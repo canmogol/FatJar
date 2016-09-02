@@ -1,0 +1,2 @@
+# FatJar
+FatJar simple API

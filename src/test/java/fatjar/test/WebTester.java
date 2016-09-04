@@ -1,6 +1,6 @@
 package fatjar.test;
 
-import fatjar.server.undertow.UndertowServer;
+import fatjar.server.Server;
 
 public class WebTester {
 
@@ -11,7 +11,7 @@ public class WebTester {
 
     public void serverStartTest() {
         // do a request to http://localhost:8080/ and/or http://localhost:8080/Hi
-        UndertowServer.create()
+        Server.create()
                 .listen(8080, "localhost")
                 .get("/", (req, res) -> {
                     res.setContent("Welcome");

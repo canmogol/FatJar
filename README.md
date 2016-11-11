@@ -43,7 +43,7 @@ Server.create()
                 .get("/httpClient", (req, res) -> {
                     try {
                         String content = HttpClient.create()
-                                .url("http://localhost:8080/toJSON")
+                                .url("http://ip.jsontest.com/")
                                 .method(HttpMethod.GET)
                                 .send()
                                 .getContentAsString();

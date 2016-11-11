@@ -1,9 +1,9 @@
 package fatjar.test;
 
-import fatjar.server.HttpClient;
-import fatjar.server.JSON;
-import fatjar.server.Server;
-import fatjar.server.dto.HttpMethod;
+import fatjar.HttpClient;
+import fatjar.JSON;
+import fatjar.Server;
+import fatjar.internal.dto.HttpMethod;
 
 public class WebTester {
 
@@ -31,7 +31,7 @@ public class WebTester {
                 .get("/httpClient", (req, res) -> {
                     try {
                         String content = HttpClient.create()
-                                .url("http://localhost:8080/toJSON")
+                                .url("http://ip.jsontest.com/")
                                 .method(HttpMethod.GET)
                                 .send()
                                 .getContentAsString();

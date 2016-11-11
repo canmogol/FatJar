@@ -1,4 +1,4 @@
-package fatjar.server.dto;
+package fatjar.internal.dto;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;

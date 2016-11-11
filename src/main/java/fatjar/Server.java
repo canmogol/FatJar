@@ -1,7 +1,7 @@
-package fatjar.server;
+package fatjar;
 
-import fatjar.server.dto.RequestResponse;
-import fatjar.server.undertow.UndertowServer;
+import fatjar.internal.dto.RequestResponse;
+import fatjar.internal.undertow.UndertowServer;
 
 public interface Server {
 

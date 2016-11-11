@@ -1,7 +1,7 @@
-package fatjar.server.genson;
+package fatjar.internal.genson;
 
 import com.owlike.genson.Genson;
-import fatjar.server.JSON;
+import fatjar.JSON;
 
 public class GensonJSON implements JSON {
 

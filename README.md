@@ -1,7 +1,8 @@
 # FatJar
 FatJar simple API to quick prototyping and portable web services
 
-please see the fatjar.test.WebTester class for detailed examples
+please see the fatjar.test.WebTester class for detailed examples,
+also check the interfaces **HttpClient**, **JSON** and **Server** under **fatjar** package
 
 to create and start the server
 ```
@@ -53,5 +54,43 @@ Server.create()
                     res.write();
                 })
                 .start();
+```
+
+
+
+### Sample Test Request
+
+After WebTester start
+
+```
+request :   GET   http://localhost:8080/
+response:   Welcome
+```
+
+```
+request :   GET   http://localhost:8080/Hi
+response:   type "http://localhost:8080/Hi?name=john" in your browser
+```
+
+```
+request :   GET   http://localhost:8080/Hi?name=john
+response:   Hello john
+```
+
+```
+request :   GET   http://localhost:8080/toJSON
+response:   {"age":101,"name":"john"}
+```
+
+```
+request :   POST   http://localhost:8080/fromJSON
+            BODY   {"age":101,"name":"john"}
+
+response:   {"age":101,"name":"john"}
+```
+
+```
+request :   GET   http://localhost:8080/httpClient
+response:   got content: {"ip": "123.123.123.123"}
 ```
 

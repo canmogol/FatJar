@@ -1,4 +1,4 @@
-package fatjar.server.dto;
+package fatjar.internal.dto;
 
 import java.io.Serializable;
 

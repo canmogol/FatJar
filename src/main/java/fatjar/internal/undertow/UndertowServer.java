@@ -1,7 +1,7 @@
-package fatjar.server.undertow;
+package fatjar.internal.undertow;
 
-import fatjar.server.Server;
-import fatjar.server.dto.*;
+import fatjar.Server;
+import fatjar.internal.dto.*;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;

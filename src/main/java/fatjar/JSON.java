@@ -1,6 +1,6 @@
-package fatjar.server;
+package fatjar;
 
-import fatjar.server.genson.GensonJSON;
+import fatjar.internal.genson.GensonJSON;
 
 public interface JSON {
 

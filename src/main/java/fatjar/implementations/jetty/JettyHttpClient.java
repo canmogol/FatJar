@@ -1,4 +1,4 @@
-package fatjar.internal.jetty;
+package fatjar.implementations.jetty;
 
 import fatjar.HttpClient;
 import fatjar.internal.dto.HttpMethod;

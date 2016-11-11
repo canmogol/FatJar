@@ -1,4 +1,4 @@
-package fatjar.internal.undertow;
+package fatjar.implementations.undertow;
 
 import fatjar.Server;
 import fatjar.internal.dto.*;

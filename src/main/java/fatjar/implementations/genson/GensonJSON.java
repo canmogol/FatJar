@@ -1,4 +1,4 @@
-package fatjar.internal.genson;
+package fatjar.implementations.genson;
 
 import com.owlike.genson.Genson;
 import fatjar.JSON;

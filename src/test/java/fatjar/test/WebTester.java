@@ -1,6 +1,9 @@
 package fatjar.test;
 
+import fatjar.server.HttpClient;
+import fatjar.server.JSON;
 import fatjar.server.Server;
+import fatjar.server.dto.HttpMethod;
 
 public class WebTester {
 
@@ -23,6 +26,28 @@ public class WebTester {
                     } else {
                         res.setContent("type \"http://localhost:8080/Hi?name=john\" in your browser");
                     }
+                    res.write();
+                })
+                .get("/httpClient", (req, res) -> {
+                    try {
+                        String content = HttpClient.create()
+                                .url("http://localhost:8080/toJSON")
+                                .method(HttpMethod.GET)
+                                .send()
+                                .getContentAsString();
+                        res.setContent("got content: " + content);
+                    } catch (HttpClient.HttpClientException e) {
+                        res.setContent("got exception: " + e);
+                    }
+                    res.write();
+                })
+                .get("/toJSON", (req, res) -> {
+                    res.setContent(JSON.toJson(new MyPOJO("john", 101)));
+                    res.write();
+                })
+                .post("/fromJSON", (req, res) -> {
+                    MyPOJO myPOJO = JSON.fromJson(new String(req.getBody()), MyPOJO.class);
+                    res.setContent(JSON.toJson(myPOJO));
                     res.write();
                 })
                 .post("/", (req, res) -> {

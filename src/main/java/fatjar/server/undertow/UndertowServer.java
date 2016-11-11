@@ -113,7 +113,15 @@ public class UndertowServer implements Server {
                                 session = new Session(String.valueOf(headers.get(SessionKeys.COOKIE.getValue().toLowerCase()).getValue()));
                             }
                         }
-                        return new Request(params, headers, session);
+                        Request request = new Request(params, headers, session);
+                        exchange.getRequestReceiver().receiveFullBytes((e, data) -> {
+                                    request.setBody(data);
+                                },
+                                (e, exception) -> {
+                                    exception.printStackTrace();
+                                }
+                        );
+                        return request;
                     }
                 }).build();
         server.start();

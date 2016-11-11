@@ -5,7 +5,7 @@ import fatjar.server.undertow.UndertowServer;
 
 public interface Server {
 
-    public static Server create() {
+    static Server create() {
         return UndertowServer.create();
     }
 

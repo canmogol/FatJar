@@ -5,7 +5,7 @@ please see the fatjar.test.WebTester class for detailed examples
 
 to create and start the server
 ```
-Server.create().listen(8080, "localhost").start();;
+Server.create().listen(8080, "localhost").start();
 ```
 
 Listen to an http method on a path

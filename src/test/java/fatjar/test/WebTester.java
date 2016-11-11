@@ -3,7 +3,7 @@ package fatjar.test;
 import fatjar.HttpClient;
 import fatjar.JSON;
 import fatjar.Server;
-import fatjar.internal.dto.HttpMethod;
+import fatjar.dto.HttpMethod;
 
 public class WebTester {
 

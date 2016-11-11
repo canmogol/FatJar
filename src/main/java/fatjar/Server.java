@@ -1,6 +1,6 @@
 package fatjar;
 
-import fatjar.internal.dto.RequestResponse;
+import fatjar.dto.RequestResponse;
 import fatjar.implementations.undertow.UndertowServer;
 
 public interface Server {

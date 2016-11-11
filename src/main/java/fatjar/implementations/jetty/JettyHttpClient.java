@@ -1,7 +1,7 @@
 package fatjar.implementations.jetty;
 
 import fatjar.HttpClient;
-import fatjar.internal.dto.HttpMethod;
+import fatjar.dto.HttpMethod;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.BytesContentProvider;

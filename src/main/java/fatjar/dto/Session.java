@@ -1,20 +1,16 @@
 package fatjar.dto;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.TreeMap;
 
 public class Session extends TreeMap<String, Serializable> {
 
-    private BASE64Encoder base64Encoder = new BASE64Encoder();
-    private BASE64Decoder base64Decoder = new BASE64Decoder();
     private String cookieSignSecretKey = "CHANGE_THIS_KEY";
     private String applicationCookieName = "CHANGE_APPLICATION_NAME";
     private String rawContent = "";
@@ -135,11 +131,11 @@ public class Session extends TreeMap<String, Serializable> {
     }
 
     public String decode(String value) throws IOException {
-        return new String(base64Decoder.decodeBuffer(value));
+        return new String(Base64.getDecoder().decode(value));
     }
 
     public String encode(String value) {
-        String encoded = base64Encoder.encode(value.getBytes());
+        String encoded = new String(Base64.getEncoder().encode(value.getBytes()));
         while (encoded.endsWith("=")) {
             encoded = encoded.substring(0, encoded.length() - 1);
         }

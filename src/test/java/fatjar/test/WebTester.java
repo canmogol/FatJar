@@ -1,9 +1,10 @@
 package fatjar.test;
 
-import fatjar.HttpClient;
-import fatjar.JSON;
-import fatjar.Server;
+import fatjar.*;
 import fatjar.dto.HttpMethod;
+import sample.MyEntity;
+
+import java.util.List;
 
 public class WebTester {
 
@@ -26,6 +27,35 @@ public class WebTester {
                     } else {
                         res.setContent("type \"http://localhost:8080/Hi?name=john\" in your browser");
                     }
+                    res.write();
+                })
+                .get("/db", (req, res) -> {
+
+                    DB db = DB.create();
+
+                    long numberOfAllEntities = db.count(MyEntity.class);
+                    long numberOfJohnEntities = db.count(MyEntity.class, DB.Query.create("name", "five"));
+                    long numberOfLargeIDEntities = db.count(MyEntity.class, DB.Query.create("id", DB.Sign.GT, 1L));
+                    Log.info("numberOfLargeIDEntities: " + numberOfLargeIDEntities);
+
+                    List<MyEntity> allEntities = db.findAll(MyEntity.class);
+                    Log.info("found allEntities: " + allEntities);
+
+                    MyEntity entityID1L = db.find(MyEntity.class, 1L);
+                    Log.info("fount entityID1L: " + entityID1L);
+
+                    MyEntity entity = new MyEntity("john");
+                    MyEntity insertedEntity = db.insert(entity);
+                    Log.info("insert insertedEntity: " + insertedEntity);
+
+                    insertedEntity.setName("johnny");
+                    db.update(insertedEntity);
+                    Log.info("update insertedEntity: " + insertedEntity);
+
+                    db.delete(insertedEntity);
+                    Log.info("delete insertedEntity: " + insertedEntity);
+
+                    res.setContent(JSON.toJson(insertedEntity));
                     res.write();
                 })
                 .get("/httpClient", (req, res) -> {

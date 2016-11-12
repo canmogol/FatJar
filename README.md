@@ -2,7 +2,8 @@
 FatJar simple API to quick prototyping and portable web services
 
 please see the fatjar.test.WebTester class for detailed examples,
-also check the interfaces **HttpClient**, **JSON** and **Server** under **fatjar** package
+also check the interfaces **HttpClient**, **JSON** and **Server** under **fatjar** package,
+added a sample **MyEntity** class under fatjar.sample package as DB operations sample
 
 to create and start the server
 ```

@@ -91,6 +91,13 @@ request :   POST   http://localhost:8080/fromJSON
 response:   {"age":101,"name":"john"}
 ```
 
+A database method added, you may find the count, find, insert, update and delete methods under "/db" handler
+```
+request :   GET   http://localhost:8080/db
+response:   {"id":73,"name":"johnny"}
+```
+
+Example exception throw method
 ```
 request :   GET   http://localhost:8080/throwException
 response:   {"error": "fatjar.Server$ServerException: tojsonexception", "request": {...}, "status": "500"}

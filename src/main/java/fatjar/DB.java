@@ -2,13 +2,20 @@ package fatjar;
 
 import fatjar.implementations.emdb.EntityDB;
 
+import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.Optional;
 
 public interface DB {
 
-    static DB create() {
-        return new EntityDB();
+    static Optional<DB> create() {
+        DB db = null;
+        try {
+            db = new EntityDB();
+        } catch (PersistenceException e) {
+            Log.error("could not create database, exception: " + e);
+        }
+        return Optional.ofNullable(db);
     }
 
     <T> long count(Class<T> tClass);

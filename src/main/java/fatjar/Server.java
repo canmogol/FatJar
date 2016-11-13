@@ -33,6 +33,11 @@ public interface Server {
             this.status = status;
         }
 
+        public ServerException(Status status, String message) {
+            super(message);
+            this.status = status;
+        }
+
         public ServerException(String message) {
             super(message);
         }

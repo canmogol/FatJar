@@ -18,10 +18,11 @@ public class EntityDB implements DB {
     private static EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
 
+    public EntityDB() {
+        entityManagerFactory = Persistence.createEntityManagerFactory("DefaultPersistenceUnit");
+    }
+
     public EntityManagerFactory getEntityManagerFactory() {
-        if (entityManagerFactory == null) {
-            entityManagerFactory = Persistence.createEntityManagerFactory("DefaultPersistenceUnit");
-        }
         return entityManagerFactory;
     }
 

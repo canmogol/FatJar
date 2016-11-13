@@ -99,9 +99,6 @@ public class Response implements Serializable {
             // append the content
             sb.append(getContent());
 
-            // append the delimiters
-            sb.append("\n\r\n\r");
-
             // write content to output stream
             try {
                 try {

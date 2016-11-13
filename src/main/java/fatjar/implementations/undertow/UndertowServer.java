@@ -201,9 +201,15 @@ public class UndertowServer implements Server {
         private void handleError(Request request, Response response, ServerException e) {
             Map<String, Object> responseMap = new TreeMap<>();
             responseMap.put("error", String.valueOf(e));
-            responseMap.put("status", String.valueOf(Status.STATUS_INTERNAL_SERVER_ERROR.getStatus()));
-            response.setStatus(Status.STATUS_INTERNAL_SERVER_ERROR);
-            response.setContent(JSON.toJson(responseMap));
+            if (e.getStatus() != null) {
+                response.setStatus(e.getStatus());
+                responseMap.put("status", e.getStatus());
+            } else {
+                response.setStatus(Status.STATUS_INTERNAL_SERVER_ERROR);
+                responseMap.put("status", String.valueOf(Status.STATUS_INTERNAL_SERVER_ERROR.getStatus()));
+            }
+            String content = JSON.toJson(responseMap);
+            response.setContent(content);
             response.write();
         }
 

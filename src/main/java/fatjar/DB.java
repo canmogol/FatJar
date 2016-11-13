@@ -3,6 +3,7 @@ package fatjar;
 import fatjar.implementations.emdb.EntityDB;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DB {
 
@@ -14,7 +15,7 @@ public interface DB {
 
     <T> long count(Class<T> tClass, Query query);
 
-    <T> T insert(T t);
+    <T> Optional<T> insert(T t);
 
     <T> T update(T t);
 

@@ -13,6 +13,7 @@ public class Response implements Serializable {
     private Status status = Status.STATUS_OK;
     private String content = null;
     private byte[] contentChar = null;
+    private String contentType = "application/json";
 
     public Response(ParamMap<String, Param<String, Object>> headers, Session session, OutputStream outputStream) {
         this.headers = headers;
@@ -65,15 +66,12 @@ public class Response implements Serializable {
         this.contentChar = contentChar;
     }
 
-    @Override
-    public String toString() {
-        return "Response{" +
-                "headers=" + headers +
-                ", session=" + session +
-                ", status=" + status +
-                ", content='" + content + '\'' +
-                ", contentChar='" + Arrays.toString(contentChar) + '\'' +
-                '}';
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public void write() {
@@ -115,6 +113,17 @@ public class Response implements Serializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Response{" +
+                "headers=" + headers +
+                ", session=" + session +
+                ", status=" + status +
+                ", content='" + content + '\'' +
+                ", contentChar='" + Arrays.toString(contentChar) + '\'' +
+                '}';
     }
 
 }

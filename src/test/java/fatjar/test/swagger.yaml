@@ -1,0 +1,63 @@
+# this is an example FatJar API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: FatJar API
+  description: FatJar is a shaded library includes predefined interfaces
+  version: "1.0.0"
+# the domain of the service
+host: fatjar.org
+# schemes of API
+schemes:
+  - http
+  - https
+# will be prefixed to all paths
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /toJSON:
+    get:
+      summary: MyPOJO object
+      description: |
+        Returns a new MyPOJO object for with static id as 101 and a name
+        with the query parameter 'name' or it will add a description for the
+        name value.
+      parameters:
+        - name: name
+          in: query
+          description: name of the MyPOJO
+          required: false
+          type: string
+      tags:
+        - MyPOJO
+      responses:
+        200:
+          description: A MyPOJO object
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/MyPOJO'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  MyPOJO:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the MyPOJO object
+      age:
+        type: number
+        description: Age of the MyPOJO object
+  Error:
+    type: object
+    properties:
+      status:
+        type: integer
+        format: int32
+      error:
+        type: string

@@ -1,9 +1,11 @@
 # FatJar
-FatJar simple API to quick prototyping and portable web services
+FatJar simple API to quick prototyping and portable web services. See **WebTester** test class for examples.
 
-please see the fatjar.test.WebTester class for detailed examples,
+Please see the fatjar.test.WebTester class for detailed examples,
 also check the interfaces **HttpClient**, **JSON** and **Server** under **fatjar** package,
 added a sample **MyEntity** class under fatjar.sample package as DB operations sample
+
+Please find the swagger.yaml file as an example for service documentation
 
 to create and start the server
 ```
@@ -86,12 +88,29 @@ response:   {"age":101,"name":"john"}
 ```
 request :   POST   http://localhost:8080/fromJSON
             BODY   {"age":101,"name":"john"}
-
 response:   {"age":101,"name":"john"}
+```
+
+```
+request :   GET   http://localhost:8080/throwException
+response:   {"error": "fatjar.Server$ServerException: tojsonexception", "request": {...}, "status": "500"}
+```
+
+Below example will make a request to a uri that is not handled 
+```
+request :   GET   http://localhost:8080/notfound
+response:   {"error":"fatjar.Server$ServerException","status":"500"}
+```
+
+/badRequest will return html content, 
+this content is created by the Status.STATUS_BAD_REQUEST handler,
+registered with the .register(Status.STATUS_BAD_REQUEST, ...) method
+```
+request :   GET   http://localhost:8080/badRequest
+response:   <h1>BAD REQUEST!</h1> 
 ```
 
 ```
 request :   GET   http://localhost:8080/httpClient
 response:   got content: {"ip": "123.123.123.123"}
 ```
-

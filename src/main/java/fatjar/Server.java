@@ -1,6 +1,6 @@
 package fatjar;
 
-import fatjar.dto.RequestResponse;
+import fatjar.dto.Status;
 import fatjar.implementations.undertow.UndertowServer;
 
 public interface Server {
@@ -11,6 +11,10 @@ public interface Server {
 
     Server listen(int port, String hostname);
 
+    Server filter(String path, RequestResponse requestResponse);
+
+    Server register(Status status, RequestResponse requestResponse);
+
     Server get(String path, RequestResponse requestResponse);
 
     Server post(String path, RequestResponse requestResponse);
@@ -20,5 +24,26 @@ public interface Server {
     Server put(String path, RequestResponse requestResponse);
 
     void start();
+
+    class ServerException extends Throwable {
+
+        private Status status = null;
+
+        public ServerException(Status status) {
+            this.status = status;
+        }
+
+        public ServerException(String message) {
+            super(message);
+        }
+
+        public ServerException(Throwable cause) {
+            super(cause);
+        }
+
+        public Status getStatus() {
+            return status;
+        }
+    }
 
 }

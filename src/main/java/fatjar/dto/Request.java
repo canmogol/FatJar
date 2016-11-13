@@ -35,6 +35,18 @@ public class Request implements Serializable {
         return params;
     }
 
+    public String getParam(String name) {
+        return getParam(name, null);
+    }
+
+    public String getParam(String name, String defaultValue) {
+        if (this.getParams().containsKey(name)) {
+            return String.valueOf(this.getParams().getValue(name));
+        } else {
+            return defaultValue;
+        }
+    }
+
     @Override
     public String toString() {
         return "Request{" +
@@ -43,6 +55,5 @@ public class Request implements Serializable {
                 ", session=" + session +
                 '}';
     }
-
 
 }

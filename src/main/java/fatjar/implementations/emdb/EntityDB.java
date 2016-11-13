@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Optional;
 
 public class EntityDB implements DB {
 
@@ -54,7 +55,7 @@ public class EntityDB implements DB {
     }
 
     @Override
-    public <T> T insert(T t) {
+    public <T> Optional<T> insert(T t) {
         T inserted = null;
         try {
             beginTransaction();
@@ -67,7 +68,7 @@ public class EntityDB implements DB {
                 inserted = update(t);
             }
         }
-        return inserted;
+        return Optional.ofNullable(inserted);
     }
 
     @Override

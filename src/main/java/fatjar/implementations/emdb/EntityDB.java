@@ -2,6 +2,7 @@ package fatjar.implementations.emdb;
 
 
 import fatjar.DB;
+import fatjar.Log;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -10,7 +11,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class EntityDB implements DB {
@@ -18,8 +23,32 @@ public class EntityDB implements DB {
     private static EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
 
+    private String getJdbcURL() {
+        String jdbcURL = null;
+        try {
+            if (System.getenv("DATABASE_URL") != null) {
+                URI dbUri = null;
+                dbUri = new URI(System.getenv("DATABASE_URL"));
+                String username = dbUri.getUserInfo().split(":")[0];
+                String password = dbUri.getUserInfo().split(":")[1];
+                jdbcURL = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+                Log.info("using jdbcURL: " + jdbcURL);
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return jdbcURL;
+    }
+
     public EntityDB() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("DefaultPersistenceUnit");
+        String jdbcURL = getJdbcURL();
+        if (jdbcURL != null) {
+            Map<String, String> map = new HashMap<>();
+            map.put("javax.persistence.jdbc.url", jdbcURL);
+            entityManagerFactory = Persistence.createEntityManagerFactory("DefaultPersistenceUnit", map);
+        } else {
+            entityManagerFactory = Persistence.createEntityManagerFactory("DefaultPersistenceUnit");
+        }
     }
 
     public EntityManagerFactory getEntityManagerFactory() {

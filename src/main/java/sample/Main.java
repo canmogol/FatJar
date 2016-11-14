@@ -4,6 +4,7 @@ import fatjar.*;
 import fatjar.dto.HttpMethod;
 import fatjar.dto.Status;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +15,17 @@ public class Main {
         tester.exampleServer();
     }
 
+    private int getAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 8080;
+    }
+
     private void exampleServer() {
         // do a request to http://localhost:80/ and/or http://localhost:80/Hi
-        Server.create().listen(80, "localhost").register(Status.STATUS_BAD_REQUEST, (req, res) -> {
+        Server.create().listen(this.getAssignedPort(), "0.0.0.0").register(Status.STATUS_BAD_REQUEST, (req, res) -> {
             res.setContentType("text/html");
             res.setContent("<h1>BAD REQUEST!</h1>");
             res.write();
@@ -45,7 +54,7 @@ public class Main {
             res.setContent(JSON.toJson(cache.getAll()));
             res.write();
         }).get("/file", (request, response) -> {
-            String path = "tmp";
+            String path = File.separator + "tmp";
             String fileName = "file.temp";
             String fileContent = "file content here!";
             boolean result = IO.writeFile(path, fileName, fileContent);

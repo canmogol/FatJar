@@ -52,11 +52,12 @@
             <plugin>
                 <groupId>com.heroku.sdk</groupId>
                 <artifactId>heroku-maven-plugin</artifactId>
-                <version>1.1.1</version>
+                <version>0.4.4</version>
                 <configuration>
+                    <jdkVersion>1.8</jdkVersion>
                     <appName>fatjar-master</appName>
                     <processTypes>
-                        <web>java $JAVA_OPTS -jar target/FatJar-Example.jar</web>
+                        <web>java -jar ./target/FatJar-Example.jar</web>
                     </processTypes>
                 </configuration>
             </plugin>

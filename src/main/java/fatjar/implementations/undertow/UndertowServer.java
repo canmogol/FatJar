@@ -1,6 +1,7 @@
 package fatjar.implementations.undertow;
 
 import fatjar.JSON;
+import fatjar.Log;
 import fatjar.RequestResponse;
 import fatjar.Server;
 import fatjar.dto.*;
@@ -37,6 +38,7 @@ public class UndertowServer implements Server {
 
     @Override
     public Server listen(int port, String hostname) {
+        Log.info("listening host:port " + hostname + ":" + port);
         this.port = port;
         this.hostname = hostname;
         return this;

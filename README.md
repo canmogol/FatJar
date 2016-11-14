@@ -85,6 +85,12 @@ request :   GET   http://localhost:80/toJSON
 response:   {"age":101,"name":"john"}
 ```
 
+Below example creates and writes to a file under tmp directory
+```
+request :   GET   http://localhost:80/file
+response:   file content here!
+```
+
 ```
 request :   POST   http://localhost:80/fromJSON
             BODY   {"age":101,"name":"john"}

@@ -1,7 +1,7 @@
 # FatJar
-FatJar simple API to quick prototyping and portable web services. See **WebTester** test class for examples.
+FatJar simple API to quick prototyping and portable web services. See **Main::main** test class for examples.
 
-Please see the fatjar.test.WebTester class for detailed examples,
+Please see the fatjar.test.Main::main class for detailed examples,
 also check the interfaces **HttpClient**, **JSON** and **Server** under **fatjar** package,
 added a sample **MyEntity** class under fatjar.sample package as DB operations sample
 
@@ -63,7 +63,7 @@ Server.create()
 
 ### Sample Test Request
 
-After WebTester start
+After Main::main start
 
 ```
 request :   GET   http://localhost:80/

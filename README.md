@@ -93,6 +93,13 @@ request :   GET   http://localhost:80/toJSON
 response:   {"age":101,"name":"john"}
 ```
 
+Below example creates key value pairs in cache and increments 'number'
+value by one on every request
+```
+request :   GET   http://localhost:80/cache
+response:   {"number":1,"key":"value"}
+```
+
 Below example creates and writes to a file under tmp directory
 ```
 request :   GET   http://localhost:80/file

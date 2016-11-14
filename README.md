@@ -17,7 +17,13 @@ Please see the fatjar.test.Main::main class for detailed examples,
 also check the interfaces **HttpClient**, **JSON** and **Server** under **fatjar** package,
 added a sample **MyEntity** class under fatjar.sample package as DB operations sample
 
-Please find the swagger.yaml file as an example for service documentation
+
+
+Please find the swagger.yaml file as an example for service documentation, 
+you can edit yaml files with [Online Swagger Editor](http://editor.swagger.io/#/)
+and you can convert yaml files to json to use with swagger-ui [Yaml to JSON Transformer](https://apimatic.io/transformer)
+
+
 
 to create and start the server
 ```

@@ -1,6 +1,10 @@
 # FatJar
 FatJar simple API to quick prototyping and portable web services. See **Main::main** test class for examples.
 
+
+[You can visit Heroku deployment](http://fatjar-travis.herokuapp.com)
+
+
 Build and coverage status:
 
 [![Build Status](https://travis-ci.org/canmogol/FatJar.svg?branch=master)](https://travis-ci.org/canmogol/FatJar)

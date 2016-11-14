@@ -1,4 +1,4 @@
-package fatjar.test;
+package sample;
 
 public class MyPOJO {
 

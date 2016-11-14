@@ -9,13 +9,13 @@ Please find the swagger.yaml file as an example for service documentation
 
 to create and start the server
 ```
-Server.create().listen(8080, "localhost").start();
+Server.create().listen(80, "localhost").start();
 ```
 
 Listen to an http method on a path
 ```
 Server.create()
-                .listen(8080, "localhost")
+                .listen(80, "localhost")
                 .get("/", (req, res) -> {
                     res.setContent("Welcome");
                     res.write();
@@ -26,7 +26,7 @@ Server.create()
 To JSON and from JSON example
 ```
 Server.create()
-                .listen(8080, "localhost")
+                .listen(80, "localhost")
                 .get("/toJSON", (req, res) -> {
                     res.setContent(JSON.toJson(new MyPOJO("john", 101)));
                     res.write();
@@ -42,7 +42,7 @@ Server.create()
 To make an Http request
 ```
 Server.create()
-                .listen(8080, "localhost")
+                .listen(80, "localhost")
                 .get("/httpClient", (req, res) -> {
                     try {
                         String content = HttpClient.create()
@@ -66,46 +66,46 @@ Server.create()
 After WebTester start
 
 ```
-request :   GET   http://localhost:8080/
+request :   GET   http://localhost:80/
 response:   Welcome
 ```
 
 ```
-request :   GET   http://localhost:8080/Hi
-response:   type "http://localhost:8080/Hi?name=john" in your browser
+request :   GET   http://localhost:80/Hi
+response:   type "http://localhost:80/Hi?name=john" in your browser
 ```
 
 ```
-request :   GET   http://localhost:8080/Hi?name=john
+request :   GET   http://localhost:80/Hi?name=john
 response:   Hello john
 ```
 
 ```
-request :   GET   http://localhost:8080/toJSON
+request :   GET   http://localhost:80/toJSON
 response:   {"age":101,"name":"john"}
 ```
 
 ```
-request :   POST   http://localhost:8080/fromJSON
+request :   POST   http://localhost:80/fromJSON
             BODY   {"age":101,"name":"john"}
 response:   {"age":101,"name":"john"}
 ```
 
 A database method added, you may find the count, find, insert, update and delete methods under "/db" handler
 ```
-request :   GET   http://localhost:8080/db
+request :   GET   http://localhost:80/db
 response:   {"id":73,"name":"johnny"}
 ```
 
 Example exception throw method
 ```
-request :   GET   http://localhost:8080/throwException
+request :   GET   http://localhost:80/throwException
 response:   {"error": "fatjar.Server$ServerException: tojsonexception", "request": {...}, "status": "500"}
 ```
 
 Below example will make a request to a uri that is not handled 
 ```
-request :   GET   http://localhost:8080/notfound
+request :   GET   http://localhost:80/notfound
 response:   {"error":"fatjar.Server$ServerException","status":"500"}
 ```
 
@@ -113,11 +113,11 @@ response:   {"error":"fatjar.Server$ServerException","status":"500"}
 this content is created by the Status.STATUS_BAD_REQUEST handler,
 registered with the .register(Status.STATUS_BAD_REQUEST, ...) method
 ```
-request :   GET   http://localhost:8080/badRequest
+request :   GET   http://localhost:80/badRequest
 response:   <h1>BAD REQUEST!</h1> 
 ```
 
 ```
-request :   GET   http://localhost:8080/httpClient
+request :   GET   http://localhost:80/httpClient
 response:   got content: {"ip": "123.123.123.123"}
 ```

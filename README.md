@@ -26,12 +26,12 @@ and you can convert yaml files to json to use with swagger-ui [Yaml to JSON Tran
 
 
 to create and start the server
-```
+```javascript
 Server.create().listen(80, "localhost").start();
 ```
 
 Listen to an http method on a path
-```
+```javascript
 Server.create()
                 .listen(80, "localhost")
                 .get("/", (req, res) -> {
@@ -42,7 +42,7 @@ Server.create()
 ```
 
 To JSON and from JSON example
-```
+```javascript
 Server.create()
                 .listen(80, "localhost")
                 .get("/toJSON", (req, res) -> {
@@ -58,7 +58,7 @@ Server.create()
 ```
 
 To make an Http request
-```
+```javascript
 Server.create()
                 .listen(80, "localhost")
                 .get("/httpClient", (req, res) -> {

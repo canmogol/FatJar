@@ -16,7 +16,7 @@ public class Main {
 
     private void exampleServer() {
         // do a request to http://localhost:80/ and/or http://localhost:80/Hi
-        Server.create().listen(8080, "localhost").register(Status.STATUS_BAD_REQUEST, (req, res) -> {
+        Server.create().listen(80, "localhost").register(Status.STATUS_BAD_REQUEST, (req, res) -> {
             res.setContentType("text/html");
             res.setContent("<h1>BAD REQUEST!</h1>");
             res.write();

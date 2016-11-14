@@ -2,7 +2,8 @@
 FatJar simple API to quick prototyping and portable web services. See **Main::main** test class for examples.
 
 Build and coverage status:
-https://travis-ci.org/canmogol/FatJar.svg?branch=master
+
+[![Build Status](https://travis-ci.org/canmogol/FatJar.svg?branch=master)](https://travis-ci.org/canmogol/FatJar)
 
 ![codecov.io](https://codecov.io/github/canmogol/FatJar/branch.svg?branch=master)
 

@@ -5,7 +5,8 @@ Build and coverage status:
 
 [![Build Status](https://travis-ci.org/canmogol/FatJar.svg?branch=master)](https://travis-ci.org/canmogol/FatJar)
 
-![codecov.io](https://codecov.io/github/canmogol/FatJar/branch.svg?branch=master)
+[![codecov](https://codecov.io/gh/canmogol/FatJar/branch/master/graph/badge.svg)](https://codecov.io/gh/canmogol/FatJar)
+
 
 
 Please see the fatjar.test.Main::main class for detailed examples,

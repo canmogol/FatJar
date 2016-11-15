@@ -1,5 +1,8 @@
 package sample;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "myPojo")
 public class MyPOJO {
 
     private String name;

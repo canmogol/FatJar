@@ -1,12 +1,19 @@
 package sample;
 
-import fatjar.*;
-import fatjar.dto.HttpMethod;
-import fatjar.dto.Status;
-
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
+
+import fatjar.Cache;
+import fatjar.DB;
+import fatjar.HttpClient;
+import fatjar.IO;
+import fatjar.JSON;
+import fatjar.Log;
+import fatjar.Server;
+import fatjar.XML;
+import fatjar.dto.HttpMethod;
+import fatjar.dto.Status;
 
 public class Main {
 
@@ -144,8 +151,14 @@ public class Main {
                     MyPOJO myPOJO = JSON.fromJson(new String(req.getBody()), MyPOJO.class);
                     res.setContent(JSON.toJson(myPOJO));
                     res.write();
-                })
-                .post("/", (req, res) -> {
+                }).get("/toXML", (req, res) -> {
+					res.setContent(XML.toXML(new MyPOJO(req.getParam("name", "add a query parameter like '?name=doe'"), Integer.MAX_VALUE)));
+					res.write();
+				}).post("/fromXML", (req, res) -> {
+					MyPOJO myPOJO = XML.fromXML(req.getBody(), MyPOJO.class);
+					res.setContent(XML.toXML(myPOJO));
+					res.write();
+				}).post("/", (req, res) -> {
                 })
                 .delete("/", (req, res) -> {
                 })

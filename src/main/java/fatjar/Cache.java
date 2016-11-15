@@ -12,6 +12,11 @@ public interface Cache<K, V> {
         return (Cache<K, V>) CurrentCache.create(name);
     }
 
+    @SuppressWarnings("unchecked")
+    static <K, V> Cache<K, V> create(Type type, String name) {
+        return (Cache<K, V>) CurrentCache.create(type, name);
+    }
+
     Cache.Type getType();
 
     String getName();

@@ -18,6 +18,7 @@ Build and coverage status:
   [1]: https://fatjar-travis.herokuapp.com/
   [2]: https://fatjar-travis.herokuapp.com/badge (FatJar Heroku Deployment Status)
 
+
 Please see the fatjar.test.Main::main class for detailed examples,
 also check the interfaces **HttpClient**, **JSON** and **Server** under **fatjar** package,
 added a sample **MyEntity** class under fatjar.sample package as DB operations sample

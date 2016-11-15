@@ -1,5 +1,5 @@
 # FatJar
-FatJar simple API to quick prototyping and portable web services. See **Main::main** test class for examples.
+FatJar simple API to quick prototyping and portable web services. See **Main::main** sample class for examples.
 
 
 Build and coverage status:
@@ -16,9 +16,8 @@ Build and coverage status:
   [2]: https://fatjar-travis.herokuapp.com/badgeFlat (FatJar Heroku Deployment Status)
 
 
-Please see the fatjar.test.Main::main class for detailed examples,
-also check the interfaces **HttpClient**, **JSON** and **Server** under **fatjar** package,
-added a sample **MyEntity** class under fatjar.sample package as DB operations sample
+Please check the interfaces like **HttpClient**, **JSON**, **Server** under **fatjar** package,
+added sample **MyEntity** and **MyPOJO** classes under sample package for DB and JSON operations examples
 
 
 

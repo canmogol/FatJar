@@ -126,6 +126,15 @@ request :   GET   http://localhost:80/toJSON
 response:   {"age":101,"name":"john"}
 ```
 
+```
+request :   GET   http://localhost:80/toXML?name=john
+response:   <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <myPojo>
+                <age>2147483647</age>
+                <name>john</name>
+            </myPojo>
+```
+
 Below example creates key value pairs in cache and increments 'number'
 value by one on every request
 ```
@@ -143,6 +152,16 @@ response:   file content here!
 request :   POST   http://localhost:80/fromJSON
             BODY   {"age":101,"name":"john"}
 response:   {"age":101,"name":"john"}
+```
+
+```
+request :   POST   http://localhost:80/fromXML
+            BODY   <myPojo><name>john</name><age>27</age></myPojo>
+response:   <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <myPojo>
+                <age>27</age>
+                <name>john</name>
+            </myPojo>
 ```
 
 A database method added, you may find the count, find, insert, update and delete methods under "/db" handler

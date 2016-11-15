@@ -32,6 +32,8 @@ public interface DB {
 
     <T> T find(Class<T> typeClass, Object primary);
 
+    <T> List<T> find(Class<T> typeClass, Query query);
+
     enum AndOr {
         AND, OR
     }

@@ -4,6 +4,7 @@ package fatjar.implementations.emdb;
 import fatjar.DB;
 import fatjar.Log;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -89,8 +90,12 @@ public class EntityDB implements DB {
         T inserted = null;
         try {
             beginTransaction();
-            getEntityManager().persist(t);
-            inserted = t;
+            try{
+                getEntityManager().persist(t);
+                inserted = t;
+            }catch (EntityExistsException e){
+                inserted = getEntityManager().merge(t);
+            }
             commitTransaction();
         } catch (Exception e) {
             rollbackTransaction();
@@ -142,6 +147,17 @@ public class EntityDB implements DB {
     @Override
     public <T> T find(Class<T> typeClass, Object primary) {
         return getEntityManager().find(typeClass, primary);
+    }
+
+    @Override
+    public <T> List<T> find(Class<T> typeClass, Query query) {
+        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = builder.createQuery(typeClass);
+        Root<T> root = criteriaQuery.from(typeClass);
+        criteriaQuery.where(queryToPredicate(builder, root, query));
+        criteriaQuery.select(root);
+        List<T> list = getEntityManager().createQuery(criteriaQuery).getResultList();
+        return list;
     }
 
     private Predicate queryToPredicate(CriteriaBuilder builder, Root<?> root, Query query) {

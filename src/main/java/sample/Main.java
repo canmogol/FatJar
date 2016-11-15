@@ -91,6 +91,27 @@ public class Main {
                         List<MyEntity> allEntities = db.findAll(MyEntity.class);
                         Log.info("found allEntities: " + allEntities);
 
+                        List<MyEntity> entityNameFive = db.find(MyEntity.class, DB.Query.create("name", "five"));
+                        if (!entityNameFive.isEmpty()) {
+                            Log.info("fount entityNameFive: " + entityNameFive);
+                        }
+
+                        List<MyEntity> entityNameFourOrFive = db.find(MyEntity.class, DB.Query.or(
+                                DB.Query.create("name", "four"),
+                                DB.Query.create("name", "five")
+                        ));
+                        if (!entityNameFourOrFive.isEmpty()) {
+                            Log.info("fount entityNameFourOrFive: " + entityNameFourOrFive);
+                        }
+
+                        List<MyEntity> entityNameID5AndNameFive = db.find(MyEntity.class, DB.Query.and(
+                                DB.Query.create("id", 5),
+                                DB.Query.create("name", "five")
+                        ));
+                        if (!entityNameID5AndNameFive.isEmpty()) {
+                            Log.info("fount entityNameID5AndNameFive: " + entityNameID5AndNameFive);
+                        }
+
                         MyEntity entityID1L = db.find(MyEntity.class, 1L);
                         Log.info("fount entityID1L: " + entityID1L);
 
@@ -125,7 +146,7 @@ public class Main {
                     res.write();
                 })
                 .get("/badgeFlat", (req, res) -> {
-                    byte[] content = IO.readBinaryFile("target/classes","heroku-badge-deployed.png").get();
+                    byte[] content = IO.readBinaryFile("target/classes", "heroku-badge-deployed.png").get();
                     res.setContentType("image/png");
                     res.setContentChar(content);
                     res.write();

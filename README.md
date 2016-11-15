@@ -16,7 +16,7 @@ Build and coverage status:
 [![could not deploy][2]][1]
 
   [1]: https://fatjar-travis.herokuapp.com/
-  [2]: https://fatjar-travis.herokuapp.com/badge (FatJar Heroku Deployment Status)
+  [2]: https://fatjar-travis.herokuapp.com/badgeFlat (FatJar Heroku Deployment Status)
 
 
 Please see the fatjar.test.Main::main class for detailed examples,

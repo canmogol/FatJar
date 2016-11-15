@@ -124,7 +124,7 @@ public class Main {
                     }
                     res.write();
                 })
-                .get("/badge", (req, res) -> {
+                .get("/badgeFlat", (req, res) -> {
                     byte[] content = IO.readBinaryFile("target/classes","heroku-badge-deployed.png").get();
                     res.setContentType("image/png");
                     res.setContentChar(content);

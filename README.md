@@ -20,12 +20,33 @@ Please check the interfaces like **HttpClient**, **JSON**, **Server** under **fa
 added sample **MyEntity** and **MyPOJO** classes under sample package for DB and JSON operations examples
 
 
-
-Please find the swagger.yaml file as an example for service documentation, 
+Please find the swagger.yaml file as an example for service documentation,
 you can edit yaml files with [Online Swagger Editor](http://editor.swagger.io/#/)
 and you can convert yaml files to json to use with swagger-ui [Yaml to JSON Transformer](https://apimatic.io/transformer)
 
 
+### Dependency
+
+maven
+```xml
+<dependency>
+    <groupId>com.fererlab</groupId>
+    <artifactId>FatJar</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+grails
+```json
+compile 'com.fererlab:FatJar:1.0.0'
+```
+
+sbt
+```scala
+libraryDependencies += "com.fererlab" % "FatJar" % "1.0.0"
+```
+
+### Usage Examples
 
 to create and start the server
 ```javascript

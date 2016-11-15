@@ -13,7 +13,10 @@ Build and coverage status:
 
 [![gitter](https://badges.gitter.im/canmogol/FatJar.svg)](https://gitter.im/FatJar/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![could not deploy][2]][1]
 
+  [1]: https://fatjar-travis.herokuapp.com/
+  [2]: https://fatjar-travis.herokuapp.com/badge (FatJar Heroku Deployment Status)
 
 Please see the fatjar.test.Main::main class for detailed examples,
 also check the interfaces **HttpClient**, **JSON** and **Server** under **fatjar** package,

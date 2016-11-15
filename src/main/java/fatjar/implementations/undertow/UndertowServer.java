@@ -125,7 +125,9 @@ public class UndertowServer implements Server {
 
                 @Override
                 public void write(byte[] b) throws IOException {
-                    exchange.getResponseSender().send(ByteBuffer.wrap(b));
+                    if(b!=null && b.length > 0){
+                        exchange.getResponseSender().send(ByteBuffer.wrap(b));
+                    }
                 }
             }) {
                 @Override

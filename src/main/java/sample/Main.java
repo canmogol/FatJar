@@ -172,14 +172,22 @@ public class Main {
                     MyPOJO myPOJO = JSON.fromJson(new String(req.getBody()), MyPOJO.class);
                     res.setContent(JSON.toJson(myPOJO));
                     res.write();
-                }).get("/toXML", (req, res) -> {
-					res.setContent(XML.toXML(new MyPOJO(req.getParam("name", "add a query parameter like '?name=doe'"), Integer.MAX_VALUE)));
-					res.write();
-				}).post("/fromXML", (req, res) -> {
-					MyPOJO myPOJO = XML.fromXML(req.getBody(), MyPOJO.class);
-					res.setContent(XML.toXML(myPOJO));
-					res.write();
-				}).post("/", (req, res) -> {
+                })
+                .get("/toXML", (req, res) -> {
+                    Optional<String> xmlOptional = XML.toXML(new MyPOJO(req.getParam("name", "add a query parameter like '?name=doe'"), Integer.MAX_VALUE));
+                    xmlOptional.ifPresent(res::setContent);
+                    res.setContentType("text/xml");
+                    res.write();
+                })
+                .post("/fromXML", (req, res) -> {
+                    Optional<MyPOJO> myPOJOOptional = XML.fromXML(req.getBody(), MyPOJO.class);
+                    myPOJOOptional.ifPresent(myPOJO->{
+                        XML.toXML(myPOJO).ifPresent(res::setContent);
+                    });
+                    res.setContentType("text/xml");
+                    res.write();
+                })
+                .post("/", (req, res) -> {
                 })
                 .delete("/", (req, res) -> {
                 })

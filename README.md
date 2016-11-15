@@ -11,6 +11,9 @@ Build and coverage status:
 
 [![codecov](https://codecov.io/gh/canmogol/FatJar/branch/master/graph/badge.svg)](https://codecov.io/gh/canmogol/FatJar)
 
+[![gitter](https://badges.gitter.im/canmogol/FatJar.svg)](https://gitter.im/FatJar/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+
 
 
 Please see the fatjar.test.Main::main class for detailed examples,

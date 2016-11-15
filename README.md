@@ -15,7 +15,6 @@ Build and coverage status:
 
 
 
-
 Please see the fatjar.test.Main::main class for detailed examples,
 also check the interfaces **HttpClient**, **JSON** and **Server** under **fatjar** package,
 added a sample **MyEntity** class under fatjar.sample package as DB operations sample

@@ -23,7 +23,7 @@ public interface Cache<K, V> {
 
     V get(K key);
 
-    Map<K, V> getAll(Set<? extends K> keys);
+    Map<K, V> getAll(Set<K> keys);
 
     boolean containsKey(K key);
 

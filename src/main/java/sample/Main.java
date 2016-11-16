@@ -6,8 +6,7 @@ import fatjar.dto.RequestKeys;
 import fatjar.dto.Status;
 
 import java.io.File;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Main {
 
@@ -59,7 +58,10 @@ public class Main {
                     } else {
                         cache.put("number", (Integer) cache.get("number") + 1);
                     }
-                    res.setContent(JSON.toJson(cache.getAll()));
+                    Set<String> keys = new HashSet<>();
+                    keys.add("key");
+                    keys.add("number");
+                    res.setContent(JSON.toJson(cache.getAll(keys)));
                     res.write();
                 })
                 .get("/file", (request, response) -> {

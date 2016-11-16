@@ -29,7 +29,7 @@ public class MemCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public Map<K, V> getAll(Set<? extends K> keys) {
+    public Map<K, V> getAll(Set<K> keys) {
         return null;
     }
 

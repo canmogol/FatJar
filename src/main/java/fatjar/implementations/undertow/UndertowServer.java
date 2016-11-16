@@ -8,8 +8,12 @@ import fatjar.dto.*;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
+import io.undertow.server.handlers.form.FormData;
+import io.undertow.server.handlers.form.FormDataParser;
+import io.undertow.server.handlers.form.FormEncodedDataDefinition;
 import io.undertow.util.HeaderValues;
 import io.undertow.util.Headers;
+import io.undertow.util.HttpString;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,19 +25,33 @@ public class UndertowServer implements Server {
 
     private int port = 9080;
     private String hostname = "localhost";
+    private String applicationCookieName = "APPLICATION_NAME";
+    private String cookieSignSecretKey = "SIGN_KEY";
     private Map<HttpMethod, Map<String, List<RequestResponse>>> pathFunctions = new HashMap<>();
     private Map<String, List<RequestResponse>> filterFunctions = new HashMap<>();
     private Map<String, List<RequestResponse>> wildcardFunctions = new HashMap<>();
     private Map<Status, RequestResponse> statusFunctions = new HashMap<>();
 
     private UndertowServer() {
+        this(new HashMap<>());
         for (HttpMethod protocol : HttpMethod.values()) {
             pathFunctions.put(protocol, new HashMap<>());
         }
     }
 
+    public UndertowServer(Map<ServerParams, String> params) {
+        this.port = Integer.parseInt(params.getOrDefault(ServerParams.PORT, "9080"));
+        this.hostname = params.getOrDefault(ServerParams.HOST, "0.0.0.0");
+        this.applicationCookieName = params.getOrDefault(ServerParams.APPLICATION_NAME, "APPLICATION_NAME");
+        this.cookieSignSecretKey = params.getOrDefault(ServerParams.SIGN_KEY, "SIGN_KEY");
+    }
+
     public static Server create() {
         return new UndertowServer();
+    }
+
+    public static Server create(Map<ServerParams, String> params) {
+        return new UndertowServer(params);
     }
 
     @Override
@@ -125,7 +143,8 @@ public class UndertowServer implements Server {
 
                 @Override
                 public void write(byte[] b) throws IOException {
-                    if(b!=null && b.length > 0){
+                    if (b != null && b.length > 0) {
+                        exchange.setResponseContentLength(b.length);
                         exchange.getResponseSender().send(ByteBuffer.wrap(b));
                     }
                 }
@@ -133,7 +152,11 @@ public class UndertowServer implements Server {
                 @Override
                 public void write() {
                     exchange.setStatusCode(getStatus().getStatus());
+                    for (Param<String, Object> param : getHeaders().values()) {
+                        exchange.getResponseHeaders().put(new HttpString(param.getKey()), String.valueOf(param.getValue()));
+                    }
                     exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, getContentType());
+                    exchange.getResponseHeaders().put(Headers.SET_COOKIE, request.getSession().toCookie(applicationCookieName, cookieSignSecretKey));
                     super.write();
                 }
             };
@@ -152,7 +175,7 @@ public class UndertowServer implements Server {
                     this.handleRequestResponse(httpMethod, exchange.getRequestURI(), request, response);
                 } else {
                     // notify client that there is no handler for this call
-                    throw new ServerException(Status.STATUS_NOT_FOUND);
+                    throw new ServerException(Status.STATUS_NOT_FOUND, exchange.getRequestURI());
                 }
             } catch (ServerException e) {
                 // notify client that server got an exception
@@ -221,6 +244,13 @@ public class UndertowServer implements Server {
 
             ParamMap<String, Param<String, Object>> headers = new ParamMap<>();
             headers.addParam(new Param<>(RequestKeys.PROTOCOL.getValue(), exchange.getRequestMethod().toString()));
+            headers.addParam(new Param<>(RequestKeys.URI.getValue(), exchange.getRequestURI()));
+            headers.addParam(new Param<>(RequestKeys.URL.getValue(), exchange.getRequestURL()));
+            headers.addParam(new Param<>(RequestKeys.HEADER_NAMES.getValue(), exchange.getRequestHeaders().getHeaderNames().stream().map(HttpString::toString).collect(Collectors.toList())));
+            headers.addParam(new Param<>(RequestKeys.HOST_NAME.getValue(), exchange.getHostName()));
+            headers.addParam(new Param<>(RequestKeys.HOST_PORT.getValue(), exchange.getHostPort()));
+            headers.addParam(new Param<>(RequestKeys.QUERY_STRING.getValue(), exchange.getQueryString()));
+            headers.addParam(new Param<>(RequestKeys.REQUEST_METHOD.getValue(), exchange.getRequestMethod().toString()));
             exchange.getRequestHeaders().getHeaderNames().forEach((headerName) -> {
                 HeaderValues headerValues = exchange.getRequestHeaders().get(headerName);
                 headers.addParam(new Param<>(headerName.toString(), headerValues.getFirst()));
@@ -234,23 +264,51 @@ public class UndertowServer implements Server {
                 params.addParam(new Param<>(key, values.getFirst()));
             });
 
-            Session session = new Session("");
+            Session session = new Session("", cookieSignSecretKey, applicationCookieName);
             if (headers.containsKey(SessionKeys.COOKIE.getValue().toLowerCase()) ||
                     headers.containsKey(SessionKeys.COOKIE.getValue())) {
                 try {
-                    session = new Session(String.valueOf(headers.get(SessionKeys.COOKIE.getValue()).getValue()));
+                    session = new Session(
+                            String.valueOf(headers.get(SessionKeys.COOKIE.getValue()).getValue()),
+                            cookieSignSecretKey,
+                            applicationCookieName
+                    );
                 } catch (Exception e) {
-                    session = new Session(String.valueOf(headers.get(SessionKeys.COOKIE.getValue().toLowerCase()).getValue()));
+                    session = new Session(
+                            String.valueOf(headers.get(SessionKeys.COOKIE.getValue().toLowerCase()).getValue()),
+                            cookieSignSecretKey,
+                            applicationCookieName
+                    );
                 }
             }
+
             Request request = new Request(params, headers, session);
-            exchange.getRequestReceiver().receiveFullBytes((e, data) -> {
-                        request.setBody(data);
-                    },
-                    (e, exception) -> {
-                        exception.printStackTrace();
+            if ("POST".equalsIgnoreCase(exchange.getRequestMethod().toString())) {
+                try {
+                    FormEncodedDataDefinition formEncodedDataDefinition = new FormEncodedDataDefinition();
+                    FormDataParser parser = formEncodedDataDefinition.create(exchange);
+                    FormData formData = parser.parseBlocking();
+                    for (String key : formData) {
+                        System.out.println(key + ":");
+                        for (FormData.FormValue value : formData.get(key)) {
+                            System.out.println("\t" + value.getValue());
+                            request.getParams().addParam(new Param<>(key, value.getValue()));
+                        }
                     }
-            );
+                } catch (Exception ex) {
+                    Log.error("could not handle post request, exception: " + ex);
+                }
+            } else {
+                exchange.getRequestReceiver().receiveFullBytes((e, data) -> {
+                            request.setBody(data);
+                        },
+                        (e, exception) -> {
+                            exception.printStackTrace();
+                        }
+                );
+            }
+
+            // return Request object
             return request;
         }
     }

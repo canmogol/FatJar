@@ -2,7 +2,6 @@ package fatjar.dto;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -11,19 +10,16 @@ import java.util.TreeMap;
 
 public class Session extends TreeMap<String, Serializable> {
 
-    private String cookieSignSecretKey = "CHANGE_THIS_KEY";
-    private String applicationCookieName = "CHANGE_APPLICATION_NAME";
     private String rawContent = "";
 
 
-    public Session(String rawContent) {
+    public Session(String rawContent, String cookieSignSecretKey, String applicationCookieName) {
         // SampleApplication=a2V5MT12YWx1ZTE7a2V5Mj12YWx1ZTI7;SampleApplication_fr_ck_sn_ky=YWRhOTI0M2QyZDA5ZmQwYmQ1ZTM4MGE5ODc4Y2M3YTlhZDA2M2E0MA;
         this.rawContent = rawContent;
+        this.fromCookie(applicationCookieName, cookieSignSecretKey);
     }
 
     public void fromCookie(String applicationCookieName, String cookieSignSecretKey) {
-        this.applicationCookieName = applicationCookieName;
-        this.cookieSignSecretKey = cookieSignSecretKey;
         String applicationCookieSignedName = applicationCookieName + "_" + SessionKeys.COOKIE_SIGN_KEY.getValue();
         String applicationCookie = null;
         String applicationCookieValue = null;
@@ -93,7 +89,7 @@ public class Session extends TreeMap<String, Serializable> {
 
     }
 
-    public String toCookie() {
+    public String toCookie(String applicationCookieName, String cookieSignSecretKey) {
         // if there is nothing to set to cookie, return empty string
         if (this.size() == 0) {
             return "";
@@ -130,7 +126,7 @@ public class Session extends TreeMap<String, Serializable> {
         return "";
     }
 
-    public String decode(String value) throws IOException {
+    public String decode(String value) {
         return new String(Base64.getDecoder().decode(value));
     }
 

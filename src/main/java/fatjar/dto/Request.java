@@ -44,6 +44,19 @@ public class Request implements Serializable {
         return true;
     }
 
+    public String getHeader(RequestKeys requestKey) {
+        String key = requestKey.toString();
+        return getHeader(key);
+    }
+
+    public String getHeader(String key) {
+        if (getHeaders().containsKey(key) && getHeaders().getValue(key) != null) {
+            return getHeaders().getValue(key).toString();
+        } else {
+            return null;
+        }
+    }
+
     public String getParam(String name) {
         return getParam(name, null);
     }

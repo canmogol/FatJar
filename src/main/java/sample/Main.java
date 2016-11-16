@@ -1,19 +1,13 @@
 package sample;
 
+import fatjar.*;
+import fatjar.dto.HttpMethod;
+import fatjar.dto.RequestKeys;
+import fatjar.dto.Status;
+
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
-
-import fatjar.Cache;
-import fatjar.DB;
-import fatjar.HttpClient;
-import fatjar.IO;
-import fatjar.JSON;
-import fatjar.Log;
-import fatjar.Server;
-import fatjar.XML;
-import fatjar.dto.HttpMethod;
-import fatjar.dto.Status;
 
 public class Main {
 
@@ -79,7 +73,7 @@ public class Main {
                             response.setContent(content.get());
                             response.write();
                         } else {
-                            throw new Server.ServerException(Status.STATUS_NOT_FOUND);
+                            throw new Server.ServerException(Status.STATUS_NOT_FOUND, request.getHeader(RequestKeys.URI));
                         }
                     } else {
                         throw new Server.ServerException(Status.STATUS_INTERNAL_SERVER_ERROR, "could not create file");
@@ -181,7 +175,7 @@ public class Main {
                 })
                 .post("/fromXML", (req, res) -> {
                     Optional<MyPOJO> myPOJOOptional = XML.fromXML(req.getBody(), MyPOJO.class);
-                    myPOJOOptional.ifPresent(myPOJO->{
+                    myPOJOOptional.ifPresent(myPOJO -> {
                         XML.toXML(myPOJO).ifPresent(res::setContent);
                     });
                     res.setContentType("text/xml");

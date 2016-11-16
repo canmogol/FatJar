@@ -32,18 +32,18 @@ maven
 <dependency>
     <groupId>com.fererlab</groupId>
     <artifactId>FatJar</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
 grails
 ```json
-compile 'com.fererlab:FatJar:1.0.0'
+compile 'com.fererlab:FatJar:1.1.0'
 ```
 
 sbt
 ```scala
-libraryDependencies += "com.fererlab" % "FatJar" % "1.0.0"
+libraryDependencies += "com.fererlab" % "FatJar" % "1.1.0"
 ```
 
 ### Usage Examples

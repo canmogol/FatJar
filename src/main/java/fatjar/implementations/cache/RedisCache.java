@@ -72,8 +72,4 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
     }
 
-    @Override
-    public Map<K, V> getAll() {
-        return null;
-    }
 }

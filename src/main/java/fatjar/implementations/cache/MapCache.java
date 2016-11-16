@@ -38,17 +38,6 @@ public class MapCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public Map<K, V> getAll() {
-        Map<K, V> map = new HashMap<>();
-        cache().keySet()
-                .stream()
-                .forEach(key -> {
-                    map.put(key, cache().get(key));
-                });
-        return map;
-    }
-
-    @Override
     public Map<K, V> getAll(Set<? extends K> keys) {
         Map<K, V> map = new HashMap<>();
         cache().keySet()

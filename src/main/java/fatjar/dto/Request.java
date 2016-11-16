@@ -35,6 +35,15 @@ public class Request implements Serializable {
         return params;
     }
 
+    public boolean hasParams(String... params) {
+        for (String param : params) {
+            if (getParam(param) == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public String getParam(String name) {
         return getParam(name, null);
     }

@@ -23,18 +23,7 @@ public class MemCache<K, V> implements Cache<K, V> {
 
 	public void initialize() {
 
-		String[] servers = { "localhost:11211" };
-		SockIOPool pool = SockIOPool.getInstance(name);
-		pool.setServers(servers);
-		pool.setFailover(true);
-		pool.setInitConn(10);
-		pool.setMinConn(5);
-		pool.setMaxConn(250);
-		pool.setMaintSleep(30);
-		pool.setNagle(false);
-		pool.setSocketTO(3000);
-		pool.setAliveCheck(true);
-		pool.initialize();
+		new MemCacheInitializer().initializeSockIOPool(name);
 		MemCachedClient mcc = new MemCachedClient(name);
 		map.put(name, mcc);
 

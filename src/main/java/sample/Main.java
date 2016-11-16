@@ -6,10 +6,7 @@ import fatjar.dto.RequestKeys;
 import fatjar.dto.Status;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 public class Main {
@@ -29,8 +26,12 @@ public class Main {
 
     private void exampleServer() {
         // do a request to http://localhost:80/ and/or http://localhost:80/Hi
-        Server.create().
-                listen(this.getAssignedPort(), "0.0.0.0")
+        Server.create(
+                new HashMap<Server.ServerParams, String>() {{
+                    put(Server.ServerParams.SIGN_KEY, "1234567812345678");
+                    put(Server.ServerParams.APPLICATION_NAME, "FAT_JAR_EXAMPLE_APP");
+                }})
+                .listen(this.getAssignedPort(), "0.0.0.0")
                 .register(Status.STATUS_BAD_REQUEST, (req, res) -> {
                     res.setContentType("text/html");
                     res.setContent("<h1>BAD REQUEST!</h1>");
@@ -52,6 +53,30 @@ public class Main {
                     } else {
                         res.setContent("type \"http://localhost:80/Hi?name=john\" in your browser");
                     }
+                    res.write();
+                })
+                .get("/setCookie", (req, res) -> {
+
+                    String encodedKey = "EncodedKey";
+                    String encodedValue = "EncodedValue1111";
+                    req.getSession().putEncoded(encodedKey, encodedValue);
+
+                    String encryptedKey = "EncryptedKey";
+                    String encryptedValue = "EncryptedValue2222";
+                    req.getSession().putEncrypt(encryptedKey, encryptedValue);
+
+                    res.setContent("cookie set");
+                    res.write();
+                })
+                .get("/getCookie", (req, res) -> {
+
+                    String encodedKey = "EncodedKey";
+                    String encodedValue = (String) req.getSession().get(encodedKey);
+
+                    String encryptedKey = "EncryptedKey";
+                    String encryptedValue = (String) req.getSession().get(encryptedKey);
+
+                    res.setContent(encodedKey + ":" + encodedValue + " - " + encryptedKey + ":" + encryptedValue);
                     res.write();
                 })
                 .get("/cache", (req, res) -> {

@@ -34,12 +34,12 @@ public class UndertowServer implements Server {
 
     private UndertowServer() {
         this(new HashMap<>());
-        for (HttpMethod protocol : HttpMethod.values()) {
-            pathFunctions.put(protocol, new HashMap<>());
-        }
     }
 
     public UndertowServer(Map<ServerParams, String> params) {
+        for (HttpMethod protocol : HttpMethod.values()) {
+            pathFunctions.put(protocol, new HashMap<>());
+        }
         this.port = Integer.parseInt(params.getOrDefault(ServerParams.PORT, "9080"));
         this.hostname = params.getOrDefault(ServerParams.HOST, "0.0.0.0");
         this.applicationCookieName = params.getOrDefault(ServerParams.APPLICATION_NAME, "APPLICATION_NAME");
@@ -156,7 +156,7 @@ public class UndertowServer implements Server {
                         exchange.getResponseHeaders().put(new HttpString(param.getKey()), String.valueOf(param.getValue()));
                     }
                     exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, getContentType());
-                    exchange.getResponseHeaders().put(Headers.SET_COOKIE, request.getSession().toCookie(applicationCookieName, cookieSignSecretKey));
+                    exchange.getResponseHeaders().put(Headers.SET_COOKIE, request.getSession().toCookie());
                     super.write();
                 }
             };

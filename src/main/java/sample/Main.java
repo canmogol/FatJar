@@ -90,7 +90,7 @@ public class Main {
                     Set<String> keys = new HashSet<>();
                     keys.add("key");
                     keys.add("number");
-                    res.setContent(JSON.toJson(cache.getAll(keys)));
+                    res.setContent(JSON.create().toJson(cache.getAll(keys)));
                     res.write();
                 })
                 .get("/file", (request, response) -> {
@@ -159,7 +159,7 @@ public class Main {
 
                             db.delete(insertedEntity);
                             Log.info("delete insertedEntity: " + insertedEntity);
-                            res.setContent(JSON.toJson(insertedEntity));
+                            res.setContent(JSON.create().toJson(insertedEntity));
                         } else {
                             res.setContent("could not insert to DB");
                         }
@@ -190,12 +190,12 @@ public class Main {
                     throw new Server.ServerException(Status.STATUS_BAD_REQUEST);
                 })
                 .get("/toJSON", (req, res) -> {
-                    res.setContent(JSON.toJson(new MyPOJO(req.getParam("name", "add a query parameter like '?name=john'"), 101)));
+                    res.setContent(JSON.create().toJson(new MyPOJO(req.getParam("name", "add a query parameter like '?name=john'"), 101)));
                     res.write();
                 })
                 .post("/fromJSON", (req, res) -> {
-                    MyPOJO myPOJO = JSON.fromJson(new String(req.getBody()), MyPOJO.class);
-                    res.setContent(JSON.toJson(myPOJO));
+                    MyPOJO myPOJO = JSON.create().fromJson(new String(req.getBody()), MyPOJO.class);
+                    res.setContent(JSON.create().toJson(myPOJO));
                     res.write();
                 })
                 .get("/toXML", (req, res) -> {

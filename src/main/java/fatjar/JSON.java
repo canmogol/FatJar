@@ -1,15 +1,23 @@
 package fatjar;
 
-import fatjar.implementations.genson.GensonJSON;
+import fatjar.implementations.json.CurrentJSON;
 
 public interface JSON {
 
-    static <T> T fromJson(String json, Class<T> tClass) {
-        return new GensonJSON().fromJson(json, tClass);
+    static JSON create() {
+        return JSON.create(Type.Genson);
     }
 
-    static String toJson(Object object) {
-        return new GensonJSON().toJson(object);
+    static JSON create(Type type) {
+        return CurrentJSON.create(type);
+    }
+
+    <T> T fromJson(String json, Class<T> tClass);
+
+    String toJson(Object object);
+
+    enum Type {
+        Genson, Jackson, Gson
     }
 
 }

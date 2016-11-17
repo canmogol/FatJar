@@ -226,7 +226,7 @@ public class Undertow implements Server {
                 response.setStatus(Status.STATUS_INTERNAL_SERVER_ERROR);
                 responseMap.put("status", String.valueOf(Status.STATUS_INTERNAL_SERVER_ERROR.getStatus()));
             }
-            String content = JSON.toJson(responseMap);
+            String content = JSON.create().toJson(responseMap);
             response.setContent(content);
             response.write();
         }

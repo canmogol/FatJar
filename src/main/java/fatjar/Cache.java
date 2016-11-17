@@ -41,7 +41,6 @@ public interface Cache<K, V> {
 
     void clear();
 
-
     enum Type {
         MapCache, MemCache, RedisCache
     }

@@ -135,7 +135,7 @@ public class UndertowServer implements Server {
             Request request = createRequest(exchange);
 
             // Response object will write the content to undertow exchange's sender
-            Response response = new Response(request.getHeaders(), request.getSession(), new OutputStream() {
+            Response response = new Response(new ParamMap<>(), request.getSession(), new OutputStream() {
                 @Override
                 public void write(int b) throws IOException {
                     write(new byte[]{(byte) b});
@@ -264,7 +264,7 @@ public class UndertowServer implements Server {
                 params.addParam(new Param<>(key, values.getFirst()));
             });
 
-            Session session = new Session("", cookieSignSecretKey, applicationCookieName);
+            Session session;
             if (headers.containsKey(SessionKeys.COOKIE.getValue().toLowerCase()) ||
                     headers.containsKey(SessionKeys.COOKIE.getValue())) {
                 try {
@@ -280,6 +280,8 @@ public class UndertowServer implements Server {
                             applicationCookieName
                     );
                 }
+            } else {
+                session = new Session("", cookieSignSecretKey, applicationCookieName);
             }
 
             Request request = new Request(params, headers, session);

@@ -5,17 +5,17 @@ import fatjar.Log;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Session extends TreeMap<String, Serializable> {
 
     private final String rawContent;
     private String secretKey;
     private final String applicationCookieName;
+    private List<String> encryptedKeys = new ArrayList<>();
 
     public Session(String rawContent, String secretKey, String applicationCookieName) {
         // SampleApplication=a2V5MT12YWx1ZTE7a2V5Mj12YWx1ZTI7;SampleApplication_fr_ck_sn_ky=YWRhOTI0M2QyZDA5ZmQwYmQ1ZTM4MGE5ODc4Y2M3YTlhZDA2M2E0MA;
@@ -69,9 +69,9 @@ public class Session extends TreeMap<String, Serializable> {
                 for (String pair : appAndSignPairs) {
                     String[] keyValue = pair.split("=");
                     if (keyValue.length == 2) {
-                        if (keyValue[0].endsWith(SessionKeys.COOKIE_SIGN_KEY.getValue())) {
+                        if (SessionKeys.COOKIE_SIGN_KEY.getValue().endsWith(keyValue[0])) {
                             signCookieContent = keyValue[1];
-                        } else if (applicationCookieName.equals(keyValue[0])) {
+                        } else if (SessionKeys.COOKIE_CONTENT.getValue().equals(keyValue[0])) {
                             appCookieContent = keyValue[1];
                         }
                     }
@@ -87,6 +87,7 @@ public class Session extends TreeMap<String, Serializable> {
                     EncodedKey=RW5jb2RlZFZhbHVlMTExMQ
                     EncryptedKey=NzcrOTc3KzlMeUowNzc
                      */
+
                     for (String keyValue : keyValues) {
                         String[] pair = keyValue.split("=");
                         /*
@@ -99,9 +100,13 @@ public class Session extends TreeMap<String, Serializable> {
                             EncodedValue
                              */
                             if (pair[0].endsWith(SessionKeys.COOKIE_ENCRYPTED.toString())) {
-                                this.put(pair[0], decrypt(secretKey, encrypt(secretKey, "123").get()));
+                                byte[] bytes = decrypt(secretKey, pair[1]);
+                                String encKey = pair[0].substring(0, pair[0].length() - SessionKeys.COOKIE_ENCRYPTED.toString().length() - 1);
+                                String encValue = new String(bytes, StandardCharsets.UTF_8);
+                                this.encryptedKeys.add(encKey);
+                                this.put(encKey, encValue);
                             } else {
-                                this.put(pair[0], decode(pair[1]));
+                                this.put(pair[0], pair[1]);
                             }
                         }
                     }
@@ -120,25 +125,40 @@ public class Session extends TreeMap<String, Serializable> {
         try {
             // Set-Cookie: SampleApplication=a2V5MT12YWx1ZTE7a2V5Mj12YWx1ZTI7;\n
             // Set-Cookie: SampleApplication_fr_ck_sn_ky=YWRhOTI0M2QyZDA5ZmQwYmQ1ZTM4MGE5ODc4Y2M3YTlhZDA2M2E0MA;\n
-
-            String applicationCookieKeyValueString = "";
+            Map<String, String> cookieKeyValues = new TreeMap<>();
             for (String key : this.keySet()) {
-                applicationCookieKeyValueString += key + "=" + this.get(key) + ";";
+                if (this.encryptedKeys.contains(key)) {
+                    encrypt(secretKey, (String) this.get(key)).ifPresent(
+                            encryptedValue ->
+                                    cookieKeyValues.put(
+                                            key + "_" + SessionKeys.COOKIE_ENCRYPTED.toString(),
+                                            Base64.getEncoder().encodeToString(encryptedValue))
+                    );
+                } else {
+                    cookieKeyValues.put(key, (String) this.get(key));
+                }
             }
-            String applicationCookieContent = encode(applicationCookieKeyValueString).replace("\n", "").replace("=", "");
-            String applicationCookieAsString = applicationCookieName + "=" + applicationCookieContent;
-            cookies.append(applicationCookieAsString);
-            cookies.append(";");
 
-            String applicationCookieSignatureAsString = applicationCookieName + "_" + SessionKeys.COOKIE_SIGN_KEY.getValue() + "=";
+            StringBuilder applicationCookieKeyValueString = new StringBuilder();
+            for (String key : cookieKeyValues.keySet()) {
+                applicationCookieKeyValueString.append(key).append("=").append(cookieKeyValues.get(key)).append(";");
+            }
+            String applicationCookieContent = encode(applicationCookieKeyValueString.toString()).replace("\n", "").replace("=", "");
+            if (!applicationCookieContent.trim().isEmpty()) {
+                cookies.append(SessionKeys.COOKIE_CONTENT.getValue()).append("=").append(applicationCookieContent);
+                cookies.append(";");
 
-            applicationCookieSignatureAsString += sign(applicationCookieContent, secretKey);
-            cookies.append(applicationCookieSignatureAsString);
+                StringBuilder applicationCookieSignatureAsString = new StringBuilder();
+                applicationCookieSignatureAsString.append(SessionKeys.COOKIE_SIGN_KEY.getValue()).append("=");
+
+                applicationCookieSignatureAsString.append(sign(applicationCookieContent, secretKey));
+                cookies.append(applicationCookieSignatureAsString);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return applicationCookieName + "=" + encode(cookies.toString());
+        return applicationCookieName + "=" + encode(cookies.toString()) + "; Path=/; ";
     }
 
     public String decode(String value) {
@@ -156,20 +176,20 @@ public class Session extends TreeMap<String, Serializable> {
         return encoded;
     }
 
-    public String decrypt(String secretKey, String value) throws Exception {
+    public byte[] decrypt(String secretKey, String value) throws Exception {
         Cipher c = Cipher.getInstance("AES");
         SecretKeySpec k = new SecretKeySpec(secretKey.getBytes(), "AES");
         c.init(Cipher.DECRYPT_MODE, k);
-        return new String(c.doFinal(Base64.getDecoder().decode(value)));
+        return c.doFinal(Base64.getDecoder().decode(value));
     }
 
-    public Optional<String> encrypt(String secretKey, String value) {
+    public Optional<byte[]> encrypt(String secretKey, String value) {
         try {
             Cipher c = Cipher.getInstance("AES");
             SecretKeySpec k = new SecretKeySpec(secretKey.getBytes(), "AES");
             c.init(Cipher.ENCRYPT_MODE, k);
             byte[] encrypted = c.doFinal(value.getBytes());
-            return Optional.of(Base64.getEncoder().encodeToString(encrypted));
+            return Optional.of(encrypted);
         } catch (Exception e) {
             Log.error("could not encrypt value: " + value + " for key: " + secretKey);
             return Optional.empty();
@@ -190,13 +210,9 @@ public class Session extends TreeMap<String, Serializable> {
         return signValue;
     }
 
-    public void putEncoded(String key, String value) {
-        put(key, encode(value));
-    }
-
     public void putEncrypt(String key, String value) {
         encrypt(secretKey, value).ifPresent(
-                encryptedValue -> putEncoded(key + "_" + SessionKeys.COOKIE_ENCRYPTED.toString(), encryptedValue)
+                encryptedValue -> put(key + "_" + SessionKeys.COOKIE_ENCRYPTED.toString(), Base64.getEncoder().encodeToString(encryptedValue))
         );
     }
 

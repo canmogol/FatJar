@@ -2,6 +2,7 @@ package fatjar.dto;
 
 public enum SessionKeys {
 
+    COOKIE_CONTENT("COOKIE_CONTENT"),
     COOKIE_SIGN_KEY("COOKIE_SIGN_KEY"),
     COOKIE_ENCRYPTED("COOKIE_ENCRYPTED"),
     COOKIE("Cookie");

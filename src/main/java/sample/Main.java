@@ -59,7 +59,7 @@ public class Main {
 
                     String encodedKey = "EncodedKey";
                     String encodedValue = "EncodedValue1111";
-                    req.getSession().putEncoded(encodedKey, encodedValue);
+                    req.getSession().put(encodedKey, encodedValue);
 
                     String encryptedKey = "EncryptedKey";
                     String encryptedValue = "EncryptedValue2222";

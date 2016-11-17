@@ -1,18 +1,23 @@
 package fatjar;
 
 import fatjar.dto.Status;
-import fatjar.implementations.undertow.UndertowServer;
+import fatjar.implementations.server.CurrentServer;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public interface Server {
 
+    static Server create(Server.Type type, Map<ServerParams, String> params) {
+        return CurrentServer.create(type, params);
+    }
+
     static Server create(Map<ServerParams, String> params) {
-        return UndertowServer.create(params);
+        return Server.create(Type.Undertow, params);
     }
 
     static Server create() {
-        return UndertowServer.create();
+        return Server.create(Type.Undertow, new HashMap<>());
     }
 
     Server listen(int port, String hostname);
@@ -33,6 +38,10 @@ public interface Server {
 
     enum ServerParams {
         PORT, HOST, APPLICATION_NAME, SIGN_KEY
+    }
+
+    enum Type {
+        Undertow, Grizzly, Netty
     }
 
     class ServerException extends Throwable {

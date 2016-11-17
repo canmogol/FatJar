@@ -24,7 +24,7 @@ public class MapCache<K, V> implements Cache<K, V> {
 
     @Override
     public Type getType() {
-        return Type.Map;
+        return Type.MapCache;
     }
 
     @Override

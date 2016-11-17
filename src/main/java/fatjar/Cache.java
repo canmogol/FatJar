@@ -9,7 +9,7 @@ public interface Cache<K, V> {
 
     @SuppressWarnings("unchecked")
     static <K, V> Cache<K, V> create(String name) {
-        return (Cache<K, V>) CurrentCache.create(name);
+        return (Cache<K, V>) Cache.create(Type.MapCache, name);
     }
 
     @SuppressWarnings("unchecked")
@@ -43,7 +43,7 @@ public interface Cache<K, V> {
 
 
     enum Type {
-        Map, Memcache, Redis
+        MapCache, MemCache, RedisCache
     }
 
 }

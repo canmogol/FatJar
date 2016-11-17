@@ -1,11 +1,10 @@
-package fatjar.implementations.undertow;
+package fatjar.implementations.server;
 
 import fatjar.JSON;
 import fatjar.Log;
 import fatjar.RequestResponse;
 import fatjar.Server;
 import fatjar.dto.*;
-import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.handlers.form.FormData;
@@ -21,7 +20,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class UndertowServer implements Server {
+public class Undertow implements Server {
 
     private int port = 9080;
     private String hostname = "localhost";
@@ -32,26 +31,18 @@ public class UndertowServer implements Server {
     private Map<String, List<RequestResponse>> wildcardFunctions = new HashMap<>();
     private Map<Status, RequestResponse> statusFunctions = new HashMap<>();
 
-    private UndertowServer() {
-        this(new HashMap<>());
-    }
-
-    public UndertowServer(Map<ServerParams, String> params) {
+    public Undertow(Map<ServerParams, String> params) {
         for (HttpMethod protocol : HttpMethod.values()) {
             pathFunctions.put(protocol, new HashMap<>());
         }
-        this.port = Integer.parseInt(params.getOrDefault(ServerParams.PORT, "9080"));
-        this.hostname = params.getOrDefault(ServerParams.HOST, "0.0.0.0");
-        this.applicationCookieName = params.getOrDefault(ServerParams.APPLICATION_NAME, "APPLICATION_NAME");
-        this.cookieSignSecretKey = params.getOrDefault(ServerParams.SIGN_KEY, "SIGN_KEY");
-    }
-
-    public static Server create() {
-        return new UndertowServer();
+        this.port = Integer.parseInt(params.getOrDefault(ServerParams.PORT, String.valueOf(port)));
+        this.hostname = params.getOrDefault(ServerParams.HOST, hostname);
+        this.applicationCookieName = params.getOrDefault(ServerParams.APPLICATION_NAME, applicationCookieName);
+        this.cookieSignSecretKey = params.getOrDefault(ServerParams.SIGN_KEY, cookieSignSecretKey);
     }
 
     public static Server create(Map<ServerParams, String> params) {
-        return new UndertowServer(params);
+        return new Undertow(params);
     }
 
     @Override
@@ -111,7 +102,7 @@ public class UndertowServer implements Server {
 
     @Override
     public void start() {
-        Undertow server = Undertow.builder()
+        io.undertow.Undertow server = io.undertow.Undertow.builder()
                 .addHttpListener(port, hostname)
                 .setHandler(new UndertowHttpHandler()).build();
         server.start();
@@ -125,7 +116,7 @@ public class UndertowServer implements Server {
     }
 
     /**
-     * UndertowServer's Http handler
+     * Undertow's Http handler
      */
     class UndertowHttpHandler implements HttpHandler {
 

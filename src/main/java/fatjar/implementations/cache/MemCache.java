@@ -1,13 +1,11 @@
 package fatjar.implementations.cache;
 
+import com.whalin.MemCached.MemCachedClient;
+import fatjar.Cache;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.whalin.MemCached.MemCachedClient;
-import com.whalin.MemCached.SockIOPool;
-
-import fatjar.Cache;
 
 public class MemCache<K, V> implements Cache<K, V> {
 
@@ -36,7 +34,7 @@ public class MemCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public Type getType() {
-		return Type.Memcache;
+		return Type.MapCache;
 	}
 
 	@Override

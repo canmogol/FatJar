@@ -2,7 +2,7 @@ package fatjar;
 
 
 import fatjar.dto.HttpMethod;
-import fatjar.implementations.jetty.JettyHttpClient;
+import fatjar.implementations.httpclient.CurrentHttpClient;
 
 import java.net.HttpCookie;
 import java.net.URI;
@@ -14,7 +14,11 @@ import java.util.concurrent.TimeUnit;
 public interface HttpClient {
 
     static HttpClient create() {
-        return JettyHttpClient.create();
+        return HttpClient.create(Type.JettyHttpClient);
+    }
+
+    static HttpClient create(Type type) {
+        return CurrentHttpClient.create(type);
     }
 
     HttpClient url(String url);
@@ -50,6 +54,10 @@ public interface HttpClient {
     Map<String, Map<String, String>> getCookies();
 
     Map<String, String> getCookies(String path);
+
+    enum Type {
+        JettyHttpClient, ApacheHttpClient, UndertowHttpClient
+    }
 
     class HttpClientException extends Throwable {
         public HttpClientException(Throwable cause) {

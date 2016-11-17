@@ -5,7 +5,7 @@ import fatjar.implementations.json.CurrentJSON;
 public interface JSON {
 
     static JSON create() {
-        return JSON.create(Type.Genson);
+        return JSON.create(Type.GensonJSON);
     }
 
     static JSON create(Type type) {
@@ -17,7 +17,7 @@ public interface JSON {
     String toJson(Object object);
 
     enum Type {
-        Genson, Jackson, Gson
+        GensonJSON, JacksonJSON, GsonJSON
     }
 
 }

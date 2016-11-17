@@ -24,32 +24,8 @@ public class EntityDB implements DB {
     private static EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
 
-    private String getJdbcURL() {
-        String jdbcURL = null;
-        try {
-            if (System.getenv("DATABASE_URL") != null) {
-                URI dbUri = null;
-                dbUri = new URI(System.getenv("DATABASE_URL"));
-                String username = dbUri.getUserInfo().split(":")[0];
-                String password = dbUri.getUserInfo().split(":")[1];
-                jdbcURL = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
-                Log.info("using jdbcURL: " + jdbcURL);
-            }
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return jdbcURL;
-    }
-
     public EntityDB() {
-        String jdbcURL = getJdbcURL();
-        if (jdbcURL != null) {
-            Map<String, String> map = new HashMap<>();
-            map.put("javax.persistence.jdbc.url", jdbcURL);
-            entityManagerFactory = Persistence.createEntityManagerFactory("DefaultPersistenceUnit", map);
-        } else {
-            entityManagerFactory = Persistence.createEntityManagerFactory("DefaultPersistenceUnit");
-        }
+        entityManagerFactory = Persistence.createEntityManagerFactory("DefaultPersistenceUnit");
     }
 
     public EntityManagerFactory getEntityManagerFactory() {

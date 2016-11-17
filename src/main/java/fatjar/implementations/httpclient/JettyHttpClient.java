@@ -1,4 +1,4 @@
-package fatjar.implementations.jetty;
+package fatjar.implementations.httpclient;
 
 import fatjar.HttpClient;
 import fatjar.dto.HttpMethod;
@@ -26,7 +26,7 @@ public class JettyHttpClient implements HttpClient {
     private Request request;
     private ContentResponse contentResponse;
 
-    private JettyHttpClient() {
+    public JettyHttpClient() {
         SslContextFactory sslContextFactory = new SslContextFactory();
         httpClient = new org.eclipse.jetty.client.HttpClient(sslContextFactory);
         httpClient.setFollowRedirects(false);

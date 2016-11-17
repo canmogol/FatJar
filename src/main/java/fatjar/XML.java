@@ -1,17 +1,25 @@
 package fatjar;
 
-import fatjar.implementations.jaxb.JaxbXML;
+import fatjar.implementations.xml.CurrentXML;
 
 import java.util.Optional;
 
 public interface XML {
 
-    static <T> Optional<T> fromXML(byte[] xmlData, Class<T> tClass) {
-        return new JaxbXML().fromXML(xmlData, tClass);
+    static XML create() {
+        return XML.create(Type.JaxbXML);
     }
 
-    static <T> Optional<String> toXML(Object object) {
-        return new JaxbXML().toXML(object);
+    static XML create(Type type) {
+        return CurrentXML.create(type);
+    }
+
+    <T> Optional<T> fromXML(byte[] xmlData, Class<T> tClass);
+
+    <T> Optional<String> toXML(T object);
+
+    enum Type {
+        JaxbXML, XStreamXML
     }
 
 }

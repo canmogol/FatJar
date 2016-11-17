@@ -199,15 +199,15 @@ public class Main {
                     res.write();
                 })
                 .get("/toXML", (req, res) -> {
-                    Optional<String> xmlOptional = XML.toXML(new MyPOJO(req.getParam("name", "add a query parameter like '?name=doe'"), Integer.MAX_VALUE));
+                    Optional<String> xmlOptional = XML.create().toXML(new MyPOJO(req.getParam("name", "add a query parameter like '?name=doe'"), Integer.MAX_VALUE));
                     xmlOptional.ifPresent(res::setContent);
                     res.setContentType("text/xml");
                     res.write();
                 })
                 .post("/fromXML", (req, res) -> {
-                    Optional<MyPOJO> myPOJOOptional = XML.fromXML(req.getBody(), MyPOJO.class);
+                    Optional<MyPOJO> myPOJOOptional = XML.create().fromXML(req.getBody(), MyPOJO.class);
                     myPOJOOptional.ifPresent(myPOJO -> {
-                        XML.toXML(myPOJO).ifPresent(res::setContent);
+                        XML.create().toXML(myPOJO).ifPresent(res::setContent);
                     });
                     res.setContentType("text/xml");
                     res.write();

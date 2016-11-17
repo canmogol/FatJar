@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 public interface Log {
 
-    static Logger LOG = Logger.getLogger(Log.class.getName());
+    Logger LOG = Logger.getLogger(Log.class.getName());
 
     static void info(String message) {
         LOG.log(Level.INFO, message);

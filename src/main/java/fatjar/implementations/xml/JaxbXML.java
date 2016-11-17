@@ -1,15 +1,13 @@
-package fatjar.implementations.jaxb;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.Optional;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+package fatjar.implementations.xml;
 
 import fatjar.Log;
 import fatjar.XML;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Optional;
 
 public class JaxbXML implements XML {
 

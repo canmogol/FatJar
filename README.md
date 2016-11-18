@@ -4,13 +4,7 @@ FatJar simple API to quick prototyping and portable web services. See **Main::ma
 
 Build and coverage status:
 
-[![Build Status](https://travis-ci.org/canmogol/FatJar.svg?branch=master)](https://travis-ci.org/canmogol/FatJar)
-
-[![codecov](https://codecov.io/gh/canmogol/FatJar/branch/master/graph/badge.svg)](https://codecov.io/gh/canmogol/FatJar)
-
-[![gitter](https://badges.gitter.im/canmogol/FatJar.svg)](https://gitter.im/FatJar/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![could not deploy][2]][1]
+[![Build Status](https://travis-ci.org/canmogol/FatJar.svg?branch=master)](https://travis-ci.org/canmogol/FatJar) [![codecov](https://codecov.io/gh/canmogol/FatJar/branch/master/graph/badge.svg)](https://codecov.io/gh/canmogol/FatJar) [![gitter](https://badges.gitter.im/canmogol/FatJar.svg)](https://gitter.im/FatJar/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![could not deploy][2]][1]
 
   [1]: https://fatjar-travis.herokuapp.com/
   [2]: https://fatjar-travis.herokuapp.com/badgeFlat (FatJar Heroku Deployment Status)

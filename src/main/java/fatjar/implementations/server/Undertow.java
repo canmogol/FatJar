@@ -27,13 +27,15 @@ public class Undertow implements Server {
     private String applicationCookieName = "APPLICATION_NAME";
     private String cookieSignSecretKey = "SIGN_KEY";
     private Map<HttpMethod, Map<String, List<RequestResponse>>> pathFunctions = new HashMap<>();
+    private Map<HttpMethod, Map<String, List<RequestResponse>>> parametrizedPathFunctions = new HashMap<>();
     private Map<String, List<RequestResponse>> filterFunctions = new HashMap<>();
-    private Map<String, List<RequestResponse>> wildcardFunctions = new HashMap<>();
+    private Map<String, List<RequestResponse>> filterWildcardFunctions = new HashMap<>();
     private Map<Status, RequestResponse> statusFunctions = new HashMap<>();
 
     public Undertow(Map<ServerParams, String> params) {
         for (HttpMethod protocol : HttpMethod.values()) {
             pathFunctions.put(protocol, new HashMap<>());
+            parametrizedPathFunctions.put(protocol, new HashMap<>());
         }
         this.port = Integer.parseInt(params.getOrDefault(ServerParams.PORT, String.valueOf(port)));
         this.hostname = params.getOrDefault(ServerParams.HOST, hostname);
@@ -57,10 +59,10 @@ public class Undertow implements Server {
     public Server filter(String path, RequestResponse requestResponse) {
         if (path.endsWith("*")) {
             String wildcardPath = path.split("\\*")[0];
-            if (!this.wildcardFunctions.containsKey(wildcardPath)) {
-                this.wildcardFunctions.put(wildcardPath, new LinkedList<>());
+            if (!this.filterWildcardFunctions.containsKey(wildcardPath)) {
+                this.filterWildcardFunctions.put(wildcardPath, new LinkedList<>());
             }
-            this.wildcardFunctions.get(wildcardPath).add(requestResponse);
+            this.filterWildcardFunctions.get(wildcardPath).add(requestResponse);
         } else {
             if (!this.filterFunctions.containsKey(path)) {
                 this.filterFunctions.put(path, new LinkedList<>());
@@ -78,25 +80,25 @@ public class Undertow implements Server {
 
     @Override
     public Server get(String path, RequestResponse requestResponse) {
-        this.getPathFunctionList(HttpMethod.GET, path).add(requestResponse);
+        this.addPathFunctionList(HttpMethod.GET, path).add(requestResponse);
         return this;
     }
 
     @Override
     public Server post(String path, RequestResponse requestResponse) {
-        this.getPathFunctionList(HttpMethod.POST, path).add(requestResponse);
+        this.addPathFunctionList(HttpMethod.POST, path).add(requestResponse);
         return this;
     }
 
     @Override
     public Server delete(String path, RequestResponse requestResponse) {
-        this.getPathFunctionList(HttpMethod.DELETE, path).add(requestResponse);
+        this.addPathFunctionList(HttpMethod.DELETE, path).add(requestResponse);
         return this;
     }
 
     @Override
     public Server put(String path, RequestResponse requestResponse) {
-        this.getPathFunctionList(HttpMethod.PUT, path).add(requestResponse);
+        this.addPathFunctionList(HttpMethod.PUT, path).add(requestResponse);
         return this;
     }
 
@@ -108,11 +110,19 @@ public class Undertow implements Server {
         server.start();
     }
 
-    private List<RequestResponse> getPathFunctionList(HttpMethod httpMethod, String path) {
-        if (!this.pathFunctions.get(httpMethod).containsKey(path)) {
-            this.pathFunctions.get(httpMethod).put(path, new LinkedList<>());
+    private List<RequestResponse> addPathFunctionList(HttpMethod httpMethod, String path) {
+        if (path.contains("@")) {
+            String wildPath = path.split("@")[0];
+            if (!this.parametrizedPathFunctions.get(httpMethod).containsKey(wildPath)) {
+                this.parametrizedPathFunctions.get(httpMethod).put(wildPath, new LinkedList<>());
+            }
+            return this.parametrizedPathFunctions.get(httpMethod).get(wildPath);
+        } else {
+            if (!this.pathFunctions.get(httpMethod).containsKey(path)) {
+                this.pathFunctions.get(httpMethod).put(path, new LinkedList<>());
+            }
+            return this.pathFunctions.get(httpMethod).get(path);
         }
-        return this.pathFunctions.get(httpMethod).get(path);
     }
 
     /**
@@ -164,10 +174,36 @@ public class Undertow implements Server {
                     this.handleFilters(exchange.getRequestURI(), request, response);
                     // run registered handlers for this url
                     this.handleRequestResponse(httpMethod, exchange.getRequestURI(), request, response);
+                    // set request to handled
                 } else {
-                    // notify client that there is no handler for this call
-                    throw new ServerException(Status.STATUS_NOT_FOUND, exchange.getRequestURI());
+                    /**
+                     * exchange.getRequestURI()     /html/user/login.html
+                     * parametrizedPathFunctions            html, js, css, image
+                     */
+                    Map<String, List<RequestResponse>> requestMethodMap = parametrizedPathFunctions.get(HttpMethod.valueOf(exchange.getRequestMethod().toString()));
+
+                    // status
+                    boolean parametrizedStatus = false;
+
+                    // check if parametrized method exists
+                    for (String parametrized : requestMethodMap.keySet()) {
+                        if (exchange.getRequestURI().startsWith(parametrized)) {
+                            request.getParams().addParam(new Param<>("@", exchange.getRequestURI().substring(parametrized.length())));
+                            List<RequestResponse> requestResponseList = requestMethodMap.get(parametrized);
+                            for (RequestResponse requestResponse : requestResponseList) {
+                                requestResponse.apply(request, response);
+                                parametrizedStatus = true;
+                            }
+                        }
+                    }
+
+                    // if no one handled this request, throw not found
+                    if (!parametrizedStatus) {
+                        // notify client that there is no handler for this call
+                        throw new ServerException(Status.STATUS_NOT_FOUND, exchange.getRequestURI());
+                    }
                 }
+
             } catch (ServerException e) {
                 // notify client that server got an exception
                 this.handleServerError(request, response, e);
@@ -181,10 +217,10 @@ public class Undertow implements Server {
         }
 
         private void handleWildcards(String path, Request request, Response response) throws ServerException {
-            List<RequestResponse> wildcardRequestResponseFunctions = wildcardFunctions.keySet()
+            List<RequestResponse> wildcardRequestResponseFunctions = filterWildcardFunctions.keySet()
                     .stream()
                     .filter(path::startsWith)
-                    .flatMap(wildcardPath -> wildcardFunctions.get(wildcardPath).stream())
+                    .flatMap(wildcardPath -> filterWildcardFunctions.get(wildcardPath).stream())
                     .collect(Collectors.toList());
             // calling apply inside the forEach() method will mask the wildcard function's exception,
             // so call the apply function in a for loop

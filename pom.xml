@@ -255,6 +255,13 @@
 			<artifactId>Memcached-Java-Client</artifactId>
 			<version>3.0.2</version>
 		</dependency>
+		<!-- TEMPLATE -->
+		<!-- string template -->
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>stringtemplate</artifactId>
+			<version>4.0.2</version>
+		</dependency>
 
 
 	</dependencies>

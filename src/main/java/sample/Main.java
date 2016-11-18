@@ -55,6 +55,12 @@ public class Main {
                     }
                     res.write();
                 })
+                .get("/html/@", (req, res) -> {
+                    res.setContent("could not load/find login.html");
+                    res.setContentType("text/html");
+                    IO.readFile("web/html/" + req.getParam("@")).ifPresent(res::setContent);
+                    res.write();
+                })
                 .get("/setCookie", (req, res) -> {
 
                     String encodedKey = "EncodedKey";

@@ -63,18 +63,27 @@ public class Main {
                     res.write();
                 })
                 .get("/@folder/@file", (req, res) -> {
-                    res.setContent("could not load/find login.html");
+                    String uri = req.getHeader(RequestKeys.URI);
+                    res.setContentType(req.getMimeType(uri));
                     Optional<String> content = IO.readResource(req.getParam("@folder"), req.getParam("@file"));
                     if (content.isPresent()) {
-                        res.setContentType(req.getMimeType(req.getHeader(RequestKeys.URI)));
                         res.setContent(content.get());
                     } else {
-                        res.setContentType(req.getMimeType(req.getHeader(RequestKeys.URI)));
-                        IO.readBinaryResource(req.getParam("@folder"), req.getParam("@file")).ifPresent(res::setContentChar);
+                        Optional<byte[]> contentOptional = IO.readBinaryResource(req.getParam("@folder"), req.getParam("@file"));
+                        if (contentOptional.isPresent()) {
+                            res.setContentChar(contentOptional.get());
+                        } else {
+                            throw new Server.ServerException(Status.STATUS_NOT_FOUND, "no file found with uri: " + uri);
+                        }
                     }
                     res.write();
                 })
                 .post("/login", (req, res) -> {
+                    String paramContent = "";
+                    for (Param p : req.getParams().values()) {
+                        paramContent += p.toString();
+                    }
+                    String error = "username and/or password fields are empty " + paramContent;
                     if (!req.hasParams("username", "password")) {
                         IO.readResource("template", "freemarker", "error.ftl")
                                 .ifPresent(content -> {
@@ -82,7 +91,7 @@ public class Main {
                                     res.setContent(
                                             Template.create().fromTemplate(
                                                     content,
-                                                    "error", "username and/or password fields are empty"
+                                                    "error", error
                                             )
                                     );
                                 });

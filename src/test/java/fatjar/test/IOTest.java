@@ -37,21 +37,25 @@ public class IOTest {
     }
 
     @Test
-    public void writeFileBinary() {
+    public void readWriteFileBinary() {
+        writeFileBinary();
+        readBinaryFile();
+    }
+
+    private void writeFileBinary() {
         boolean result = IO.writeFile(contentByteArray, folder, fileByteArray);
         Assert.assertTrue("test failed, could not write to binary file: " + fileByteArray, result);
+    }
+
+    private void readBinaryFile() {
+        Optional<byte[]> bytesOptional = IO.readBinaryFile(folder, fileByteArray);
+        Assert.assertNotNull("test failed, could not read binary file: " + fileByteArray, bytesOptional.get());
     }
 
     @Test
     public void writeFileBinaryFail() {
         boolean result = IO.writeFile(contentByteArray, "dev", "test", folder, fileByteArray);
         Assert.assertFalse("test failed, should not be able to write to binary file: " + fileByteArray, result);
-    }
-
-    @Test
-    public void readBinaryFile() {
-        Optional<byte[]> bytesOptional = IO.readBinaryFile(folder, fileByteArray);
-        Assert.assertNotNull("test failed, could not read binary file: " + fileByteArray, bytesOptional.get());
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -61,9 +65,20 @@ public class IOTest {
     }
 
     @Test
-    public void writeFile() {
+    public void readWriteFile() {
+        writeFile();
+        readFile();
+    }
+
+    private void writeFile() {
         boolean result = IO.writeFile(content, folder, file);
         Assert.assertTrue("test failed, could not write to text file: " + file, result);
+    }
+
+    private void readFile() {
+        Optional<String> contentOptional = IO.readFile(folder, file);
+        Assert.assertTrue(contentOptional.isPresent());
+        Assert.assertEquals(contentOptional.get(), content);
     }
 
     @Test
@@ -72,12 +87,6 @@ public class IOTest {
         Assert.assertFalse("test failed, should not be able to write to text file: " + file, result);
     }
 
-    @Test
-    public void readFile() {
-        Optional<String> contentOptional = IO.readFile(folder, file);
-        Assert.assertTrue(contentOptional.isPresent());
-        Assert.assertEquals(contentOptional.get(), content);
-    }
 
     @Test(expected = NoSuchElementException.class)
     public void readFileFail() {

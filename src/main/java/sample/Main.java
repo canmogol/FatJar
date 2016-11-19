@@ -65,12 +65,12 @@ public class Main {
                 .get("/@folder/@file", (req, res) -> {
                     res.setContent("could not load/find login.html");
                     res.setContentType("text/html");
-                    IO.readFile("web", req.getParam("@folder"), req.getParam("@file")).ifPresent(res::setContent);
+                    IO.readResource("web", req.getParam("@folder"), req.getParam("@file")).ifPresent(res::setContent);
                     res.write();
                 })
                 .post("/login", (req, res) -> {
                     if (!req.hasParams("username", "password")) {
-                        IO.readFile("web", "template", "freemarker","error.ftl")
+                        IO.readResource("web", "template", "freemarker", "error.ftl")
                                 .ifPresent(content -> {
                                     res.setContentType("text/html");
                                     res.setContent(
@@ -81,7 +81,7 @@ public class Main {
                                     );
                                 });
                     } else if (!"john".equals(req.getParam("username")) || !"123".equals(req.getParam("password"))) {
-                        IO.readFile("web", "template", "freemarker", "error.ftl")
+                        IO.readResource("web", "template", "freemarker", "error.ftl")
                                 .ifPresent(content -> {
                                     res.setContentType("text/html");
                                     res.setContent(
@@ -102,7 +102,7 @@ public class Main {
                     res.write();
                 })
                 .get("/aa/logged", (req, res) -> {
-                    IO.readFile("web", "template", "freemarker","login.ftl")
+                    IO.readResource("web", "template", "freemarker", "login.ftl")
                             .ifPresent(content -> {
                                 res.setContentType("text/html");
                                 res.setContent(
@@ -156,7 +156,7 @@ public class Main {
                     String path = File.separator + "tmp";
                     String fileName = "file.temp";
                     String fileContent = "file content here!";
-                    boolean result = IO.writeFile(path, fileName, fileContent);
+                    boolean result = IO.writeFile(fileContent, path, fileName);
                     if (result) {
                         Optional<String> content = IO.readFile(path, fileName);
                         if (content.isPresent()) {

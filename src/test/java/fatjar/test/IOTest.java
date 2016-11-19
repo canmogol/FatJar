@@ -15,7 +15,7 @@ public class IOTest {
 
     @Test
     public void writeTest() {
-        boolean result = IO.writeFile(folder, file, content);
+        boolean result = IO.writeFile(content, folder, file);
         Assert.assertTrue("test failed, could not write to file", result);
     }
 

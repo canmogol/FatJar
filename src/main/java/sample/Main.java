@@ -55,8 +55,8 @@ public class Main {
                     res.write();
                 })
                 .get("/Hi", (req, res) -> {
-                    if (req.getParams().containsKey("name")) {
-                        res.setContent("Hello " + req.getParams().getValue("name"));
+                    if (req.getQueryParams().containsKey("name")) {
+                        res.setContent("Hello " + req.getQueryParams().getValue("name"));
                     } else {
                         res.setContent("type \"http://localhost:80/Hi?name=john\" in your browser");
                     }
@@ -65,11 +65,11 @@ public class Main {
                 .get("/@folder/@file", (req, res) -> {
                     String uri = req.getHeader(RequestKeys.URI);
                     res.setContentType(req.getMimeType(uri));
-                    Optional<String> content = IO.readResource(req.getParam("@folder"), req.getParam("@file"));
+                    Optional<String> content = IO.readResource(req.getQueryParam("@folder"), req.getQueryParam("@file"));
                     if (content.isPresent()) {
                         res.setContent(content.get());
                     } else {
-                        Optional<byte[]> contentOptional = IO.readBinaryResource(req.getParam("@folder"), req.getParam("@file"));
+                        Optional<byte[]> contentOptional = IO.readBinaryResource(req.getQueryParam("@folder"), req.getQueryParam("@file"));
                         if (contentOptional.isPresent()) {
                             res.setContentChar(contentOptional.get());
                         } else {
@@ -79,23 +79,18 @@ public class Main {
                     res.write();
                 })
                 .post("/login", (req, res) -> {
-                    String paramContent = "";
-                    for (Param p : req.getParams().values()) {
-                        paramContent += p.toString();
-                    }
-                    String error = "login username and/or password fields are empty " + paramContent;
-                    if (!req.hasParams("username", "password")) {
+                    if (!req.hasPostParams("username", "password")) {
                         IO.readResource("template", "freemarker", "error.ftl")
                                 .ifPresent(content -> {
                                     res.setContentType("text/html");
                                     res.setContent(
                                             Template.create().fromTemplate(
                                                     content,
-                                                    "error", error
+                                                    "error", "login username and/or password fields are empty "
                                             )
                                     );
                                 });
-                    } else if (!"john".equals(req.getParam("username")) || !"123".equals(req.getParam("password"))) {
+                    } else if (!"john".equals(req.getPostParam("username")) || !"123".equals(req.getPostParam("password"))) {
                         IO.readResource("template", "freemarker", "error.ftl")
                                 .ifPresent(content -> {
                                     res.setContentType("text/html");
@@ -108,11 +103,11 @@ public class Main {
                                 });
                     } else {
                         req.getSession().put("lastLogin", new Date().toString());
-                        req.getSession().putEncrypt("username", req.getParam("username"));
+                        req.getSession().putEncrypt("username", req.getPostParam("username"));
 
                         res.setStatus(Status.STATUS_SEE_OTHER);
                         res.getHeaders().addParam(new Param<>("Location", "/aa/logged"));
-                        Cache.create().put("username", req.getParam("username"));
+                        Cache.create().put("username", req.getPostParam("username"));
                     }
                     res.write();
                 })
@@ -272,7 +267,7 @@ public class Main {
                     throw new Server.ServerException(Status.STATUS_BAD_REQUEST);
                 })
                 .get("/toJSON", (req, res) -> {
-                    res.setContent(JSON.create().toJson(new MyPOJO(req.getParam("name", "add a query parameter like '?name=john'"), 101)));
+                    res.setContent(JSON.create().toJson(new MyPOJO(req.getQueryParam("name", "add a query parameter like '?name=john'"), 101)));
                     res.write();
                 })
                 .post("/fromJSON", (req, res) -> {
@@ -281,7 +276,7 @@ public class Main {
                     res.write();
                 })
                 .get("/toXML", (req, res) -> {
-                    Optional<String> xmlOptional = XML.create().toXML(new MyPOJO(req.getParam("name", "add a query parameter like '?name=doe'"), Integer.MAX_VALUE));
+                    Optional<String> xmlOptional = XML.create().toXML(new MyPOJO(req.getQueryParam("name", "add a query parameter like '?name=doe'"), Integer.MAX_VALUE));
                     xmlOptional.ifPresent(res::setContent);
                     res.setContentType("text/xml");
                     res.write();

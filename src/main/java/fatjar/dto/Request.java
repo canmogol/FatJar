@@ -17,6 +17,8 @@ public class Request implements Serializable {
     private ParamMap<String, Param<String, Object>> params;
     private Session session;
     private byte[] body;
+    private byte[] post;
+    private Map<String, String> postMap = null;
 
     public Request(ParamMap<String, Param<String, Object>> params, ParamMap<String, Param<String, Object>> headers, Session session) {
         this.session = session;
@@ -64,13 +66,22 @@ public class Request implements Serializable {
         return headers;
     }
 
-    public ParamMap<String, Param<String, Object>> getParams() {
+    public ParamMap<String, Param<String, Object>> getQueryParams() {
         return params;
     }
 
-    public boolean hasParams(String... params) {
+    public boolean hasQueryParams(String... params) {
         for (String param : params) {
-            if (getParam(param) == null) {
+            if (getQueryParam(param) == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean hasPostParams(String... params) {
+        for (String param : params) {
+            if (getPostParam(param) == null) {
                 return false;
             }
         }
@@ -90,16 +101,43 @@ public class Request implements Serializable {
         }
     }
 
-    public String getParam(String name) {
-        return getParam(name, null);
+    public String getQueryParam(String name) {
+        return getQueryParam(name, null);
     }
 
-    public String getParam(String name, String defaultValue) {
-        if (this.getParams().containsKey(name)) {
-            return String.valueOf(this.getParams().getValue(name));
+    public String getQueryParam(String name, String defaultValue) {
+        if (this.getQueryParams().containsKey(name)) {
+            return String.valueOf(this.getQueryParams().getValue(name));
         } else {
             return defaultValue;
         }
+    }
+
+    public void setPost(byte[] post) {
+        this.post = post;
+    }
+
+    public byte[] getPost() {
+        return post;
+    }
+
+    public String getPostParam(String name) {
+        if (this.postMap == null) {
+            this.postMap = new HashMap<>();
+            try {
+                String postString = new String(this.post);
+                String[] keyValuePairs = postString.split("&");
+                for (String keyValuePair : keyValuePairs) {
+                    String[] keyValue = keyValuePair.split("=");
+                    if(keyValue.length == 2){
+                        this.postMap.put(keyValue[0], keyValue[1]);
+                    }
+                }
+            } catch (Exception e) {
+                Log.error("got exception while reading body to map, error: " + e);
+            }
+        }
+        return this.postMap.get(name);
     }
 
     @Override

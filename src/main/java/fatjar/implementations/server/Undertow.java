@@ -7,9 +7,6 @@ import fatjar.Server;
 import fatjar.dto.*;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
-import io.undertow.server.handlers.form.FormData;
-import io.undertow.server.handlers.form.FormDataParser;
-import io.undertow.server.handlers.form.FormEncodedDataDefinition;
 import io.undertow.util.HeaderValues;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
@@ -205,7 +202,7 @@ public class Undertow implements Server {
                             List<String> keys = parametersMap.get(parametrized);
                             String[] split = remainingURI.split("/");
                             for (int i = 0; i < split.length; i++) {
-                                request.getParams().addParam(new Param<>("@" + keys.get(i), split[i]));
+                                request.getQueryParams().addParam(new Param<>("@" + keys.get(i), split[i]));
                             }
                             // find and execute parameter functions
                             List<RequestResponse> requestResponseList = requestMethodMap.get(parametrized);
@@ -332,20 +329,16 @@ public class Undertow implements Server {
 
             Request request = new Request(params, headers, session);
             if ("POST".equalsIgnoreCase(exchange.getRequestMethod().toString())) {
-                try {
-                    FormEncodedDataDefinition formEncodedDataDefinition = new FormEncodedDataDefinition();
-                    FormDataParser parser = formEncodedDataDefinition.create(exchange);
-                    FormData formData = parser.parseBlocking();
-                    for (String key : formData) {
-                        System.out.println(key + ":");
-                        for (FormData.FormValue value : formData.get(key)) {
-                            System.out.println("\t" + value.getValue());
-                            request.getParams().addParam(new Param<>(key, value.getValue()));
+                exchange.getRequestReceiver().receiveFullBytes((e, data) -> {
+                            if (data != null) {
+                                request.setPost(data);
+                            }
+                        },
+                        (e, exception) -> {
+                            Log.error("got exception at receiveFullBytes, exception: " + exception);
+                            exception.printStackTrace();
                         }
-                    }
-                } catch (Exception ex) {
-                    Log.error("could not handle post request, exception: " + ex);
-                }
+                );
             } else {
                 exchange.getRequestReceiver().receiveFullBytes((e, data) -> {
                             request.setBody(data);

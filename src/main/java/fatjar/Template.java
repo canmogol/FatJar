@@ -8,7 +8,7 @@ import java.util.Map;
 public interface Template {
 
     static Template create() {
-        return Template.create(Type.StringTemplate);
+        return Template.create(Type.FreemarkerTemplate);
     }
 
     static Template create(Type type) {
@@ -17,8 +17,10 @@ public interface Template {
 
     String fromTemplate(String content, Map<String, Object> values);
 
+    String fromTemplate(String content, String... keyValuePairs);
+
     enum Type {
-        StringTemplate, FreemarkerTemplate
+        FreemarkerTemplate, StringTemplate
     }
 
 }

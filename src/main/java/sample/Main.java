@@ -2,6 +2,7 @@ package sample;
 
 import fatjar.*;
 import fatjar.dto.HttpMethod;
+import fatjar.dto.Param;
 import fatjar.dto.RequestKeys;
 import fatjar.dto.Status;
 
@@ -40,6 +41,12 @@ public class Main {
                 .filter("/*", (req, res) -> {
                     Log.info("Wildcard filter called");
                 })
+                .filter("/aa/*", (req, res) -> {
+                    String uri = req.getHeader(RequestKeys.URI);
+                    if (req.getSession() == null || req.getSession().get("username") == null) {
+                        throw new Server.ServerException(Status.STATUS_UNAUTHORIZED, "unauthorized call to " + uri);
+                    }
+                })
                 .filter("/Hi", (req, res) -> {
                     Log.info("/Hi filter called");
                 })
@@ -55,10 +62,56 @@ public class Main {
                     }
                     res.write();
                 })
-                .get("/html/@", (req, res) -> {
+                .get("/@folder/@file", (req, res) -> {
                     res.setContent("could not load/find login.html");
                     res.setContentType("text/html");
-                    IO.readFile("web/html/" + req.getParam("@")).ifPresent(res::setContent);
+                    IO.readFile("web", req.getParam("@folder"), req.getParam("@file")).ifPresent(res::setContent);
+                    res.write();
+                })
+                .post("/login", (req, res) -> {
+                    if (!req.hasParams("username", "password")) {
+                        IO.readFile("web", "template", "freemarker","error.ftl")
+                                .ifPresent(content -> {
+                                    res.setContentType("text/html");
+                                    res.setContent(
+                                            Template.create().fromTemplate(
+                                                    content,
+                                                    "error", "username and/or password fields are empty"
+                                            )
+                                    );
+                                });
+                    } else if (!"john".equals(req.getParam("username")) || !"123".equals(req.getParam("password"))) {
+                        IO.readFile("web", "template", "freemarker", "error.ftl")
+                                .ifPresent(content -> {
+                                    res.setContentType("text/html");
+                                    res.setContent(
+                                            Template.create().fromTemplate(
+                                                    content,
+                                                    "error", "username and/or password wrong"
+                                            )
+                                    );
+                                });
+                    } else {
+                        req.getSession().put("lastLogin", new Date().toString());
+                        req.getSession().putEncrypt("username", req.getParam("username"));
+
+                        res.setStatus(Status.STATUS_SEE_OTHER);
+                        res.getHeaders().addParam(new Param<>("Location", "/aa/logged"));
+                        Cache.create().put("username", req.getParam("username"));
+                    }
+                    res.write();
+                })
+                .get("/aa/logged", (req, res) -> {
+                    IO.readFile("web", "template", "freemarker","login.ftl")
+                            .ifPresent(content -> {
+                                res.setContentType("text/html");
+                                res.setContent(
+                                        Template.create().fromTemplate(
+                                                content,
+                                                "username", String.valueOf(req.getSession().get("username"))
+                                        )
+                                );
+                            });
                     res.write();
                 })
                 .get("/setCookie", (req, res) -> {

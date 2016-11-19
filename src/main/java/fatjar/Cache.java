@@ -8,6 +8,11 @@ import java.util.Set;
 public interface Cache<K, V> {
 
     @SuppressWarnings("unchecked")
+    static <K, V> Cache<K, V> create() {
+        return (Cache<K, V>) Cache.create(Type.MapCache, Type.MapCache.name());
+    }
+
+    @SuppressWarnings("unchecked")
     static <K, V> Cache<K, V> create(String name) {
         return (Cache<K, V>) Cache.create(Type.MapCache, name);
     }

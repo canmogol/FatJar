@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public interface IO {
 
@@ -32,6 +33,11 @@ public interface IO {
             Log.error("got exception while reading binary file, folder: " + folder + " fileName: " + fileName + " error: " + e);
             return Optional.empty();
         }
+    }
+
+    static Optional<String> readFile(String... paths) {
+        return readFile(Stream.of(paths)
+                .collect(Collectors.joining(File.separator)));
     }
 
     static Optional<String> readFile(String fileName) {

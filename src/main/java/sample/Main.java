@@ -83,7 +83,7 @@ public class Main {
                     for (Param p : req.getParams().values()) {
                         paramContent += p.toString();
                     }
-                    String error = "username and/or password fields are empty " + paramContent;
+                    String error = "login username and/or password fields are empty " + paramContent;
                     if (!req.hasParams("username", "password")) {
                         IO.readResource("template", "freemarker", "error.ftl")
                                 .ifPresent(content -> {

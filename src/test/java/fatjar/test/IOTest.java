@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public class IOTest {
 
-    private static final String targetTestFolder = "test-classes";
-    private static final String targetClassesFolder = "classes";
+    private static final String targetTestFolder = "target" + File.separator + "test-classes";
+    private static final String targetClassesFolder = "src" + File.separator + "main" + File.separator + "resources";
 
     private static final String folder = File.separator + "tmp";
     private static final String file = "IOTest.txt";

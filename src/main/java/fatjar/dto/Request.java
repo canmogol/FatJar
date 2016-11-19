@@ -1,9 +1,18 @@
 package fatjar.dto;
 
+import fatjar.Log;
+
+import java.io.File;
+import java.io.FileReader;
 import java.io.Serializable;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class Request implements Serializable {
 
+    private static Map<String, String> mimeTypes = new HashMap<>();
     private ParamMap<String, Param<String, Object>> headers;
     private ParamMap<String, Param<String, Object>> params;
     private Session session;
@@ -13,6 +22,30 @@ public class Request implements Serializable {
         this.session = session;
         this.params = params;
         this.headers = headers;
+    }
+
+    public String getMimeType(String file) {
+        if (mimeTypes.isEmpty()) {
+            URL url = getClass().getClassLoader().getResource(".");
+            if (url != null) {
+                try {
+                    File mimeTypeMapFile = new File(url.getPath() + "/MimeTypesMap.properties");
+                    Properties properties = new Properties();
+                    properties.load(new FileReader(mimeTypeMapFile));
+                    for (Object key : properties.keySet()) {
+                        String valueString = String.valueOf(properties.get(key));
+                        String[] values = valueString.split(" ");
+                        for (String value : values) {
+                            mimeTypes.put(value.trim(), String.valueOf(key).trim());
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.error("got exception while reading mime types, error: " + e);
+                }
+            }
+        }
+        String fileType = file.substring(file.lastIndexOf(".") + 1);
+        return mimeTypes.get(fileType);
     }
 
     public byte[] getBody() {

@@ -64,13 +64,19 @@ public class Main {
                 })
                 .get("/@folder/@file", (req, res) -> {
                     res.setContent("could not load/find login.html");
-                    res.setContentType("text/html");
-                    IO.readResource("web", req.getParam("@folder"), req.getParam("@file")).ifPresent(res::setContent);
+                    Optional<String> content = IO.readResource(req.getParam("@folder"), req.getParam("@file"));
+                    if (content.isPresent()) {
+                        res.setContentType(req.getMimeType(req.getHeader(RequestKeys.URI)));
+                        res.setContent(content.get());
+                    } else {
+                        res.setContentType(req.getMimeType(req.getHeader(RequestKeys.URI)));
+                        IO.readBinaryResource(req.getParam("@folder"), req.getParam("@file")).ifPresent(res::setContentChar);
+                    }
                     res.write();
                 })
                 .post("/login", (req, res) -> {
                     if (!req.hasParams("username", "password")) {
-                        IO.readResource("web", "template", "freemarker", "error.ftl")
+                        IO.readResource("template", "freemarker", "error.ftl")
                                 .ifPresent(content -> {
                                     res.setContentType("text/html");
                                     res.setContent(
@@ -81,7 +87,7 @@ public class Main {
                                     );
                                 });
                     } else if (!"john".equals(req.getParam("username")) || !"123".equals(req.getParam("password"))) {
-                        IO.readResource("web", "template", "freemarker", "error.ftl")
+                        IO.readResource("template", "freemarker", "error.ftl")
                                 .ifPresent(content -> {
                                     res.setContentType("text/html");
                                     res.setContent(
@@ -102,7 +108,7 @@ public class Main {
                     res.write();
                 })
                 .get("/aa/logged", (req, res) -> {
-                    IO.readResource("web", "template", "freemarker", "login.ftl")
+                    IO.readResource("template", "freemarker", "login.ftl")
                             .ifPresent(content -> {
                                 res.setContentType("text/html");
                                 res.setContent(
@@ -112,6 +118,14 @@ public class Main {
                                         )
                                 );
                             });
+                    res.write();
+                })
+                .get("/logout", (req, res) -> {
+                    req.getSession().clear();
+                    Cache.create().remove("username");
+
+                    res.setStatus(Status.STATUS_SEE_OTHER);
+                    res.getHeaders().addParam(new Param<>("Location", "/html/login.html"));
                     res.write();
                 })
                 .get("/setCookie", (req, res) -> {

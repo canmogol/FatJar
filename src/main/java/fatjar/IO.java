@@ -22,7 +22,7 @@ public interface IO {
         if (resource != null) {
             List<String> resourcePaths = new LinkedList<>();
             resourcePaths.add(resource);
-            resourcePaths.addAll(Arrays.asList(paths));
+            resourcePaths.addAll(Arrays.asList(paths).stream().filter(p->p!=null).collect(Collectors.toList()));
             resourcePaths.toArray(new String[resourcePaths.size()]);
             String path = resourcePaths.stream().collect(Collectors.joining(File.separator));
             try {
@@ -43,7 +43,7 @@ public interface IO {
         if (resource != null) {
             List<String> resourcePaths = new LinkedList<>();
             resourcePaths.add(resource);
-            resourcePaths.addAll(Arrays.asList(paths));
+            resourcePaths.addAll(Arrays.asList(paths).stream().filter(p->p!=null).collect(Collectors.toList()));
             resourcePaths.toArray(new String[resourcePaths.size()]);
             String path = resourcePaths.stream().collect(Collectors.joining(File.separator));
             try {

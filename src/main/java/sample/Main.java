@@ -193,6 +193,10 @@ public class Main {
                     if (dbOptional.isPresent()) {
                         DB db = dbOptional.get();
                         long numberOfAllEntities = db.count(MyEntity.class);
+                        if(numberOfAllEntities == 0){
+                            MyEntity myEntity = new MyEntity("five");
+                            db.insert(myEntity).ifPresent(System.out::println);
+                        }
                         long numberOfJohnEntities = db.count(MyEntity.class, DB.Query.create("name", "five"));
                         long numberOfLargeIDEntities = db.count(MyEntity.class, DB.Query.create("id", DB.Sign.GT, 1L));
                         Log.info("numberOfLargeIDEntities: " + numberOfLargeIDEntities);
@@ -218,7 +222,7 @@ public class Main {
                                 DB.Query.create("name", "five")
                         ));
                         if (!entityNameID5AndNameFive.isEmpty()) {
-                            Log.info("fount entityNameID5AndNameFive: " + entityNameID5AndNameFive);
+                            Log.info("found entityNameID5AndNameFive: " + entityNameID5AndNameFive);
                         }
 
                         MyEntity entityID1L = db.find(MyEntity.class, 1L);

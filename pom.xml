@@ -200,12 +200,6 @@
 		<!-- PROVIDED -->
 
 		<!-- PACK -->
-		<!-- UTIL -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.5</version>
-		</dependency>
 		<!-- SERVER -->
 		<dependency>
 			<groupId>io.undertow</groupId>
@@ -225,7 +219,8 @@
 			<version>1.4</version>
 		</dependency>
 		<!-- DB -->
-		<dependency>
+		<!-- EntityDB persistence context dependency -->
+        <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>4.3.10.Final</version>
@@ -236,12 +231,18 @@
 			<version>4.3.10.Final</version>
 		</dependency>
 		<!-- DB DRIVER -->
-		<!-- postgresql -->
+		<!-- hsqldb - 100% Java Database -->
 		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.4-1201-jdbc41</version>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.3.4</version>
 		</dependency>
+        <!-- mongodb - Java Driver uber-artifact, containing mongodb-driver, mongodb-driver-core, and bson -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.3.0</version>
+        </dependency>
 		<!-- CACHE -->
 		<!-- redis -->
 		<dependency>

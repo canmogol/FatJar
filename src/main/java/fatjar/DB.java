@@ -1,21 +1,28 @@
 package fatjar;
 
-import fatjar.implementations.emdb.EntityDB;
+import fatjar.implementations.db.CurrentDB;
 
-import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.Optional;
 
 public interface DB {
 
+    String defaultName = "DefaultDatabase";
+
+    static Optional<DB> create(Type type, String name) {
+        return Optional.ofNullable(CurrentDB.create(type, name));
+    }
+
+    static Optional<DB> create(Type type) {
+        return create(type, defaultName);
+    }
+
+    static Optional<DB> create(String name) {
+        return create(Type.EntityDB, name);
+    }
+
     static Optional<DB> create() {
-        DB db = null;
-        try {
-            db = new EntityDB();
-        } catch (PersistenceException e) {
-            Log.error("could not create database, exception: " + e);
-        }
-        return Optional.ofNullable(db);
+        return create(defaultName);
     }
 
     <T> long count(Class<T> tClass);
@@ -33,6 +40,10 @@ public interface DB {
     <T> T find(Class<T> typeClass, Object primary);
 
     <T> List<T> find(Class<T> typeClass, Query query);
+
+    enum Type {
+        EntityDB, MongoDB
+    }
 
     enum AndOr {
         AND, OR

@@ -1,8 +1,7 @@
-package fatjar.implementations.emdb;
+package fatjar.implementations.db;
 
 
 import fatjar.DB;
-import fatjar.Log;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
@@ -12,20 +11,16 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class EntityDB implements DB {
 
-    private static EntityManagerFactory entityManagerFactory;
+    private EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
 
-    public EntityDB() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("DefaultPersistenceUnit");
+    public EntityDB(String persistenceUnitName) {
+        entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
     }
 
     public EntityManagerFactory getEntityManagerFactory() {
@@ -66,10 +61,10 @@ public class EntityDB implements DB {
         T inserted = null;
         try {
             beginTransaction();
-            try{
+            try {
                 getEntityManager().persist(t);
                 inserted = t;
-            }catch (EntityExistsException e){
+            } catch (EntityExistsException e) {
                 inserted = getEntityManager().merge(t);
             }
             commitTransaction();

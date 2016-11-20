@@ -83,7 +83,7 @@ public class IOTest {
 
     @Test
     public void writeFileFail() {
-        boolean result = IO.writeFile("dev", "test", content, folder, file);
+        boolean result = IO.writeFile(content, "dev", "test", folder, file);
         Assert.assertFalse("test failed, should not be able to write to text file: " + file, result);
     }
 

@@ -3,14 +3,17 @@ package fatjar.implementations.db;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import fatjar.DB;
 import fatjar.Log;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,13 +43,13 @@ public class MongoDB implements DB {
 
     @Override
     public <T> long count(Class<T> tClass) {
-        MongoCollection<Document> collection = database.getCollection(tClass.getName());
+        MongoCollection<Document> collection = database.getCollection(tClass.getSimpleName());
         return collection.count();
     }
 
     @Override
     public <T> long count(Class<T> tClass, Query query) {
-        MongoCollection<Document> collection = database.getCollection(tClass.getName());
+        MongoCollection<Document> collection = database.getCollection(tClass.getSimpleName());
         Bson dbQuery = queryToBasicDBObject(query);
         return collection.count(dbQuery);
     }
@@ -92,24 +95,33 @@ public class MongoDB implements DB {
 
     @Override
     public <T> Optional<T> insert(T t) {
-        MongoCollection<Document> collection = database.getCollection(t.getClass().getName());
-        collection.insertOne((Document) t);
+        MongoModel mongoModel = (MongoModel) t;
+        try {
+            MongoCollection<Document> collection = database.getCollection(t.getClass().getSimpleName());
+            collection.insertOne(mongoModel.toDocument());
+        } catch (Exception e) {
+            Log.error("could not insert object: " + t + " got exception: " + e);
+        }
         return Optional.of(t);
     }
 
     @Override
     public <T> T update(T t) {
-        Document document = (Document) t;
-        MongoCollection<Document> collection = database.getCollection(t.getClass().getName());
-        return (T) collection.findOneAndUpdate(new BasicDBObject("_id", document.get("_id")), document);
+        MongoModel mongoModel = (MongoModel) t;
+        Document document = mongoModel.toDocument();
+        MongoCollection<Document> collection = database.getCollection(t.getClass().getSimpleName());
+        BasicDBObject query = new BasicDBObject(MongoModel.OID, mongoModel.getObjectId());
+        collection.findOneAndUpdate(query, new Document("$set", document), (new FindOneAndUpdateOptions()).upsert(true));
+        return t;
     }
 
 
     @Override
     public <T> void delete(T t) {
-        Document document = (Document) t;
-        MongoCollection<Document> collection = database.getCollection(t.getClass().getName());
-        DeleteResult deleteResult = collection.deleteOne(new BasicDBObject("_id", document.get("_id")));
+        MongoModel mongoModel = (MongoModel) t;
+        MongoCollection<Document> collection = database.getCollection(t.getClass().getSimpleName());
+        BasicDBObject query = new BasicDBObject(MongoModel.OID, mongoModel.getObjectId());
+        DeleteResult deleteResult = collection.deleteOne(query);
         if (deleteResult.getDeletedCount() != 1) {
             Log.error("error while deleting from db, total delete count: " + deleteResult.getDeletedCount());
         }
@@ -118,27 +130,74 @@ public class MongoDB implements DB {
     @Override
     public <T> List<T> findAll(Class<T> typeClass) {
         List<T> list = new LinkedList<>();
-        MongoCollection<Document> collection = database.getCollection(typeClass.getName());
+        MongoCollection<Document> collection = database.getCollection(typeClass.getSimpleName());
         collection.find().forEach((Consumer<Document>) document -> {
-            list.add((T) document);
+            modelFromDocument(typeClass, list, document);
         });
         return list;
     }
 
+    private <T> void modelFromDocument(Class<T> typeClass, List<T> list, Document document) {
+        try {
+            T t = typeClass.newInstance();
+            if (MongoModel.class.isAssignableFrom(typeClass)) {
+                MongoModel mongoModel = (MongoModel) t;
+                mongoModel.fromDocument(document);
+            } else {
+                Log.error("class is not an instance of MongoModel, will not be able to set document to T object, class: " + typeClass);
+            }
+            list.add(t);
+        } catch (InstantiationException | IllegalAccessException e) {
+            Log.error("could not create mongo model of class: " + typeClass + " got exception: " + e);
+        }
+    }
+
     @Override
     public <T> T find(Class<T> typeClass, Object primary) {
-        MongoCollection<Document> collection = database.getCollection(typeClass.getName());
-        return (T) collection.find(new BasicDBObject("_id", primary));
+        T t = null;
+        MongoCollection<Document> collection = database.getCollection(typeClass.getSimpleName());
+        BasicDBObject query = new BasicDBObject(MongoModel.OID, primary);
+        FindIterable<Document> documents = collection.find(query);
+        Document document = documents.first();
+        try {
+            t = typeClass.newInstance();
+            if (MongoModel.class.isAssignableFrom(typeClass)) {
+                MongoModel mongoModel = (MongoModel) t;
+                mongoModel.fromDocument(document);
+            } else {
+                Log.error("class is not an instance of MongoModel, will not be able to set document to T object, class: " + typeClass);
+            }
+        } catch (InstantiationException | IllegalAccessException e) {
+            Log.error("could not create mongo model of class: " + typeClass + " got exception: " + e);
+        }
+        return t;
     }
 
     @Override
     public <T> List<T> find(Class<T> typeClass, Query query) {
         List<T> list = new LinkedList<>();
-        MongoCollection<Document> collection = database.getCollection(typeClass.getName());
+        MongoCollection<Document> collection = database.getCollection(typeClass.getSimpleName());
         Bson dbQuery = queryToBasicDBObject(query);
         collection.find(dbQuery).forEach((Consumer<Document>) document -> {
-            list.add((T) document);
+            modelFromDocument(typeClass, list, document);
         });
         return list;
     }
+
+    public interface MongoModel extends ToDocument, FromDocument {
+        String OID = "_id";
+
+        void setObjectId(ObjectId id);
+
+        ObjectId getObjectId();
+    }
+
+    public interface FromDocument {
+        void fromDocument(Document document);
+    }
+
+    public interface ToDocument {
+        Document toDocument();
+    }
+
 }

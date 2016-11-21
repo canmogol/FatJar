@@ -8,6 +8,7 @@ import fatjar.dto.Status;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class Main {
@@ -193,7 +194,7 @@ public class Main {
                     if (dbOptional.isPresent()) {
                         DB db = dbOptional.get();
                         long numberOfAllEntities = db.count(MyEntity.class);
-                        if(numberOfAllEntities == 0){
+                        if (numberOfAllEntities == 0) {
                             MyEntity myEntity = new MyEntity("five");
                             db.insert(myEntity).ifPresent(System.out::println);
                         }
@@ -243,6 +244,47 @@ public class Main {
                             res.setContent(JSON.create().toJson(insertedEntity));
                         } else {
                             res.setContent("could not insert to DB");
+                        }
+                        res.write();
+                    } else {
+                        throw new Server.ServerException("no db available");
+                    }
+                })
+                .get("/dbMongo", (req, res) -> {
+                    Optional<DB> dbOptional = DB.create(DB.Type.MongoDB);
+                    if (dbOptional.isPresent()) {
+                        DB db = dbOptional.get();
+                        MyMongoModel model = new MyMongoModel("john", "555-4343", "Elm Street");
+                        Optional<MyMongoModel> modelOptional = db.insert(model);
+                        if (modelOptional.isPresent()) {
+                            model = modelOptional.get();
+                            Log.info("inserted mongo model: " + JSON.create().toJson(model));
+                            res.setContent(JSON.create().toJson(model));
+
+                            MyMongoModel foundModel = db.find(MyMongoModel.class, model.getObjectId());
+                            Log.info("foundModel: " + foundModel);
+
+                            long numberOfTotalModels = db.count(MyMongoModel.class);
+                            Log.info("numberOfTotalModels: " + numberOfTotalModels);
+
+                            db.insert(new MyMongoModel("test", "111-1111", "1st Street"));
+                            db.insert(new MyMongoModel("test", "222-2222", "2nd Street"));
+                            numberOfTotalModels = db.count(MyMongoModel.class);
+                            Log.info("numberOfTotalModels: " + numberOfTotalModels);
+
+                            List<MyMongoModel> mongoModels = db.find(MyMongoModel.class, DB.Query.create("name", "test"));
+                            mongoModels.stream().forEach(m -> Log.info(JSON.create().toJson(m)));
+
+
+                            List<MyMongoModel> allModels = db.findAll(MyMongoModel.class);
+                            Log.info(allModels.stream().map(MyMongoModel::getAddress).collect(Collectors.joining(",")));
+
+                            model.setPhone("999-3322");
+                            model = db.update(model);
+                            Log.info("updated mongo model: " + JSON.create().toJson(model));
+
+                            allModels.forEach(db::delete);
+                            Log.info("deleted all mongo model");
                         }
                         res.write();
                     } else {

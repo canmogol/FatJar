@@ -15,7 +15,15 @@ public class Main {
 
     public static void main(String[] args) {
         Main tester = new Main();
-        tester.exampleServer();
+        if (args.length == 1) {
+            tester.scriptServer(args[0]);
+        } else {
+            tester.exampleServer();
+        }
+    }
+
+    private void scriptServer(String scriptName) {
+        Script.create().evaluate(IO.readFile(scriptName).get());
     }
 
     private int getAssignedPort() {

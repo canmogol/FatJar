@@ -19,7 +19,18 @@ public interface Script {
     Object evaluate(String content);
 
     enum Type {
-        JavaScript, PythonScript, RubyScript
+        JavaScript, PythonScript, RubyScript;
+
+        public static Type from(String extension) {
+            switch (extension) {
+                case "py":
+                    return PythonScript;
+                case "rb":
+                    return RubyScript;
+                default:
+                    return JavaScript;
+            }
+        }
     }
 
 }

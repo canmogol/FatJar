@@ -23,7 +23,8 @@ public class Main {
     }
 
     private void scriptServer(String scriptName) {
-        Script.create().evaluate(IO.readFile(scriptName).get());
+        Script.Type type = Script.Type.from(scriptName.substring(scriptName.lastIndexOf(".") + 1));
+        Script.create(type).evaluate(IO.readFile(scriptName).get());
     }
 
     private int getAssignedPort() {

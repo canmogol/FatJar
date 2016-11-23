@@ -1,6 +1,8 @@
 # FatJar
 FatJar simple API to quick prototyping and portable web services. See **Main::main** sample class for examples.
 
+For scripting examples, see the main.js and main.py files under resources, building for scripting instructions can be found under "Building FatJar".
+
 
 Build and coverage status:
 
@@ -19,6 +21,24 @@ you can edit yaml files with [Online Swagger Editor](http://editor.swagger.io/#/
 and you can convert yaml files to json to use with swagger-ui [Yaml to JSON Transformer](https://apimatic.io/transformer)
 
 
+
+###Building FatJar
+
+Building from source:
+
+```sh
+git clone https://github.com/canmogol/FatJar.git
+cd FatJar
+mvn clean install
+```
+
+if you want to use scripting engines, you should run the scripting profile, instead of "mvn clean install"
+Please note that jython implementation adds around 40MB of code to code base.
+```sh
+mvn clean install -P scripting
+```
+
+
 ### Dependency
 
 maven
@@ -26,18 +46,18 @@ maven
 <dependency>
     <groupId>com.fererlab</groupId>
     <artifactId>FatJar</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
 grails
 ```json
-compile 'com.fererlab:FatJar:1.2.0'
+compile 'com.fererlab:FatJar:1.3.0'
 ```
 
 sbt
 ```scala
-libraryDependencies += "com.fererlab" % "FatJar" % "1.2.0"
+libraryDependencies += "com.fererlab" % "FatJar" % "1.3.0"
 ```
 
 ### Usage Examples

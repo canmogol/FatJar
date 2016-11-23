@@ -80,8 +80,10 @@ to create and start the server
 Server.create().listen(80, "localhost").start();
 ```
 
-Listen to an http method on a path
-```javascript
+Listen to an http method on a path;
+
+java
+```java
 Server.create()
                 .listen(80, "localhost")
                 .get("/", (req, res) -> {
@@ -90,6 +92,27 @@ Server.create()
                 })
                 .start();
 ```
+
+javascript
+```javascript
+Server.create()
+                .listen(8080, "0.0.0.0")
+                .get("/", function (req, res) {
+                    res.setContent("Welcome");
+                    res.write();
+                })
+                .start();
+```
+
+
+python
+```python
+ Server.create()
+              .listen(8080, "0.0.0.0") \
+              .get("/", lambda req, res: (res.setContent("Welcome"), res.write())) \
+              .start()
+```
+
 
 To JSON and from JSON example
 ```javascript

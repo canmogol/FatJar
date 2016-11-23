@@ -158,10 +158,18 @@ response:   <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             </myPojo>
 ```
 
-A database method added, you may find the count, find, insert, update and delete methods under "/db" handler
+A database method added, you may find the count, find, insert, update and delete methods under "/db" handler.
+Please find the persistence.xml file under resources/META-INF for database connection parameters
 ```
 request :   GET   http://localhost:80/db
-response:   {"id":73,"name":"johnny"}
+response:   {"id":2,"name":"johnny"}
+```
+
+A mongodb method added, you may find the count, find, insert, update and delete methods under "/dbMongo" handler
+Please find the mongodb.properties file under resources for database connection parameters
+```
+request :   GET   http://localhost:80/dbMongo
+response:   {"address":"Elm Street","name":"john","objectId":{"counter":15787905,"date":1479883525000,"machineIdentifier":14269665,"processIdentifier":29177,"time":1479883525000,"timeSecond":1479883525,"timestamp":1479883525},"phone":"555-4343"}
 ```
 
 Example exception throw method
@@ -187,4 +195,30 @@ response:   <h1>BAD REQUEST!</h1>
 ```
 request :   GET   http://localhost:80/httpClient
 response:   got content: {"ip": "123.123.123.123"}
+```
+
+TEA and AES encryption example
+```
+request :   GET   http://localhost:80/encrypt
+response:   got content: TEA( clear: 123456 encrypted/decrypted: 123456)
+                         AES (clear: 123456 encrypted/decrypted: 123456)
+```
+
+Encrypted and encoded set cookie example
+```
+request :   GET   http://localhost:80/setCookie
+response:   got content: cookie set
+            check cookie: FAT_JAR_EXAMPLE_APP, it is encoded, signed
+            you may find COOKIE_CONTENT as the content of the cookie
+            and COOKIE_SIGN_KEY as the signed part of the cookie.
+            Decoded COOKIE_CONTENT contains EncodedKey which is clear
+            EncryptedKey_COOKIE_ENCRYPTED is encrypted.
+```
+
+Encrypted and encoded get cookie example
+```
+request :   GET   http://localhost:80/getCookie
+response:   got content: EncodedKey:EncodedValue1111 - EncryptedKey:EncryptedValue2222
+            these two are the decoded and decrypted values
+            which set at the /setCookie call
 ```

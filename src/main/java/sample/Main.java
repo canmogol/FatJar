@@ -142,6 +142,21 @@ public class Main {
                     res.getHeaders().addParam(new Param<>("Location", "/html/login.html"));
                     res.write();
                 })
+                .get("/encrypt", (req, res) -> {
+                    String clear = "123456";
+                    String key = "1234567812345678";
+
+                    byte[] encrypted = Encrypt.create().encrypt(key.getBytes(), clear.getBytes());
+                    byte[] decrypted = Encrypt.create().decrypt(key.getBytes(), encrypted);
+                    String response = "TEA( clear: " + clear + " encrypted/decrypted: " + new String(decrypted) + ") \n";
+
+                    encrypted = Encrypt.create(Encrypt.Type.AESEncrypt).encrypt(key.getBytes(), clear.getBytes());
+                    decrypted = Encrypt.create(Encrypt.Type.AESEncrypt).decrypt(key.getBytes(), encrypted);
+                    response += "AES (clear: " + clear + " encrypted/decrypted: " + new String(decrypted) + ")";
+
+                    res.setContent(response);
+                    res.write();
+                })
                 .get("/setCookie", (req, res) -> {
 
                     String encodedKey = "EncodedKey";

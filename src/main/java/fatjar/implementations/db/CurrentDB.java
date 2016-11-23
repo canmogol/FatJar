@@ -16,16 +16,17 @@ public class CurrentDB {
 
     @SuppressWarnings("unchecked")
     public static DB create(DB.Type type, String name) {
-        if (!dbMap.containsKey(name)) {
+        String key = type.name() + "/" + name;
+        if (!dbMap.containsKey(key)) {
             String packageName = CurrentDB.class.getPackage().getName();
             try {
                 Class<? extends DB> dbClass = Class.forName(packageName + "." + type.name()).asSubclass(DB.class);
                 DB instance = dbClass.getConstructor(String.class).newInstance(name);
-                dbMap.put(name, instance);
+                dbMap.put(key, instance);
             } catch (Exception e) {
                 Log.error("could not create db of type: " + type + " error: " + e);
             }
         }
-        return dbMap.get(name);
+        return dbMap.get(key);
     }
 }

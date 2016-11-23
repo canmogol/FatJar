@@ -38,6 +38,17 @@ Please note that jython implementation adds around 40MB of code to code base.
 mvn clean install -P scripting
 ```
 
+You may run scripting examples as;
+```sh
+cd FatJar
+java -jar target/FatJar-Example.jar src/main/resources/main.js
+```
+or python example
+```sh
+cd FatJar
+java -jar target/FatJar-Example.jar src/main/resources/main.py
+```
+
 
 ### Dependency
 

@@ -38,7 +38,7 @@ public class MemCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public Type getType() {
-		return Type.MapCache;
+		return Type.MemCache;
 	}
 
 	@Override

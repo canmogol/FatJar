@@ -32,18 +32,20 @@ cd FatJar
 mvn clean install
 ```
 
-if you want to use scripting engines, you should run the scripting profile, instead of "mvn clean install"
+if you want to use scripting engines, you should run the scripting profile, instead of "mvn clean install".
+
 Please note that jython implementation adds around 40MB of code to code base.
 ```sh
 mvn clean install -P scripting
 ```
 
 You may run scripting examples as;
+since javascript engine "nashorn" build in to jvm, javascript example should run without scripting profile enabled.
 ```sh
 cd FatJar
 java -jar target/FatJar-Example.jar src/main/resources/main.js
 ```
-or python example
+python example needs the FarJar build with "scripting" profile enabled,
 ```sh
 cd FatJar
 java -jar target/FatJar-Example.jar src/main/resources/main.py

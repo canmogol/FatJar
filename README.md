@@ -77,7 +77,7 @@ libraryDependencies += "com.fererlab" % "FatJar" % "1.3.0"
 
 to create and start the server
 ```javascript
-Server.create().listen(80, "localhost").start();
+Server.create().listen(80, "0.0.0.0").start();
 ```
 
 Listen to an http method on a path;
@@ -85,7 +85,7 @@ Listen to an http method on a path;
 java
 ```java
 Server.create()
-                .listen(80, "localhost")
+                .listen(80, "0.0.0.0")
                 .get("/", (req, res) -> {
                     res.setContent("Welcome");
                     res.write();
@@ -117,7 +117,7 @@ python
 To JSON and from JSON example
 ```javascript
 Server.create()
-                .listen(80, "localhost")
+                .listen(80, "0.0.0.0")
                 .get("/toJSON", (req, res) -> {
                     res.setContent(JSON.toJson(new MyPOJO("john", 101)));
                     res.write();
@@ -133,7 +133,7 @@ Server.create()
 To make an Http request
 ```javascript
 Server.create()
-                .listen(80, "localhost")
+                .listen(80, "0.0.0.0")
                 .get("/httpClient", (req, res) -> {
                     try {
                         String content = HttpClient.create()

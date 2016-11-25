@@ -2,8 +2,6 @@ package fatjar;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -25,13 +23,10 @@ public interface IO {
             resourcePaths.addAll(Arrays.asList(paths).stream().filter(p->p!=null).collect(Collectors.toList()));
             resourcePaths.toArray(new String[resourcePaths.size()]);
             String path = resourcePaths.stream().collect(Collectors.joining(File.separator));
-            try {
-                String normalized = new URI(path).normalize().getPath();
-                if (normalized.startsWith(resource)) {
-                    return readBinaryFile(resourcePaths.toArray(new String[resourcePaths.size()]));
-                }
-            } catch (URISyntaxException e) {
-                Log.error("got exception while getting uri from path: " + path + " error: " + e);
+            String normalizedResource = new File(resource).toURI().normalize().getPath();
+            String normalized = new File(path).toURI().normalize().getPath();
+            if (normalized.startsWith(normalizedResource)) {
+                return readBinaryFile(resourcePaths.toArray(new String[resourcePaths.size()]));
             }
         } else {
             Log.error("resource path not defined, either give resource as command line parameter as -Dresource=\"/path/to/resources\" or define it as System.setProperty(\"resource\", \"/path/to/resources\")");
@@ -46,13 +41,10 @@ public interface IO {
             resourcePaths.addAll(Arrays.asList(paths).stream().filter(p->p!=null).collect(Collectors.toList()));
             resourcePaths.toArray(new String[resourcePaths.size()]);
             String path = resourcePaths.stream().collect(Collectors.joining(File.separator));
-            try {
-                String normalized = new URI(path).normalize().getPath();
-                if (normalized.startsWith(resource)) {
-                    return readFile(resourcePaths.toArray(new String[resourcePaths.size()]));
-                }
-            } catch (URISyntaxException e) {
-                Log.error("got exception while getting uri from path: " + path + " error: " + e);
+            String normalizedResource = new File(resource).toURI().normalize().getPath();
+            String normalized = new File(path).toURI().normalize().getPath();
+            if (normalized.startsWith(normalizedResource)) {
+                return readFile(resourcePaths.toArray(new String[resourcePaths.size()]));
             }
         } else {
             Log.error("resource path not defined, either give resource as command line parameter as -Dresource=\"/path/to/resources\" or define it as System.setProperty(\"resource\", \"/path/to/resources\")");
@@ -84,7 +76,7 @@ public interface IO {
     static boolean writeFile(byte[] content, String... paths) {
         String fileName = Stream.of(paths).collect(Collectors.joining(File.separator));
         try {
-            Files.write(Paths.get(fileName), content, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+            Files.write(Paths.get(new File(fileName).toURI()), content, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
             return true;
         } catch (IOException e) {
             Log.error("got exception while writing file, fileName: " + fileName + " error: " + e);

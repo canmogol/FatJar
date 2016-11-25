@@ -50,6 +50,23 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <compiler.source>1.8</compiler.source>
         <compiler.target>1.8</compiler.target>
+
+        <exclude.sample>**/sample/*.java</exclude.sample>
+        <exclude.cache.memcache>**/MemCache.java</exclude.cache.memcache>
+        <exclude.cache.redis>**/RedisCache.java</exclude.cache.redis>
+        <exclude.db.entitydb>**/EntityDB.java</exclude.db.entitydb>
+        <exclude.db.mongodb>**/MongoDB.java</exclude.db.mongodb>
+        <exclude.db.hsql>**/HsqlDB.java</exclude.db.hsql>
+        <exclude.encyription.aes>**/AESEncrypt.java</exclude.encyription.aes>
+        <exclude.encyription.tea>**/TEAEncrypt.java</exclude.encyription.tea>
+        <exclude.httpclient.jetty>**/JettyHttpClient.java</exclude.httpclient.jetty>
+        <exclude.json.genson>**/GensonJSON.java</exclude.json.genson>
+        <exclude.script.javascript>**/JavaScript.java</exclude.script.javascript>
+        <exclude.script.python>**/PythonScript.java</exclude.script.python>
+        <exclude.server.undertow>**/Undertow.java</exclude.server.undertow>
+        <exclude.template.freemaker>**/FreemarkerTemplate.java</exclude.template.freemaker>
+        <!-- MapCache -->
+        <!-- JaxB -->
     </properties>
 
     <build>
@@ -61,6 +78,22 @@
                 <configuration>
                     <source>${compiler.source}</source>
                     <target>${compiler.target}</target>
+                    <excludes>
+                        <exclude>${exclude.sample}</exclude>
+                        <exclude>${exclude.cache.memcache}</exclude>
+                        <exclude>${exclude.cache.redis}</exclude>
+                        <exclude>${exclude.db.entitydb}</exclude>
+                        <exclude>${exclude.db.hsql}</exclude>
+                        <exclude>${exclude.db.mongodb}</exclude>
+                        <exclude>${exclude.encyription.aes}</exclude>
+                        <exclude>${exclude.encyription.tea}</exclude>
+                        <exclude>${exclude.httpclient.jetty}</exclude>
+                        <exclude>${exclude.json.genson}</exclude>
+                        <exclude>${exclude.script.javascript}</exclude>
+                        <exclude>${exclude.script.python}</exclude>
+                        <exclude>${exclude.server.undertow}</exclude>
+                        <exclude>${exclude.template.freemaker}</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -125,6 +158,7 @@
 
 
     <profiles>
+        <!-- Release  -->
         <profile>
             <id>release</id>
             <build>
@@ -186,52 +220,249 @@
                 </plugins>
             </build>
         </profile>
+
+        <!-- sample project profiles -->
         <profile>
-            <id>scripting</id>
+            <id>sample</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.sample>none</exclude.sample>
+            </properties>
+        </profile>
+        <!-- Module profiles -->
+        <profile>
+            <id>memcache</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.cache.memcache>none</exclude.cache.memcache>
+            </properties>
             <dependencies>
-                <!-- SCRIPTING DEPENDENCIES -->
-                <!-- python -->
+                <dependency>
+                    <groupId>com.whalin</groupId>
+                    <artifactId>Memcached-Java-Client</artifactId>
+                    <version>3.0.2</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>redis</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.cache.redis>none</exclude.cache.redis>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>redis.clients</groupId>
+                    <artifactId>jedis</artifactId>
+                    <version>2.9.0</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>entitydb</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.db.entitydb>none</exclude.db.entitydb>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                    <version>4.3.10.Final</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-entitymanager</artifactId>
+                    <version>4.3.10.Final</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>hsqldb</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.db.hsql>none</exclude.db.hsql>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                    <version>2.3.4</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>mongodb</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.db.mongodb>none</exclude.db.mongodb>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.mongodb</groupId>
+                    <artifactId>mongo-java-driver</artifactId>
+                    <version>3.3.0</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>aes</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.encyription.aes>none</exclude.encyription.aes>
+            </properties>
+        </profile>
+        <profile>
+            <id>tea</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.encyription.tea>none</exclude.encyription.tea>
+            </properties>
+        </profile>
+        <profile>
+            <id>jetty</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.httpclient.jetty>none</exclude.httpclient.jetty>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-client</artifactId>
+                    <version>9.4.0.M1</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>genson</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.json.genson>none</exclude.json.genson>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.owlike</groupId>
+                    <artifactId>genson</artifactId>
+                    <version>1.4</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>javascript</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.script.javascript>none</exclude.script.javascript>
+            </properties>
+        </profile>
+        <profile>
+            <id>python</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.script.python>none</exclude.script.python>
+            </properties>
+            <dependencies>
                 <dependency>
                     <groupId>org.python</groupId>
                     <artifactId>jython-standalone</artifactId>
                     <version>2.7.0</version>
                 </dependency>
             </dependencies>
-            <build>
-                <plugins>
-                    <!-- ANT PLUGIN - ADD REMOVE SCRIPTING ENGINES -->
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>add-scripting-engines</id>
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <tasks>
-                                        <copy file="${project.basedir}/src/main/java/fatjar/implementations/script/PythonScript.script"
-                                              tofile="${project.basedir}/src/main/java/fatjar/implementations/script/PythonScript.java"/>
-                                    </tasks>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>remove-scripting-engines</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <tasks>
-                                        <delete file="${project.basedir}/src/main/java/fatjar/implementations/script/PythonScript.java"/>
-                                    </tasks>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
+        </profile>
+        <profile>
+            <id>undertow</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.server.undertow>none</exclude.server.undertow>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>io.undertow</groupId>
+                    <artifactId>undertow-core</artifactId>
+                    <version>1.4.4.Final</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>freemarker</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+
+                </property>
+            </activation>
+            <properties>
+                <exclude.template.freemaker>none</exclude.template.freemaker>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.freemarker</groupId>
+                    <artifactId>freemarker</artifactId>
+                    <version>2.3.23</version>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 
@@ -243,75 +474,6 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- PROVIDED -->
-
-        <!-- PACK -->
-        <!-- SERVER -->
-        <dependency>
-            <groupId>io.undertow</groupId>
-            <artifactId>undertow-core</artifactId>
-            <version>1.4.4.Final</version>
-        </dependency>
-        <!-- HTTP CLIENT -->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-client</artifactId>
-            <version>9.4.0.M1</version>
-        </dependency>
-        <!-- JSON -->
-        <dependency>
-            <groupId>com.owlike</groupId>
-            <artifactId>genson</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <!-- DB -->
-        <!-- EntityDB persistence context dependency -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>4.3.10.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.3.10.Final</version>
-        </dependency>
-        <!-- DB DRIVER -->
-        <!-- hsqldb - 100% Java Database -->
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.3.4</version>
-        </dependency>
-        <!-- mongodb - Java Driver uber-artifact, containing mongodb-driver, mongodb-driver-core, and bson -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.3.0</version>
-        </dependency>
-        <!-- CACHE -->
-        <!-- redis -->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-        <!-- memcache -->
-        <dependency>
-            <groupId>com.whalin</groupId>
-            <artifactId>Memcached-Java-Client</artifactId>
-            <version>3.0.2</version>
-        </dependency>
-        <!-- TEMPLATE -->
-        <!-- string template -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.23</version>
-        </dependency>
-
-
     </dependencies>
 
 

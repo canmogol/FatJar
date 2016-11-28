@@ -23,7 +23,7 @@ public class CurrentScript {
                 Script instance = scriptClass.newInstance();
                 scriptMap.put(type.name(), instance);
             } catch (Exception e) {
-                Log.error("could not create script of type: " + type + " error: " + e);
+                Log.error("could not create script of type: " + type + " error: " + e, e);
             }
         }
         return scriptMap.get(type.name());

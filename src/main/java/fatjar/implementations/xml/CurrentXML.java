@@ -17,7 +17,7 @@ public class CurrentXML {
             Class<? extends XML> xmlClass = Class.forName(packageName + "." + type.name()).asSubclass(XML.class);
             xml = xmlClass.newInstance();
         } catch (Exception e) {
-            Log.error("could not create xml of type: " + type + " error: " + e);
+            Log.error("could not create xml of type: " + type + " error: " + e, e);
         }
         return xml;
     }

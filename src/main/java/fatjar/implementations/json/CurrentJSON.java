@@ -23,7 +23,7 @@ public class CurrentJSON {
                 JSON instance = jsonClass.newInstance();
                 jsonMap.put(type.name(), instance);
             } catch (Exception e) {
-                Log.error("could not create json of type: " + type + " error: " + e);
+                Log.error("could not create json of type: " + type + " error: " + e, e);
             }
         }
         return jsonMap.get(type.name());

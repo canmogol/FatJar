@@ -335,8 +335,7 @@ public class Undertow implements Server {
                             }
                         },
                         (e, exception) -> {
-                            Log.error("got exception at receiveFullBytes, exception: " + exception);
-                            exception.printStackTrace();
+                            Log.error("got exception at receiveFullBytes, exception: " + exception, exception);
                         }
                 );
             } else {
@@ -344,7 +343,7 @@ public class Undertow implements Server {
                             request.setBody(data);
                         },
                         (e, exception) -> {
-                            exception.printStackTrace();
+                            Log.error("got exception while setting request body, exception: " + exception, exception);
                         }
                 );
             }

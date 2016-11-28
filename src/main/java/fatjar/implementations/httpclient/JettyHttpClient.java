@@ -1,6 +1,7 @@
 package fatjar.implementations.httpclient;
 
 import fatjar.HttpClient;
+import fatjar.Log;
 import fatjar.dto.HttpMethod;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
@@ -33,7 +34,7 @@ public class JettyHttpClient implements HttpClient {
         try {
             httpClient.start();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error("got exception while starting http client, error: " + e, e);
         }
     }
 

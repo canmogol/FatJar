@@ -17,7 +17,7 @@ public class CurrentEncrypt {
             Class<? extends Encrypt> encryptClass = Class.forName(packageName + "." + type.name()).asSubclass(Encrypt.class);
             instance = encryptClass.newInstance();
         } catch (Exception e) {
-            Log.error("could not create encryption of type: " + type + " error: " + e);
+            Log.error("could not create encryption of type: " + type + " error: " + e, e);
         }
         return instance;
     }

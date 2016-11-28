@@ -21,4 +21,8 @@ public interface Log {
         LOG.log(Level.SEVERE, message);
     }
 
+    static void error(String message, Exception e) {
+        LOG.log(Level.SEVERE, message, e);
+    }
+
 }

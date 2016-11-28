@@ -112,7 +112,7 @@ public class Session extends TreeMap<String, Serializable> {
                     }
                 }
             } catch (Exception e) {
-                Log.error("could not read cookie, rawContent: " + rawContent + " error: " + e);
+                Log.error("could not read cookie, rawContent: " + rawContent + " error: " + e, e);
             }
         }
 
@@ -156,7 +156,7 @@ public class Session extends TreeMap<String, Serializable> {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error("got exception while writing session content to cookie, error: " + e, e);
         }
         return applicationCookieName + "=" + encode(cookies.toString()) + "; Path=/; ";
     }
@@ -191,7 +191,7 @@ public class Session extends TreeMap<String, Serializable> {
             byte[] encrypted = c.doFinal(value.getBytes());
             return Optional.of(encrypted);
         } catch (Exception e) {
-            Log.error("could not encrypt value: " + value + " for key: " + secretKey);
+            Log.error("could not encrypt value: " + value + " for key: " + secretKey, e);
             return Optional.empty();
         }
     }
@@ -204,7 +204,6 @@ public class Session extends TreeMap<String, Serializable> {
                 signValue += Integer.toString((b & 0xff) + 0x100, 16).substring(1);
             }
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
             throw e;
         }
         return signValue;

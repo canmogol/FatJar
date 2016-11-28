@@ -28,8 +28,6 @@ public interface Cache<K, V> {
 
     V get(K key);
 
-    Map<K, V> getAll(Set<K> keys);
-
     boolean containsKey(K key);
 
     void put(K key, V value);
@@ -41,11 +39,6 @@ public interface Cache<K, V> {
     V remove(K key);
 
     boolean replace(K key, V oldValue, V newValue);
-
-    void removeAll(Set<? extends K> keys);
-
-    void clear();
-
     enum Type {
         MapCache, MemCache, RedisCache
     }

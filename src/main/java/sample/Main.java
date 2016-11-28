@@ -189,10 +189,10 @@ public class Main {
                     } else {
                         cache.put("number", (Integer) cache.get("number") + 1);
                     }
-                    Set<String> keys = new HashSet<>();
-                    keys.add("key");
-                    keys.add("number");
-                    res.setContent(JSON.create().toJson(cache.getAll(keys)));
+                    Map<String, Object> keyValues = new HashMap<>();
+                    keyValues.put("key", cache.get("key"));
+                    keyValues.put("number", cache.get("number"));
+                    res.setContent(JSON.create().toJson(keyValues));
                     res.write();
                 })
                 .get("/file", (request, response) -> {

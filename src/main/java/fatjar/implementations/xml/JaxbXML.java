@@ -16,7 +16,7 @@ public class JaxbXML implements XML {
         try {
             return Optional.ofNullable((T) JAXBContext.newInstance(tClass).createUnmarshaller().unmarshal(new ByteArrayInputStream(xmlData)));
         } catch (Exception e) {
-            Log.error("got exception while creating object from xml, exception: " + e);
+            Log.error("got exception while creating object from xml, exception: " + e, e);
             return Optional.empty();
         }
     }
@@ -29,7 +29,7 @@ public class JaxbXML implements XML {
             marshaller.marshal(object, outStream);
             return Optional.of(new String(outStream.toByteArray()));
         } catch (Exception e) {
-            Log.error("got exception while creating object from xml, exception: " + e);
+            Log.error("got exception while creating object from xml, exception: " + e, e);
             return Optional.empty();
         }
     }

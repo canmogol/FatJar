@@ -18,7 +18,7 @@ public class CurrentHttpClient {
             Class<? extends HttpClient> httpClientClass = Class.forName(packageName + "." + type.name()).asSubclass(HttpClient.class);
             httpClient = httpClientClass.newInstance();
         } catch (Exception e) {
-            Log.error("could not create httpClient of type: " + type + " error: " + e);
+            Log.error("could not create httpClient of type: " + type + " error: " + e, e);
         }
         return httpClient;
     }

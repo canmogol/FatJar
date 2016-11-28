@@ -3,12 +3,12 @@ package fatjar.implementations.cache;
 import com.whalin.MemCached.MemCachedClient;
 import com.whalin.MemCached.SockIOPool;
 import fatjar.Cache;
+import fatjar.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MemCache<K, V> implements Cache<K, V> {
@@ -52,11 +52,6 @@ public class MemCache<K, V> implements Cache<K, V> {
 	}
 
 	@Override
-	public Map<K, V> getAll(Set<K> keys) {
-		throw new UnsupportedOperationException();		
-	}
-
-	@Override
 	public boolean containsKey(K key) {
 		return cache().keyExists(key.toString());
 	}
@@ -96,23 +91,13 @@ public class MemCache<K, V> implements Cache<K, V> {
 		return cache().replace(key.toString(), newValue);
 	}
 
-	@Override
-	public void removeAll(Set<? extends K> keys) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void clear() {
-		throw new UnsupportedOperationException();
-	}
-
 	public static class MemCacheInitializer {
                 private static final String PROP_NAME = "memcache.properties";
 
                 public void initializeSockIOPool(String name) {
 
                         Properties memcacheProp = new Properties();
-                        InputStream input = null;
+                        InputStream input;
                         SockIOPool pool = SockIOPool.getInstance(name);
                         input = this.getClass().getClassLoader().getResourceAsStream(PROP_NAME);
                         try {
@@ -128,8 +113,9 @@ public class MemCache<K, V> implements Cache<K, V> {
                                 pool.setSocketTO(Integer.parseInt(memcacheProp.getProperty("docketTO")));
                                 pool.setAliveCheck(Boolean.parseBoolean(memcacheProp.getProperty("aliveCheck")));
                         } catch (IOException e) {
-                                e.printStackTrace();
-                                String[] servers = { "localhost:11211" };
+							Log.error("could not create load/read memcache properties from file: " + PROP_NAME + ", will try with defaults, error: " + e, e);
+
+							String[] servers = { "localhost:11211" };
                                 pool.setServers(servers);
                                 pool.setFailover(true);
                                 pool.setInitConn(10);

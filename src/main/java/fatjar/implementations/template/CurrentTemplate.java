@@ -18,7 +18,7 @@ public class CurrentTemplate {
             Class<? extends Template> templateClass = Class.forName(packageName + "." + type.name()).asSubclass(Template.class);
             template = templateClass.newInstance();
         } catch (Exception e) {
-            Log.error("could not create template of type: " + type + " error: " + e);
+            Log.error("could not create template of type: " + type + " error: " + e, e);
         }
         return template;
     }

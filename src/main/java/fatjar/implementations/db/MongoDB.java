@@ -100,7 +100,7 @@ public class MongoDB implements DB {
             MongoCollection<Document> collection = database.getCollection(t.getClass().getSimpleName());
             collection.insertOne(mongoModel.toDocument());
         } catch (Exception e) {
-            Log.error("could not insert object: " + t + " got exception: " + e);
+            Log.error("could not insert object: " + t + " got exception: " + e, e);
         }
         return Optional.of(t);
     }
@@ -148,7 +148,7 @@ public class MongoDB implements DB {
             }
             list.add(t);
         } catch (InstantiationException | IllegalAccessException e) {
-            Log.error("could not create mongo model of class: " + typeClass + " got exception: " + e);
+            Log.error("could not create mongo model of class: " + typeClass + " got exception: " + e, e);
         }
     }
 
@@ -168,7 +168,7 @@ public class MongoDB implements DB {
                 Log.error("class is not an instance of MongoModel, will not be able to set document to T object, class: " + typeClass);
             }
         } catch (InstantiationException | IllegalAccessException e) {
-            Log.error("could not create mongo model of class: " + typeClass + " got exception: " + e);
+            Log.error("could not create mongo model of class: " + typeClass + " got exception: " + e, e);
         }
         return t;
     }

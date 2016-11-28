@@ -24,7 +24,7 @@ public class JavaScript implements Script {
             }
             result = javascriptInterpreter.eval(content);
         } catch (ScriptException e) {
-            Log.error("could not evaluate the content, error: " + e);
+            Log.error("could not evaluate the content, error: " + e, e);
         }
         return result;
     }

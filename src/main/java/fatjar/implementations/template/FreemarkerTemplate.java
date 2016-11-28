@@ -32,7 +32,7 @@ public class FreemarkerTemplate implements Template {
             t.process(map, out);
             generatedContent = out.toString();
         } catch (Exception e) {
-            Log.error("could not generate content from template, error: " + e);
+            Log.error("could not generate content from template, error: " + e, e);
         }
         return generatedContent;
     }

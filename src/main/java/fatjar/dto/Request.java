@@ -42,7 +42,7 @@ public class Request implements Serializable {
                         }
                     }
                 } catch (Exception e) {
-                    Log.error("got exception while reading mime types, error: " + e);
+                    Log.error("got exception while reading mime types, error: " + e, e);
                 }
             }
         }
@@ -129,12 +129,12 @@ public class Request implements Serializable {
                 String[] keyValuePairs = postString.split("&");
                 for (String keyValuePair : keyValuePairs) {
                     String[] keyValue = keyValuePair.split("=");
-                    if(keyValue.length == 2){
+                    if (keyValue.length == 2) {
                         this.postMap.put(keyValue[0], keyValue[1]);
                     }
                 }
             } catch (Exception e) {
-                Log.error("got exception while reading body to map, error: " + e);
+                Log.error("got exception while reading body to map, error: " + e, e);
             }
         }
         return this.postMap.get(name);

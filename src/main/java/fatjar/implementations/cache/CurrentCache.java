@@ -24,7 +24,7 @@ public class CurrentCache {
                 Cache instance = cacheClass.getConstructor(String.class).newInstance(name);
                 cacheMap.put(key, instance);
             } catch (Exception e) {
-                Log.error("could not create cache of type: " + type + " for name: " + name + " error: " + e);
+                Log.error("could not create cache of type: " + type + " for name: " + name + " error: " + e, e);
             }
         }
         return cacheMap.get(key);

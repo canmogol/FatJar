@@ -18,7 +18,7 @@ public class CurrentServer {
             Class<? extends Server> serverClass = Class.forName(packageName + "." + type.name()).asSubclass(Server.class);
             server = serverClass.getConstructor(Map.class).newInstance(params);
         } catch (Exception e) {
-            Log.error("could not create server of type: " + type + " error: " + e);
+            Log.error("could not create server of type: " + type + " error: " + e, e);
         }
         return server;
     }

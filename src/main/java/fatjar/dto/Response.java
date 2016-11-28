@@ -1,5 +1,7 @@
 package fatjar.dto;
 
+import fatjar.Log;
+
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -91,7 +93,7 @@ public class Response implements Serializable {
                 outputStream.write(getContentChar());
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.error("got exception while writing byte[] content to output stream, error: " + e, e);
             }
 
         } else {
@@ -107,7 +109,7 @@ public class Response implements Serializable {
                     outputStream.write(sb.toString().getBytes());
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.error("got exception while writing string content to output stream, error: " + e, e);
             }
         }
     }

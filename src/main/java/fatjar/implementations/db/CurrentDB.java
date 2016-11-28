@@ -24,7 +24,7 @@ public class CurrentDB {
                 DB instance = dbClass.getConstructor(String.class).newInstance(name);
                 dbMap.put(key, instance);
             } catch (Exception e) {
-                Log.error("could not create db of type: " + type + " error: " + e);
+                Log.error("could not create db of type: " + type + " error: " + e, e);
             }
         }
         return dbMap.get(key);

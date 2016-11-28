@@ -38,18 +38,6 @@ public class MapCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public Map<K, V> getAll(Set<K> keys) {
-        Map<K, V> map = new HashMap<>();
-        cache().keySet()
-                .stream()
-                .filter(keys::contains)
-                .forEach(key -> {
-                    map.put(key, cache().get(key));
-                });
-        return map;
-    }
-
-    @Override
     public boolean containsKey(K key) {
         return cache().containsKey(key);
     }
@@ -78,21 +66,5 @@ public class MapCache<K, V> implements Cache<K, V> {
     public boolean replace(K key, V oldValue, V newValue) {
         return cache().replace(key, oldValue, newValue);
     }
-
-    @Override
-    public void removeAll(Set<? extends K> keys) {
-        cache().keySet()
-                .stream()
-                .filter(keys::contains)
-                .forEach(key -> {
-                    cache().remove(key);
-                });
-    }
-
-    @Override
-    public void clear() {
-        cache().clear();
-    }
-
 
 }

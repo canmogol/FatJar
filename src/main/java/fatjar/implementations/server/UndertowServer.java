@@ -2,7 +2,7 @@ package fatjar.implementations.server;
 
 import fatjar.Date;
 import fatjar.*;
-import fatjar.implementations.server.dto.*;
+import fatjar.dto.*;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.HeaderValues;

@@ -1,7 +1,7 @@
 package fatjar;
 
 
-import fatjar.implementations.server.dto.HttpMethod;
+import fatjar.dto.HttpMethod;
 import fatjar.implementations.httpclient.CurrentHttpClient;
 
 import java.net.HttpCookie;

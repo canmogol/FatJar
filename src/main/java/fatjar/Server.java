@@ -1,8 +1,8 @@
 package fatjar;
 
-import fatjar.implementations.server.dto.Request;
-import fatjar.implementations.server.dto.Response;
-import fatjar.implementations.server.dto.Status;
+import fatjar.dto.Request;
+import fatjar.dto.Response;
+import fatjar.dto.Status;
 import fatjar.implementations.server.CurrentServer;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package fatjar.implementations.server.dto;
+package fatjar.dto;
 
 public enum ResponseKeys {
 

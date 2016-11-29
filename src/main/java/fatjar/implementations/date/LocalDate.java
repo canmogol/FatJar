@@ -9,16 +9,16 @@ public class LocalDate implements Date {
     private String name;
 
     public LocalDate(String name) {
-	this.name = name;
+        this.name = name;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     @Override
     public java.util.Date getDate() {
-	return Calendar.getInstance().getTime();
+        return Calendar.getInstance().getTime();
     }
 
 }

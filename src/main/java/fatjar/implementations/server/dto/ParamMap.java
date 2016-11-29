@@ -1,4 +1,4 @@
-package fatjar.dto;
+package fatjar.implementations.server.dto;
 
 import java.util.ArrayList;
 import java.util.List;

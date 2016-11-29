@@ -1,7 +1,7 @@
 package fatjar.test;
 
 import fatjar.HttpClient;
-import fatjar.dto.HttpMethod;
+import fatjar.implementations.server.dto.HttpMethod;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -20,7 +20,7 @@ public interface IO {
         if (resource != null) {
             List<String> resourcePaths = new LinkedList<>();
             resourcePaths.add(resource);
-            resourcePaths.addAll(Arrays.asList(paths).stream().filter(p->p!=null).collect(Collectors.toList()));
+            resourcePaths.addAll(Arrays.asList(paths).stream().filter(p -> p != null).collect(Collectors.toList()));
             resourcePaths.toArray(new String[resourcePaths.size()]);
             String path = resourcePaths.stream().collect(Collectors.joining(File.separator));
             String normalizedResource = new File(resource).toURI().normalize().getPath();
@@ -38,7 +38,7 @@ public interface IO {
         if (resource != null) {
             List<String> resourcePaths = new LinkedList<>();
             resourcePaths.add(resource);
-            resourcePaths.addAll(Arrays.asList(paths).stream().filter(p->p!=null).collect(Collectors.toList()));
+            resourcePaths.addAll(Arrays.asList(paths).stream().filter(p -> p != null).collect(Collectors.toList()));
             resourcePaths.toArray(new String[resourcePaths.size()]);
             String path = resourcePaths.stream().collect(Collectors.joining(File.separator));
             String normalizedResource = new File(resource).toURI().normalize().getPath();

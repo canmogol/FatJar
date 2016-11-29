@@ -1,4 +1,4 @@
-package fatjar.dto;
+package fatjar.implementations.server.dto;
 
 public enum HttpMethod {
     GET("GET"), HEAD("HEAD"), POST("POST"), PUT("PUT"), DELETE("DELETE"),

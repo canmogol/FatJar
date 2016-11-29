@@ -1,4 +1,4 @@
-package fatjar.dto;
+package fatjar.implementations.server.dto;
 
 import fatjar.Log;
 

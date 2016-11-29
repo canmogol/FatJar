@@ -39,6 +39,7 @@ public interface Cache<K, V> {
     V remove(K key);
 
     boolean replace(K key, V oldValue, V newValue);
+
     enum Type {
         MapCache, MemCache, RedisCache
     }

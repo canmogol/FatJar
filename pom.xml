@@ -291,7 +291,6 @@
             <activation>
                 <property>
                     <name>!none</name>
-
                 </property>
             </activation>
             <properties>

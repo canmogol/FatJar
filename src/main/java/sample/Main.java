@@ -1,10 +1,10 @@
 package sample;
 
 import fatjar.*;
-import fatjar.dto.HttpMethod;
-import fatjar.dto.Param;
-import fatjar.dto.RequestKeys;
-import fatjar.dto.Status;
+import fatjar.implementations.server.dto.HttpMethod;
+import fatjar.implementations.server.dto.Param;
+import fatjar.implementations.server.dto.RequestKeys;
+import fatjar.implementations.server.dto.Status;
 
 import java.io.File;
 import java.util.Date;

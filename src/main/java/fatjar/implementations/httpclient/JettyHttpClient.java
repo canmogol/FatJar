@@ -38,10 +38,6 @@ public class JettyHttpClient implements HttpClient {
         }
     }
 
-    public static HttpClient create() {
-        return new JettyHttpClient();
-    }
-
     @Override
     public HttpClient url(String url) {
         request = httpClient.newRequest(url);

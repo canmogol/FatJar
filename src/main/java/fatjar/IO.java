@@ -29,7 +29,7 @@ public interface IO {
                 return readBinaryFile(resourcePaths.toArray(new String[resourcePaths.size()]));
             }
         } else {
-            Log.error("resource path not defined, either give resource as command line parameter as -Dresource=\"/path/to/resources\" or define it as System.setProperty(\"resource\", \"/path/to/resources\")");
+            Log.info("resource path not defined, either give resource as command line parameter as -Dresource=\"/path/to/resources\" or define it as System.setProperty(\"resource\", \"/path/to/resources\")");
         }
         return Optional.empty();
     }
@@ -47,7 +47,7 @@ public interface IO {
                 return readFile(resourcePaths.toArray(new String[resourcePaths.size()]));
             }
         } else {
-            Log.error("resource path not defined, either give resource as command line parameter as -Dresource=\"/path/to/resources\" or define it as System.setProperty(\"resource\", \"/path/to/resources\")");
+            Log.info("resource path not defined, either give resource as command line parameter as -Dresource=\"/path/to/resources\" or define it as System.setProperty(\"resource\", \"/path/to/resources\")");
         }
         return Optional.empty();
     }
@@ -58,7 +58,7 @@ public interface IO {
             byte[] content = Files.readAllBytes(Paths.get(fileName));
             return Optional.ofNullable(content);
         } catch (Exception e) {
-            Log.error("got exception while reading binary file, fileName: " + fileName + " error: " + e, e);
+            Log.info("got exception while reading binary file, fileName: " + fileName + " error: " + e, e);
             return Optional.empty();
         }
     }
@@ -68,7 +68,7 @@ public interface IO {
         try {
             return Optional.of(Files.readAllLines(Paths.get(fileName)).stream().collect(Collectors.joining("\n")));
         } catch (IOException e) {
-            Log.error("got exception while reading file, fileName: " + fileName + " error: " + e, e);
+            Log.info("got exception while reading file, fileName: " + fileName + " error: " + e, e);
             return Optional.empty();
         }
     }

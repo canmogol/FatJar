@@ -500,6 +500,17 @@
                     <version>1.4.4.Final</version>
                 </dependency>
             </dependencies>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/resources</directory>
+                        <includes>
+                            <include>MimeTypesMap.properties</include>
+                            <include>favicon.ico</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
         </profile>
         <profile>
             <id>freemarker</id>

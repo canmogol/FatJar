@@ -358,7 +358,7 @@
             </properties>
         </profile>
         <profile>
-            <id>jetty</id>
+            <id>jetty-http-client</id>
             <activation>
                 <property>
                     <name>!none</name>

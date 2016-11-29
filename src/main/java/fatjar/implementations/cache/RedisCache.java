@@ -1,24 +1,16 @@
 package fatjar.implementations.cache;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import fatjar.Cache;
 import fatjar.Log;
 import redis.clients.jedis.Jedis;
 
+import java.io.*;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class RedisCache<K, V> implements Cache<K, V> {
+
     private final String name;
 
     private static Map<String, Jedis> map = new ConcurrentHashMap<>();
@@ -74,7 +66,6 @@ public class RedisCache<K, V> implements Cache<K, V> {
             cache().set(convertToBytes(k), convertToBytes(map.get(k)));
         }
 
-
     }
 
     @Override
@@ -94,7 +85,12 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
     @Override
     public boolean replace(K key, V oldValue, V newValue) {
-        return false;
+        if(containsKey(key) && remove(key) != null){
+            put(key, newValue);
+			return true;
+        }else{
+			return false;
+		}
     }
 
     private <T> byte[] convertToBytes(T type) {
@@ -120,7 +116,6 @@ public class RedisCache<K, V> implements Cache<K, V> {
         }
         return local;
     }
-
 
     public static class RedisCacheInitializer {
         private static final String PROP_NAME = "rediscache.properties";

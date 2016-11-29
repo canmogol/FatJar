@@ -58,7 +58,7 @@ public interface IO {
             byte[] content = Files.readAllBytes(Paths.get(fileName));
             return Optional.ofNullable(content);
         } catch (Exception e) {
-            Log.info("got exception while reading binary file, fileName: " + fileName + " error: " + e, e);
+            Log.error("got exception while reading binary file, fileName: " + fileName + " error: " + e, e);
             return Optional.empty();
         }
     }
@@ -68,7 +68,7 @@ public interface IO {
         try {
             return Optional.of(Files.readAllLines(Paths.get(fileName)).stream().collect(Collectors.joining("\n")));
         } catch (IOException e) {
-            Log.info("got exception while reading file, fileName: " + fileName + " error: " + e, e);
+            Log.error("got exception while reading file, fileName: " + fileName + " error: " + e, e);
             return Optional.empty();
         }
     }

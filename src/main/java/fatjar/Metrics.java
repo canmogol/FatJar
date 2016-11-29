@@ -2,7 +2,8 @@ package fatjar;
 
 import fatjar.implementations.metrics.CurrentMetrics;
 
-import java.util.Map;
+import java.util.*;
+import java.util.Date;
 
 public interface Metrics {
 
@@ -14,7 +15,9 @@ public interface Metrics {
 
     Map<String, Object> getMetrics();
 
+    void addRequestTime(Date date);
+
     enum Key {
-	ServerType, ServerPort, ServerHostname, ServerServices, ServerCreated, ServerStarted, ServerStartFailed, LastRequestTime, LastErrorTime;
+	ServerType, ServerPort, ServerHostname, ServerServices, ServerCreated, ServerStarted, ServerStartFailed, LastRequestTimes, LastErrorTime;
     }
 }

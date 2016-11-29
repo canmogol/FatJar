@@ -108,7 +108,6 @@ public class Undertow implements Server {
 		    .setHandler(new UndertowHttpHandler()).build();
 
 	    // add to Metrics
-	    Metrics.create().add(Metrics.Key.ServerStarted.name(), Date.create().getDate());
 	    Metrics.create().add(Metrics.Key.ServerType.name(), Type.Undertow.name());
 	    Metrics.create().add(Metrics.Key.ServerPort.name(), port);
 	    Metrics.create().add(Metrics.Key.ServerHostname.name(), hostname);
@@ -121,6 +120,10 @@ public class Undertow implements Server {
 
 	    // start server
 	    server.start();
+
+	    // add to Metrics
+	    Metrics.create().add(Metrics.Key.ServerStarted.name(), Date.create().getDate());
+
 	} catch (RuntimeException e) {
 	    Metrics.create().add(Metrics.Key.ServerStartFailed.name(), Date.create().getDate());
 	    throw e;
@@ -156,8 +159,8 @@ public class Undertow implements Server {
 
 	@Override
 	public void handleRequest(final HttpServerExchange exchange) throws Exception {
-	    // add to Metrics 
-	    Metrics.create().add(Metrics.Key.LastRequestTime.name(), Date.create().getDate());
+	    // add to Metrics
+	    Metrics.create().addRequestTime(Date.create().getDate());
 
 	    // create Request DTO, Request object isolates undertow API
 	    Request request = createRequest(exchange);

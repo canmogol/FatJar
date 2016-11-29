@@ -278,3 +278,9 @@ response:   got content: EncodedKey:EncodedValue1111 - EncryptedKey:EncryptedVal
             these two are the decoded and decrypted values
             which set at the /setCookie call
 ```
+
+Metrics example
+```
+request :   GET   http://localhost:80/metrics
+response:   got content: {"LastRequestTimes":[1480449981544],"ServerCreated":1480449737690,"ServerHostname":"0.0.0.0","ServerPort":58071,"ServerServices":"/login,/toJSON,/logout,/cache,/toXML,/file,/db,/httpClient,/badgeFlat,/,/Hi,/fromXML,/dbMongo,/throwException,/getCookie,/fromJSON,/aa/logged,/metrics,/encrypt,/badRequest,/setCookie","ServerStarted":1480449738287,"ServerType":"UndertowServer"}
+```

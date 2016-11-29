@@ -71,6 +71,15 @@
 
     <build>
         <finalName>FatJar-Example</finalName>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -231,7 +240,22 @@
             </activation>
             <properties>
                 <exclude.sample>none</exclude.sample>
+                <exclude.sample.web>none</exclude.sample.web>
             </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/resources</directory>
+                        <includes>
+                            <include>web/**</include>
+                            <include>heroku-badge-deployed.png</include>
+                            <include>main.js</include>
+                            <include>main.py</include>
+                            <include>swagger.yaml</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
         </profile>
         <!-- Module profiles -->
         <profile>
@@ -251,6 +275,16 @@
                     <version>3.0.2</version>
                 </dependency>
             </dependencies>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/resources</directory>
+                        <includes>
+                            <include>memcache.properties</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
         </profile>
         <profile>
             <id>redis</id>
@@ -270,6 +304,16 @@
                     <version>2.9.0</version>
                 </dependency>
             </dependencies>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/resources</directory>
+                        <includes>
+                            <include>redis.properties</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
         </profile>
         <profile>
             <id>entitydb</id>
@@ -294,6 +338,16 @@
                     <version>4.3.10.Final</version>
                 </dependency>
             </dependencies>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/resources</directory>
+                        <includes>
+                            <include>META-INF/persistence.xml</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
         </profile>
         <profile>
             <id>hsqldb</id>
@@ -319,7 +373,6 @@
             <activation>
                 <property>
                     <name>!none</name>
-
                 </property>
             </activation>
             <properties>
@@ -332,13 +385,22 @@
                     <version>3.3.0</version>
                 </dependency>
             </dependencies>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/resources</directory>
+                        <includes>
+                            <include>mongodb.properties</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
         </profile>
         <profile>
             <id>aes</id>
             <activation>
                 <property>
                     <name>!none</name>
-
                 </property>
             </activation>
             <properties>
@@ -350,7 +412,6 @@
             <activation>
                 <property>
                     <name>!none</name>
-
                 </property>
             </activation>
             <properties>
@@ -362,7 +423,6 @@
             <activation>
                 <property>
                     <name>!none</name>
-
                 </property>
             </activation>
             <properties>
@@ -381,7 +441,6 @@
             <activation>
                 <property>
                     <name>!none</name>
-
                 </property>
             </activation>
             <properties>
@@ -400,7 +459,6 @@
             <activation>
                 <property>
                     <name>!none</name>
-
                 </property>
             </activation>
             <properties>
@@ -412,7 +470,6 @@
             <activation>
                 <property>
                     <name>!none</name>
-
                 </property>
             </activation>
             <properties>
@@ -431,7 +488,6 @@
             <activation>
                 <property>
                     <name>!none</name>
-
                 </property>
             </activation>
             <properties>
@@ -450,7 +506,6 @@
             <activation>
                 <property>
                     <name>!none</name>
-
                 </property>
             </activation>
             <properties>

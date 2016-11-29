@@ -1,6 +1,8 @@
 language: java
 jdk:
 - oraclejdk8
+script:
+  mvn clean install -Dnone -P aes,entitydb,freemarker,genson,hsqldb,javascript,jetty-http-client,memcache,mongodb,ossrh,python,redis,tea,undertow
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 deploy:

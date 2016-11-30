@@ -52,6 +52,7 @@
         <compiler.target>1.8</compiler.target>
 
         <exclude.sample>**/sample/*.java</exclude.sample>
+        <exclude.sample.scala>**/sample/*.scala</exclude.sample.scala>
         <exclude.cache.memcache>**/MemCache.java</exclude.cache.memcache>
         <exclude.cache.redis>**/RedisCache.java</exclude.cache.redis>
         <exclude.db.entitydb>**/EntityDB.java</exclude.db.entitydb>
@@ -89,6 +90,7 @@
                     <target>${compiler.target}</target>
                     <excludes>
                         <exclude>${exclude.sample}</exclude>
+                        <exclude>${exclude.sample.scala}</exclude>
                         <exclude>${exclude.cache.memcache}</exclude>
                         <exclude>${exclude.cache.redis}</exclude>
                         <exclude>${exclude.db.entitydb}</exclude>
@@ -104,6 +106,21 @@
                         <exclude>${exclude.template.freemaker}</exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>3.2.2</version>
+                <executions>
+                    <execution>
+                        <id>scala-compile-first</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -240,7 +257,6 @@
             </activation>
             <properties>
                 <exclude.sample>none</exclude.sample>
-                <exclude.sample.web>none</exclude.sample.web>
             </properties>
             <build>
                 <resources>
@@ -256,6 +272,18 @@
                     </resource>
                 </resources>
             </build>
+        </profile>
+        <!-- sample project profiles -->
+        <profile>
+            <id>sample-scala</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.sample.scala>none</exclude.sample.scala>
+            </properties>
         </profile>
         <!-- Module profiles -->
         <profile>
@@ -539,6 +567,11 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.12.0</version>
         </dependency>
     </dependencies>
 

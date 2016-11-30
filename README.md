@@ -39,16 +39,35 @@ Please note that jython implementation adds around 40MB of code to code base.
 mvn clean install -P scripting
 ```
 
-You may run scripting examples as;
+You may run other language examples as;
+
+##### Javascript
 since javascript engine "nashorn" build in to jvm, javascript example should run without scripting profile enabled.
 ```sh
 cd FatJar
 java -jar target/FatJar-Example.jar src/main/resources/main.js
 ```
+
+##### Python
 python example needs the FarJar build with "scripting" profile enabled,
 ```sh
 cd FatJar
 java -jar target/FatJar-Example.jar src/main/resources/main.py
+```
+
+##### Scala
+scala example needs sample-scala profile enabled, and you need to change the
+```
+<Main-Class>sample.Main</Main-Class>
+```
+value to
+```
+<Main-Class>sample.ScalaMain</Main-Class>
+```
+and after compilation you may run as
+```sh
+cd FatJar
+java -jar target/FatJar-Example.jar
 ```
 
 

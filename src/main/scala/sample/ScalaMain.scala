@@ -2,7 +2,7 @@ package sample
 
 import fatjar.dto.Status._
 import fatjar.dto.{Request, RequestKeys, Response}
-import fatjar.{Log, RequestResponse, Server}
+import fatjar.{Log, Server}
 
 
 object ScalaMain {

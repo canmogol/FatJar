@@ -1,7 +1,7 @@
 package sample
 
+import fatjar.dto.RequestKeys._
 import fatjar.dto.Status._
-import fatjar.dto.{Request, RequestKeys, Response}
 import fatjar.{Log, Server}
 
 
@@ -11,33 +11,33 @@ object ScalaMain {
 
       .listen(8080, "0.0.0.0")
 
-      .register(STATUS_BAD_REQUEST, (req: Request, res: Response) => {
+      .register(STATUS_BAD_REQUEST, (req, res) => {
         res.setContentType("text/html")
         res.setContent("<h1>BAD REQUEST!</h1>")
         res.write()
       })
 
-      .filter("/*", (req: Request, res: Response) => {
+      .filter("/*", (req, res) => {
         Log.info("Wildcard filter called")
       })
 
-      .filter("/aa/*", (req: Request, res: Response) => {
-        val uri = req.getHeader(RequestKeys.URI)
+      .filter("/aa/*", (req, res) => {
+        val uri = req.getHeader(URI)
         if (req.getSession == null || req.getSession.get("username") == null) {
           throw new Server.ServerException(STATUS_UNAUTHORIZED, "unauthorized call to " + uri)
         }
       })
 
-      .filter("/Hi", (req: Request, res: Response) => {
+      .filter("/Hi", (req, res) => {
         Log.info("/Hi filter called")
       })
 
-      .get("/", (req: Request, res: Response) => {
+      .get("/", (req, res) => {
         res.setContent("Welcome")
         res.write()
       })
 
-      .get("/Hi", (req: Request, res: Response) => {
+      .get("/Hi", (req, res) => {
         if (req.getQueryParams.containsKey("name")) {
           res.setContent("Hello " + req.getQueryParams.getValue("name"))
         } else {

@@ -85,12 +85,12 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
     @Override
     public boolean replace(K key, V oldValue, V newValue) {
-        if(containsKey(key) && remove(key) != null){
+        if (containsKey(key) && remove(key) != null) {
             put(key, newValue);
-			return true;
-        }else{
-			return false;
-		}
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private <T> byte[] convertToBytes(T type) {

@@ -8,7 +8,7 @@ import java.util.Date;
 public interface Metrics {
 
     static Metrics create() {
-	return CurrentMetrics.getInstance();
+        return CurrentMetrics.getInstance();
     }
 
     Metrics add(String key, Object value);
@@ -18,6 +18,6 @@ public interface Metrics {
     void addRequestTime(Date date);
 
     enum Key {
-	ServerType, ServerPort, ServerHostname, ServerServices, ServerCreated, ServerStarted, ServerStartFailed, LastRequestTimes, LastErrorTime;
+        ServerType, ServerPort, ServerHostname, ServerServices, ServerCreated, ServerStarted, ServerStartFailed, LastRequestTimes, LastErrorTime;
     }
 }

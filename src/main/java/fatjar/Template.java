@@ -20,7 +20,7 @@ public interface Template {
     String fromTemplate(String content, String... keyValuePairs);
 
     enum Type {
-        FreemarkerTemplate, StringTemplate
+        FreemarkerTemplate, MustacheTemplate
     }
 
 }

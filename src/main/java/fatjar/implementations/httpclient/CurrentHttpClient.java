@@ -22,5 +22,5 @@ public class CurrentHttpClient {
         }
         return httpClient;
     }
-    
+
 }

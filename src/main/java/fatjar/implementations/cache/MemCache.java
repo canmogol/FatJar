@@ -13,121 +13,121 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MemCache<K, V> implements Cache<K, V> {
 
-	private final String name;
+    private final String name;
 
-	private static Map<String, MemCachedClient> map = new ConcurrentHashMap<>();
+    private static Map<String, MemCachedClient> map = new ConcurrentHashMap<>();
 
-	public MemCache(String name) {
-		this.name = name;
-		this.initialize();
+    public MemCache(String name) {
+        this.name = name;
+        this.initialize();
 
-	}
+    }
 
-	public void initialize() {
+    public void initialize() {
 
-		new MemCacheInitializer().initializeSockIOPool(name);
-		MemCachedClient mcc = new MemCachedClient(name);
-		map.put(name, mcc);
+        new MemCacheInitializer().initializeSockIOPool(name);
+        MemCachedClient mcc = new MemCachedClient(name);
+        map.put(name, mcc);
 
-	}
-	
-		
-	private MemCachedClient cache() {
-		return map.get(this.name);
-	}
+    }
 
-	@Override
-	public Type getType() {
-		return Type.MemCache;
-	}
 
-	@Override
-	public String getName() {
-		return this.name;
-	}
+    private MemCachedClient cache() {
+        return map.get(this.name);
+    }
 
-	@Override
-	public V get(K key) {
-		return (V) cache().get(key.toString());
-	}
+    @Override
+    public Type getType() {
+        return Type.MemCache;
+    }
 
-	@Override
-	public boolean containsKey(K key) {
-		return cache().keyExists(key.toString());
-	}
+    @Override
+    public String getName() {
+        return this.name;
+    }
 
-	@Override
-	public void put(K key, V value) {
-		cache().add(key.toString(), value);
-	}
+    @Override
+    public V get(K key) {
+        return (V) cache().get(key.toString());
+    }
 
-	@Override
-	public void putAll(Map<? extends K, ? extends V> map) {
-		for (K key : map.keySet()) {
-			cache().add(key.toString(), map.get(key));
-		}
-	}
+    @Override
+    public boolean containsKey(K key) {
+        return cache().keyExists(key.toString());
+    }
 
-	@Override
-	public V putIfAbsent(K key, V value) {
+    @Override
+    public void put(K key, V value) {
+        cache().add(key.toString(), value);
+    }
 
-		if (!cache().keyExists(key.toString())) {
-			cache().add(key.toString(), value);
-		}
-
-		return (V) cache().get(key.toString());
-	}
-
-	@Override
-	public V remove(K key) {
-		V value = (V) cache().get(key.toString());
-		cache().delete(key.toString());
-		return value;
-	}
-
-	@Override
-	public boolean replace(K key, V oldValue, V newValue) {
-
-		return cache().replace(key.toString(), newValue);
-	}
-
-	public static class MemCacheInitializer {
-                private static final String PROP_NAME = "memcache.properties";
-
-                public void initializeSockIOPool(String name) {
-
-                        Properties memcacheProp = new Properties();
-                        InputStream input;
-                        SockIOPool pool = SockIOPool.getInstance(name);
-                        input = this.getClass().getClassLoader().getResourceAsStream(PROP_NAME);
-                        try {
-                                memcacheProp.load(input);
-                                input.close();
-                                pool.setServers(memcacheProp.getProperty("serversList").split(","));
-                                pool.setFailover(Boolean.parseBoolean(memcacheProp.getProperty("failover")));
-                                pool.setInitConn(Integer.parseInt(memcacheProp.getProperty("initConn")));
-                                pool.setMinConn(Integer.parseInt(memcacheProp.getProperty("minConn")));
-                                pool.setMaxConn(Integer.parseInt(memcacheProp.getProperty("maxConn")));
-                                pool.setMaintSleep(Long.parseLong(memcacheProp.getProperty("maintSleep")));
-                                pool.setNagle(Boolean.parseBoolean(memcacheProp.getProperty("nagle")));
-                                pool.setSocketTO(Integer.parseInt(memcacheProp.getProperty("docketTO")));
-                                pool.setAliveCheck(Boolean.parseBoolean(memcacheProp.getProperty("aliveCheck")));
-                        } catch (IOException e) {
-							Log.error("could not create load/read memcache properties from file: " + PROP_NAME + ", will try with defaults, error: " + e, e);
-
-							String[] servers = { "localhost:11211" };
-                                pool.setServers(servers);
-                                pool.setFailover(true);
-                                pool.setInitConn(10);
-                                pool.setMinConn(5);
-                                pool.setMaxConn(250);
-                                pool.setMaintSleep(30);
-                                pool.setNagle(false);
-                                pool.setSocketTO(3000);
-                                pool.setAliveCheck(true);
-                        }
-
-                        pool.initialize();
-                }
+    @Override
+    public void putAll(Map<? extends K, ? extends V> map) {
+        for (K key : map.keySet()) {
+            cache().add(key.toString(), map.get(key));
         }
+    }
+
+    @Override
+    public V putIfAbsent(K key, V value) {
+
+        if (!cache().keyExists(key.toString())) {
+            cache().add(key.toString(), value);
+        }
+
+        return (V) cache().get(key.toString());
+    }
+
+    @Override
+    public V remove(K key) {
+        V value = (V) cache().get(key.toString());
+        cache().delete(key.toString());
+        return value;
+    }
+
+    @Override
+    public boolean replace(K key, V oldValue, V newValue) {
+
+        return cache().replace(key.toString(), newValue);
+    }
+
+    public static class MemCacheInitializer {
+        private static final String PROP_NAME = "memcache.properties";
+
+        public void initializeSockIOPool(String name) {
+
+            Properties memcacheProp = new Properties();
+            InputStream input;
+            SockIOPool pool = SockIOPool.getInstance(name);
+            input = this.getClass().getClassLoader().getResourceAsStream(PROP_NAME);
+            try {
+                memcacheProp.load(input);
+                input.close();
+                pool.setServers(memcacheProp.getProperty("serversList").split(","));
+                pool.setFailover(Boolean.parseBoolean(memcacheProp.getProperty("failover")));
+                pool.setInitConn(Integer.parseInt(memcacheProp.getProperty("initConn")));
+                pool.setMinConn(Integer.parseInt(memcacheProp.getProperty("minConn")));
+                pool.setMaxConn(Integer.parseInt(memcacheProp.getProperty("maxConn")));
+                pool.setMaintSleep(Long.parseLong(memcacheProp.getProperty("maintSleep")));
+                pool.setNagle(Boolean.parseBoolean(memcacheProp.getProperty("nagle")));
+                pool.setSocketTO(Integer.parseInt(memcacheProp.getProperty("docketTO")));
+                pool.setAliveCheck(Boolean.parseBoolean(memcacheProp.getProperty("aliveCheck")));
+            } catch (IOException e) {
+                Log.error("could not create load/read memcache properties from file: " + PROP_NAME + ", will try with defaults, error: " + e, e);
+
+                String[] servers = {"localhost:11211"};
+                pool.setServers(servers);
+                pool.setFailover(true);
+                pool.setInitConn(10);
+                pool.setMinConn(5);
+                pool.setMaxConn(250);
+                pool.setMaintSleep(30);
+                pool.setNagle(false);
+                pool.setSocketTO(3000);
+                pool.setAliveCheck(true);
+            }
+
+            pool.initialize();
+        }
+    }
 }

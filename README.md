@@ -56,15 +56,7 @@ java -jar target/FatJar-Example.jar src/main/resources/main.py
 ```
 
 ##### Scala
-scala example needs sample-scala profile enabled, and you need to change the
-```
-<Main-Class>sample.Main</Main-Class>
-```
-value to
-```
-<Main-Class>sample.ScalaMain</Main-Class>
-```
-and after compilation you may run as
+scala example needs sample-scala profile enabled, and after compilation you may run as
 ```sh
 cd FatJar
 java -jar target/FatJar-Example.jar

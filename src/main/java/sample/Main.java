@@ -345,6 +345,13 @@ public class Main {
 		    res.setContent(JSON.create().toJson(myPOJO));
 		    res.write();
 		})
+		.get("/schedule", (req, res) -> {
+		    Schedule.create().add(() -> {
+			Log.info("SCHEDULED SCHEDULED SCHEDULED SCHEDULED!!!!");
+		    });
+		    res.setContentType("text/xml");
+		    res.write();
+		})
 		.get("/toXML", (req, res) -> {
 		    Optional<String> xmlOptional = XML.create().toXML(new MyPOJO(req.getQueryParam("name", "add a query parameter like '?name=doe'"), Integer.MAX_VALUE));
 		    xmlOptional.ifPresent(res::setContent);

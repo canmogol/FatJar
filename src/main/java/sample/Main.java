@@ -30,6 +30,11 @@ public class Main {
 
     private int getAssignedPort() {
 	ProcessBuilder processBuilder = new ProcessBuilder();
+	Log.info("Process Builder created: " + processBuilder);
+	for (String key : processBuilder.environment().keySet()) {
+	    Log.info("environment variable name: " + key + " value: " + processBuilder.environment().get(key));
+	}
+	Log.info("PORT environment value: " + processBuilder.environment().get("PORT"));
 	if (processBuilder.environment().get("PORT") != null) {
 	    return Integer.parseInt(processBuilder.environment().get("PORT"));
 	}

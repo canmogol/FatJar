@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+
+        header {
+            background: aliceblue;
+            font-size: xx-large;
+            margin: .5em;
+            padding: .5em;
+        }
+
+        nav {
+            background: darksalmon;
+            position: relative;
+            margin: 1em;
+            padding: 1em;
+        }
+
+        aside a {
+            display: block;
+            padding-bottom: 1em;
+        }
+
+        main {
+            background: azure;
+            display: block;
+            float: left;
+            margin: 1em;
+            padding: 1em;
+        }
+
+        article section code {
+            padding: 0.2em;
+            background: white;
+        }
+
+        article figure img {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            max-width: 1095px;
+        }
+
+        @media screen and (max-width: 800px) {
+
+            aside {
+                background: beige;
+                width: 90%;
+                float: left;
+                margin: 1em;
+                padding: 1em;
+            }
+
+            article {
+                background: aliceblue;
+                width: 90%;
+                float: right;
+                margin: 1em;
+                padding: 1em;
+            }
+
+        }
+
+        @media screen and (min-width: 800px) {
+            aside {
+                background: beige;
+                width: 10%;
+                float: left;
+                margin: 1em;
+                padding: 1em;
+            }
+
+            article {
+                background: aliceblue;
+                max-width: 70%;
+                float: left;
+                margin: 1em;
+                padding: 1em;
+            }
+
+        }
+
+        footer {
+            background: darksalmon;
+            display: block;
+            width: 100%;
+            float: left;
+            position: relative;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+<header id="Home">FatJar Sample Web Application</header>
+
+<nav>
+    <a href="https://fatjar-travis.herokuapp.com/html/index.html">Home</a>
+    <a href="https://github.com/canmogol/FatJar/">Github</a>
+    <a href="https://travis-ci.org/canmogol/FatJar">Travis-ci</a>
+    <a href="https://codecov.io/gh/canmogol/FatJar">Coverage</a>
+    <a href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22FatJar%22">Maven Repository</a>
+</nav>
+<main>
+
+    <aside>
+        <a href="#Description">Description</a>
+        <a href="#Compile">Compile</a>
+        <a href="#Samples">Samples</a>
+    </aside>
+
+    <article>
+        <h1 id="Description">Description</h1>
+        <section>
+            <details>
+                <summary>
+                    FatJar simple API to quick prototyping and portable web services. See <b>Main::main</b> sample class for examples.
+                </summary>
+                <p>For scripting examples, see the <b>main.js</b> and <b>main.py</b> files under resources, building for scripting instructions can be found under "Building FatJar".</p>
+                <p>Please check the interfaces like HttpClient, JSON, Server under fatjar package, added sample MyEntity and MyPOJO classes under sample package for DB and JSON operations examples</p>
+                <p>Please find the swagger.yaml file as an example for service documentation, you can edit yaml files with Online Swagger Editor and you can convert yaml files to json to use with swagger-ui Yaml to JSON Transformer</p>
+            </details>
+            <figure>
+                <img alt="Coverage Chart"
+                     src="data:image/png;base64,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"/>
+                <figcaption>Fig1. - FatJar Coverage Chart</figcaption>
+            </figure>
+        </section>
+
+        <h1 id="Compile">Compile</h1>
+        <section>
+            <h3>Building from source:</h3>
+            <code>
+                git clone https://github.com/canmogol/FatJar.git<br/>
+                cd FatJar<br/>
+                mvn clean install
+            </code>
+            <p>if you want to use scripting engines, you should run the scripting profile, instead of "mvn clean install".</p>
+            <p>Please note that jython implementation adds around 40MB of code to code base.</p>
+            <code>
+                mvn clean install -P scripting
+            </code>
+            <p>You may run other language examples as;</p>
+
+            <h4>Javascript</h4>
+            <p>since javascript engine "nashorn" build in to jvm, javascript example should run without scripting profile enabled.</p>
+            <code>
+                cd FatJar<br/>
+                java -jar target/FatJar-Example.jar src/main/resources/main.js
+            </code>
+
+            <h4>Python</h4>
+            <p>python example needs the FarJar build with "scripting" profile enabled,</p>
+            <code>
+                cd FatJar<br/>
+                java -jar target/FatJar-Example.jar src/main/resources/main.py
+            </code>
+
+            <h4>Scala</h4>
+            <p>scala example needs sample-scala profile enabled, and after compilation you may run as</p>
+            <code>
+                cd FatJar<br/>
+                java -jar target/FatJar-Example.jar
+            </code>
+        </section>
+
+        <h1 id="Samples">Samples</h1>
+        <section>
+            <h3>Create and Start the Server:</h3>
+            <code>
+                Server.create().listen(80, "0.0.0.0").start();
+            </code>
+
+            <h3>Listen to an http method on a path</h3>
+
+            <h5>Java</h5>
+            <code>
+                Server.create()<br/>
+                .listen(80, "0.0.0.0")<br/>
+                .get("/", (req, res) -> {<br/>
+                res.setContent("Welcome");<br/>
+                res.write();<br/>
+                })<br/>
+                .start();
+            </code>
+
+            <h5>Javascript</h5>
+            <code class="w3-code jsHigh notranslate">
+                Server.create()<br/>
+                .listen(8080, "0.0.0.0")<br/>
+                .get("/", function (req, res) {<br/>
+                res.setContent("Welcome");<br/>
+                res.write();<br/>
+                })<br/>
+                .start();
+            </code>
+
+            <h5>Python</h5>
+            <code>
+                Server.create()<br/>
+                .listen(8080, "0.0.0.0") \<br/>
+                .get("/", lambda req, res: (res.setContent("Welcome"), res.write())) \<br/>
+                .start()
+            </code>
+
+            <h3>To JSON and from JSON</h3>
+            <code>
+                Server.create()<br/>
+                .listen(80, "0.0.0.0")<br/>
+                .get("/toJSON", (req, res) -> {<br/>
+                res.setContent(JSON.toJson(new MyPOJO("john", 101)));<br/>
+                res.write();<br/>
+                })<br/>
+                .post("/fromJSON", (req, res) -> {<br/>
+                MyPOJO myPOJO = JSON.fromJson(new String(req.getBody()), MyPOJO.class);<br/>
+                res.setContent(JSON.toJson(myPOJO));<br/>
+                res.write();<br/>
+                })<br/>
+                .start();
+            </code>
+
+            <h3>To make an Http request</h3>
+            <code>
+                Server.create()<br/>
+                .listen(80, "0.0.0.0")<br/>
+                .get("/httpClient", (req, res) -> {<br/>
+                try {<br/>
+                String content = HttpClient.create()<br/>
+                .url("http://ip.jsontest.com/")<br/>
+                .method(HttpMethod.GET)<br/>
+                .send()<br/>
+                .getContentAsString();<br/>
+                res.setContent("got content: " + content);<br/>
+                } catch (HttpClient.HttpClientException e) {<br/>
+                res.setContent("error: " + e);<br/>
+                }<br/>
+                res.write();<br/>
+                })<br/>
+                .start();
+            </code>
+
+        </section>
+
+    </article>
+
+</main>
+
+<footer>
+    FatJar Registered
+    <a href="#Description">Description</a>
+    <a href="#Compile">Compile</a>
+    <a href="#Samples">Samples</a>
+    <time>Mon Dec 5 09:58:43 EET 2016</time>
+</footer>
+
+</body>
+</html>

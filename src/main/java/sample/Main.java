@@ -63,7 +63,8 @@ public class Main {
 		    Log.info("/Hi filter called");
 		})
 		.get("/", (req, res) -> {
-		    res.setContent("Welcome");
+		    res.setStatus(Status.STATUS_SEE_OTHER);
+		    res.getHeaders().addParam(new Param<>("Location", "/html/index.html"));
 		    res.write();
 		})
 		.get("/Hi", (req, res) -> {

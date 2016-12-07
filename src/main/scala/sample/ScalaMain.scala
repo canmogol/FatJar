@@ -33,7 +33,7 @@ object ScalaMain {
       })
 
       .get("/", (req, res) => {
-        res.setContent("Welcome")
+        res.setContent("Welcome Scala")
         res.write()
       })
 

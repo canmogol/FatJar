@@ -54,11 +54,7 @@
 
     <article class="row text-left">
 
-        <h1 class="text-left">Readme</h1>
-
-        <section class="col-md-12">
-
-        </section>
+        <section class="col-md-12" id="readmeSection"></section>
 
     </article>
 
@@ -93,6 +89,18 @@
 <!-- Bootstrap Core JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/js/bootstrap.js"></script>
 
+<!-- markdown to html -->
+<script src="https://cdn.rawgit.com/showdownjs/showdown/1.5.1/dist/showdown.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $.get("https://raw.githubusercontent.com/canmogol/FatJar/master/README.md", function (data) {
+            var converter = new showdown.Converter();
+            html = converter.makeHtml(data);
+            $("#readmeSection").html(html);
+        });
+    });
+</script>
 
 </body>
 

@@ -400,6 +400,17 @@ public class Main {
 		    });
 		    res.write();
 		})
+		.get("/toGSON", (req, res) -> {
+		    res.setContent(JSON.create(JSON.Type.GsonJSON).toJson(new MyPOJO("john", 28)));
+		    res.write();
+		})
+		.get("/fromGSON", (req, res) -> {
+		    JSON json = JSON.create(JSON.Type.GsonJSON);
+		    String content = json.toJson(new MyPOJO("john", 82));
+		    MyPOJO myPOJO = json.fromJson(content, MyPOJO.class);
+		    res.setContent(json.toJson(myPOJO));
+		    res.write();
+		})
 		.post("/", (req, res) -> {
 		})
 		.delete("/", (req, res) -> {

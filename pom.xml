@@ -62,7 +62,7 @@
         <exclude.encyription.tea>**/TEAEncrypt.java</exclude.encyription.tea>
         <exclude.httpclient.jetty>**/JettyHttpClient.java</exclude.httpclient.jetty>
         <exclude.json.genson>**/GensonJSON.java</exclude.json.genson>
-        <exclude.json.gson>**/GSonJSON.java</exclude.json.gson>
+        <exclude.json.gson>**/GsonJSON.java</exclude.json.gson>
         <exclude.json.jackson>**/JacksonJSON.java</exclude.json.jackson>
         <exclude.script.javascript>**/JavaScript.java</exclude.script.javascript>
         <exclude.script.python>**/PythonScript.java</exclude.script.python>

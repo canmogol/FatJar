@@ -63,6 +63,7 @@
         <exclude.httpclient.jetty>**/JettyHttpClient.java</exclude.httpclient.jetty>
         <exclude.json.genson>**/GensonJSON.java</exclude.json.genson>
         <exclude.json.gson>**/GSonJSON.java</exclude.json.gson>
+        <exclude.json.jackson>**/JacksonJSON.java</exclude.json.jackson>
         <exclude.script.javascript>**/JavaScript.java</exclude.script.javascript>
         <exclude.script.python>**/PythonScript.java</exclude.script.python>
         <exclude.server.undertow>**/Undertow.java</exclude.server.undertow>
@@ -104,6 +105,7 @@
                         <exclude>${exclude.httpclient.jetty}</exclude>
                         <exclude>${exclude.json.genson}</exclude>
                         <exclude>${exclude.json.gson}</exclude>
+                        <exclude>${exclude.json.jackson}</exclude>
                         <exclude>${exclude.script.javascript}</exclude>
                         <exclude>${exclude.script.python}</exclude>
                         <exclude>${exclude.server.undertow}</exclude>
@@ -538,6 +540,29 @@
                     <groupId>com.google.code.gson</groupId>
                     <artifactId>gson</artifactId>
                     <version>2.8.0</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>jackson</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.json.jackson>none</exclude.json.jackson>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                    <version>2.8.5</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                    <version>2.8.5</version>
                 </dependency>
             </dependencies>
         </profile>

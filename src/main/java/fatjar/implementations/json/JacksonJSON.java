@@ -1,24 +1,23 @@
 package fatjar.implementations.json;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fatjar.JSON;
 import fatjar.Log;
 
+import java.io.StringWriter;
 import java.util.Optional;
 
-public class GsonJSON implements JSON {
+public class JacksonJSON implements JSON {
 
-    private final Gson gson;
+    private final ObjectMapper mapper;
 
-    public GsonJSON() {
-	GsonBuilder builder = new GsonBuilder();
-	gson = builder.create();
+    public JacksonJSON() {
+	mapper = new ObjectMapper();
     }
 
     public <T> Optional<T> fromJson(String json, Class<T> tClass) {
 	try {
-	    T t = gson.fromJson(json, tClass);
+	    T t = mapper.readValue(json, tClass);
 	    return Optional.ofNullable(t);
 	} catch (Exception e) {
 	    Log.error("got exception while creating object from json, exception: " + e, e);
@@ -28,8 +27,9 @@ public class GsonJSON implements JSON {
 
     public Optional<String> toJson(Object object) {
 	try {
-	    String content = gson.toJson(object);
-	    return Optional.ofNullable(content);
+	    StringWriter stringWriter = new StringWriter();
+	    mapper.writeValue(stringWriter, object);
+	    return Optional.ofNullable(stringWriter.toString());
 	} catch (Exception e) {
 	    Log.error("got exception while creating json string from object, exception: " + e, e);
 	    return Optional.empty();

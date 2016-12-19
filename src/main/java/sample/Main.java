@@ -180,7 +180,7 @@ public class Main {
 		    res.write();
 		})
 		.get("/metrics", (req, res) -> {
-		    res.setContent(JSON.create().toJson(Metrics.create().getMetrics()));
+		    JSON.create().toJson(Metrics.create().getMetrics()).ifPresent(res::setContent);
 		    res.write();
 		})
 		.get("/cache", (req, res) -> {
@@ -194,7 +194,7 @@ public class Main {
 		    Map<String, Object> keyValues = new HashMap<>();
 		    keyValues.put("key", cache.get("key"));
 		    keyValues.put("number", cache.get("number"));
-		    res.setContent(JSON.create().toJson(keyValues));
+		    JSON.create().toJson(keyValues).ifPresent(res::setContent);
 		    res.write();
 		})
 		.get("/file", (request, response) -> {
@@ -267,7 +267,7 @@ public class Main {
 
 			    db.delete(insertedEntity);
 			    Log.info("delete insertedEntity: " + insertedEntity);
-			    res.setContent(JSON.create().toJson(insertedEntity));
+			    JSON.create().toJson(insertedEntity).ifPresent(res::setContent);
 			} else {
 			    res.setContent("could not insert to DB");
 			}
@@ -285,7 +285,7 @@ public class Main {
 			if (modelOptional.isPresent()) {
 			    model = modelOptional.get();
 			    Log.info("inserted mongo model: " + JSON.create().toJson(model));
-			    res.setContent(JSON.create().toJson(model));
+			    JSON.create().toJson(model).ifPresent(res::setContent);
 
 			    MyMongoModel foundModel = db.find(MyMongoModel.class, model.getObjectId());
 			    Log.info("foundModel: " + foundModel);
@@ -299,7 +299,7 @@ public class Main {
 			    Log.info("numberOfTotalModels: " + numberOfTotalModels);
 
 			    List<MyMongoModel> mongoModels = db.find(MyMongoModel.class, DB.Query.create("name", "test"));
-			    mongoModels.stream().forEach(m -> Log.info(JSON.create().toJson(m)));
+			    mongoModels.stream().forEach(m -> JSON.create().toJson(m).ifPresent(Log::info));
 
 
 			    List<MyMongoModel> allModels = db.findAll(MyMongoModel.class);
@@ -339,12 +339,16 @@ public class Main {
 		    throw new Server.ServerException(Status.STATUS_BAD_REQUEST);
 		})
 		.get("/toJSON", (req, res) -> {
-		    res.setContent(JSON.create().toJson(new MyPOJO(req.getQueryParam("name", "add a query parameter like '?name=john'"), 101)));
+		    JSON.create().toJson(new MyPOJO(req.getQueryParam("name", "add a query parameter like '?name=john'"), 101))
+			    .ifPresent(res::setContent);
 		    res.write();
 		})
 		.post("/fromJSON", (req, res) -> {
-		    MyPOJO myPOJO = JSON.create().fromJson(new String(req.getBody()), MyPOJO.class);
-		    res.setContent(JSON.create().toJson(myPOJO));
+		    Optional<MyPOJO> myPOJOOptional = JSON.create().fromJson(new String(req.getBody()), MyPOJO.class);
+		    myPOJOOptional.ifPresent(myPOJO ->
+			    JSON.create().toJson(myPOJO)
+				    .ifPresent(res::setContent)
+		    );
 		    res.write();
 		})
 		.get("/schedule", (req, res) -> {
@@ -401,14 +405,16 @@ public class Main {
 		    res.write();
 		})
 		.get("/toGSON", (req, res) -> {
-		    res.setContent(JSON.create(JSON.Type.GsonJSON).toJson(new MyPOJO("john", 28)));
+		    JSON.create(JSON.Type.GsonJSON).toJson(new MyPOJO("john", 28)).ifPresent(res::setContent);
 		    res.write();
 		})
 		.get("/fromGSON", (req, res) -> {
 		    JSON json = JSON.create(JSON.Type.GsonJSON);
-		    String content = json.toJson(new MyPOJO("john", 82));
-		    MyPOJO myPOJO = json.fromJson(content, MyPOJO.class);
-		    res.setContent(json.toJson(myPOJO));
+		    json.toJson(new MyPOJO("john", 82))
+			    .ifPresent(content -> {
+				Optional<MyPOJO> myPOJO = json.fromJson(content, MyPOJO.class);
+				myPOJO.ifPresent(pojo -> json.toJson(pojo).ifPresent(res::setContent));
+			    });
 		    res.write();
 		})
 		.post("/", (req, res) -> {

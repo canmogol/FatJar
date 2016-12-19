@@ -417,6 +417,19 @@ public class Main {
 			    });
 		    res.write();
 		})
+		.get("/toJackson", (req, res) -> {
+		    JSON.create(JSON.Type.JacksonJSON).toJson(new MyPOJO("jack", 11)).ifPresent(res::setContent);
+		    res.write();
+		})
+		.get("/fromJackson", (req, res) -> {
+		    JSON json = JSON.create(JSON.Type.JacksonJSON);
+		    json.toJson(new MyPOJO("jack", 99))
+			    .ifPresent(content -> {
+				Optional<MyPOJO> myPOJO = json.fromJson(content, MyPOJO.class);
+				myPOJO.ifPresent(pojo -> json.toJson(pojo).ifPresent(res::setContent));
+			    });
+		    res.write();
+		})
 		.post("/", (req, res) -> {
 		})
 		.delete("/", (req, res) -> {

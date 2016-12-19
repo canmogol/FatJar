@@ -7,8 +7,8 @@ import fatjar.dto.RequestKeys;
 import fatjar.dto.Status;
 
 import java.io.File;
-import java.util.Date;
 import java.util.*;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 
@@ -366,6 +366,21 @@ public class Main {
 			XML.create().toXML(myPOJO).ifPresent(res::setContent);
 		    });
 		    res.setContentType("text/xml");
+		    res.write();
+		})
+		.get("/mustache", (req, res) -> {
+		    IO.readResource("template", "mustache", "example.html")
+			    .ifPresent(content -> {
+				res.setContentType("text/html");
+				res.setContent(
+					Template.create(Template.Type.MustacheTemplate).fromTemplate(
+						content,
+						"hello", "Hello from mustache",
+						"names", Arrays.asList("John", "Mike", "Kim"),
+						"user", new MyPOJO("John", 34)
+					)
+				);
+			    });
 		    res.write();
 		})
 		.post("/", (req, res) -> {

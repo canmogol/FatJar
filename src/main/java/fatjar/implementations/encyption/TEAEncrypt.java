@@ -19,24 +19,24 @@ public class TEAEncrypt implements Encrypt {
      * The Tiny Encryption Algorithm is one of the fastest and most efficient
      * cryptographic algorithms in existence. It was developed by David Wheeler and
      * Roger Needham at the Computer Laboratory of Cambridge University.
-     * <p>
+     * <p/>
      * See http://www.cl.cam.ac.uk/ftp/users/djw3/tea.ps
-     * <p>
+     * <p/>
      * This software was written to provide simple encryption for J2ME.
      * The homepage for this software is http://winterwell.com/software/TEA.php
-     * <p>
+     * <p/>
      * (c) 2008 Joe Halliwell <joe.halliwell@gmail.com>
-     * <p>
+     * <p/>
      * This program is free software: you can redistribute it and/or modify it
      * under the terms of the GNU Lesser General Public License as published by the
      * Free Software Foundation, either version 3 of the License, or (at your
      * option) any later version.
-     * <p>
+     * <p/>
      * This program is distributed in the hope that it will be useful, but WITHOUT
      * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
      * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
      * for more details.
-     * <p>
+     * <p/>
      * You should have received a copy of the GNU Lesser General Public License
      * along with this program. If not, see <http://www.gnu.org/licenses/>.
      */

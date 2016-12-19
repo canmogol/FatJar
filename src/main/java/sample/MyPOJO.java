@@ -31,6 +31,6 @@ public class MyPOJO {
     public void setAge(Integer age) {
         this.age = age;
     }
-    
+
     // travis-ci test
 }

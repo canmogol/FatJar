@@ -67,6 +67,7 @@
         <exclude.server.undertow>**/Undertow.java</exclude.server.undertow>
         <exclude.template.freemarker>**/FreemarkerTemplate.java</exclude.template.freemarker>
         <exclude.template.mustache>**/MustacheTemplate.java</exclude.template.mustache>
+        <exclude.template.xstream>**/XStreamXML.java</exclude.template.xstream>
         <!-- MapCache -->
         <!-- JaxB -->
     </properties>
@@ -106,6 +107,7 @@
                         <exclude>${exclude.server.undertow}</exclude>
                         <exclude>${exclude.template.freemarker}</exclude>
                         <exclude>${exclude.template.mustache}</exclude>
+                        <exclude>${exclude.template.xstream}</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -610,6 +612,24 @@
                     <groupId>com.samskivert</groupId>
                     <artifactId>jmustache</artifactId>
                     <version>1.13</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>xstream</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.template.xstream>none</exclude.template.xstream>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.thoughtworks.xstream</groupId>
+                    <artifactId>xstream</artifactId>
+                    <version>1.4.9</version>
                 </dependency>
             </dependencies>
         </profile>

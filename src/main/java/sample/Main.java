@@ -383,6 +383,23 @@ public class Main {
 			    });
 		    res.write();
 		})
+		.get("/toXStream", (req, res) -> {
+		    Optional<String> xmlOptional = XML.create(XML.Type.XStreamXML).toXML(new MyPOJO(req.getQueryParam("name", "add a query parameter like '?name=doe'"), Integer.MAX_VALUE));
+		    xmlOptional.ifPresent(res::setContent);
+		    res.setContentType("text/xml");
+		    res.write();
+		})
+		.get("/fromXStream", (req, res) -> {
+		    String xml = "<sample.MyPOJO><name>Xml content Name</name><age>99</age></sample.MyPOJO>";
+		    Optional<MyPOJO> pojoOptional = XML.create(XML.Type.XStreamXML).fromXML(xml.getBytes(), MyPOJO.class);
+
+		    pojoOptional.ifPresent(pojo -> {
+			Optional<String> xmlOptional = XML.create(XML.Type.XStreamXML).toXML(pojo);
+			xmlOptional.ifPresent(res::setContent);
+			res.setContentType("text/xml");
+		    });
+		    res.write();
+		})
 		.post("/", (req, res) -> {
 		})
 		.delete("/", (req, res) -> {

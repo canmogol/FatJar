@@ -13,9 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MemCache<K, V> implements Cache<K, V> {
 
-    private final String name;
-
     private static Map<String, MemCachedClient> map = new ConcurrentHashMap<>();
+    private final String name;
 
     public MemCache(String name) {
         this.name = name;

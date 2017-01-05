@@ -3,7 +3,9 @@ package fatjar.implementations.script;
 import fatjar.Log;
 import fatjar.Script;
 
-import javax.script.*;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.util.HashMap;
 import java.util.Map;
 

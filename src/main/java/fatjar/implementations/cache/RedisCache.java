@@ -11,9 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RedisCache<K, V> implements Cache<K, V> {
 
-    private final String name;
-
     private static Map<String, Jedis> map = new ConcurrentHashMap<>();
+    private final String name;
 
     public RedisCache(String name) {
         this.name = name;

@@ -1,10 +1,10 @@
 package fatjar.implementations.script;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import fatjar.Script;
 import org.python.util.PythonInterpreter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PythonScript implements Script {
 

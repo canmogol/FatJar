@@ -46,6 +46,13 @@ public interface Server {
         UndertowServer, GrizzlyServer, NettyServer
     }
 
+    @FunctionalInterface
+    interface RequestResponse {
+
+        void apply(Request request, Response response) throws ServerException;
+
+    }
+
     class ServerException extends Throwable {
 
         private Status status = null;
@@ -70,12 +77,5 @@ public interface Server {
         public Status getStatus() {
             return status;
         }
-    }
-
-    @FunctionalInterface
-    interface RequestResponse {
-
-        void apply(Request request, Response response) throws ServerException;
-
     }
 }

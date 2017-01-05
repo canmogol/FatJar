@@ -187,9 +187,9 @@ public class MongoDB implements DB {
     public interface MongoModel extends ToDocument, FromDocument {
         String OID = "_id";
 
-        void setObjectId(ObjectId id);
-
         ObjectId getObjectId();
+
+        void setObjectId(ObjectId id);
     }
 
     public interface FromDocument {

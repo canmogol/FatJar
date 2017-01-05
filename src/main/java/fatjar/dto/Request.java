@@ -113,12 +113,12 @@ public class Request implements Serializable {
         }
     }
 
-    public void setPost(byte[] post) {
-        this.post = post;
-    }
-
     public byte[] getPost() {
         return post;
+    }
+
+    public void setPost(byte[] post) {
+        this.post = post;
     }
 
     public String getPostParam(String name) {

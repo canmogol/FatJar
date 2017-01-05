@@ -48,13 +48,13 @@ public class MyMongoModel implements MongoDB.MongoModel {
     }
 
     @Override
-    public void setObjectId(ObjectId id) {
-        document.put(MongoDB.MongoModel.OID, id);
+    public ObjectId getObjectId() {
+        return document.getObjectId(MongoDB.MongoModel.OID);
     }
 
     @Override
-    public ObjectId getObjectId() {
-        return document.getObjectId(MongoDB.MongoModel.OID);
+    public void setObjectId(ObjectId id) {
+        document.put(MongoDB.MongoModel.OID, id);
     }
 
     @Override

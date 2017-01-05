@@ -13,8 +13,8 @@ import java.util.*;
 public class Session extends TreeMap<String, Serializable> {
 
     private final String rawContent;
-    private String secretKey;
     private final String applicationCookieName;
+    private String secretKey;
     private List<String> encryptedKeys = new ArrayList<>();
 
     public Session(String rawContent, String secretKey, String applicationCookieName) {

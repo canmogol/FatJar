@@ -2,9 +2,6 @@ package fatjar;
 
 import fatjar.implementations.cache.CurrentCache;
 
-import java.util.Map;
-import java.util.Set;
-
 public interface Cache<K, V> {
 
     @SuppressWarnings("unchecked")

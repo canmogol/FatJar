@@ -2,8 +2,8 @@ package fatjar;
 
 import fatjar.implementations.metrics.CurrentMetrics;
 
-import java.util.*;
 import java.util.Date;
+import java.util.Map;
 
 public interface Metrics {
 

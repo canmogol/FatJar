@@ -12,6 +12,11 @@ public class CurrentMetrics implements Metrics {
     private CurrentMetrics() {
     }
 
+    public static Metrics getInstance() {
+        Instance.instance.metrics.put(Metrics.Key.LastRequestTimes.name(), Instance.instance.requestDates);
+        return Instance.instance;
+    }
+
     @Override
     public Metrics add(String key, Object value) {
         metrics.put(key, value);
@@ -29,11 +34,6 @@ public class CurrentMetrics implements Metrics {
             requestDates.remove(0);
         }
         requestDates.add(date);
-    }
-
-    public static Metrics getInstance() {
-        Instance.instance.metrics.put(Metrics.Key.LastRequestTimes.name(), Instance.instance.requestDates);
-        return Instance.instance;
     }
 
     private static class Instance {

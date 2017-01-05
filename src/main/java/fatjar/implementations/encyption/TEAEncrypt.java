@@ -45,7 +45,8 @@ public class TEAEncrypt implements Encrypt {
         private final static int SUGAR = 0x9E3779B9;
         private final static int CUPS = 32;
         private final static int UNSUGAR = 0xC6EF3720;
-
+        /* Simple usage example */
+        public static String quote = "Now rise, and show your strength. Be eloquent, and deep, and tender; see, with a clear eye, into Nature, and into life:  spread your white wings of quivering thought, and soar, a god-like spirit, over the whirling world beneath you, up through long lanes of flaming stars to the gates of eternity!";
         private int[] S = new int[4];
 
         /**
@@ -64,6 +65,22 @@ public class TEAEncrypt implements Encrypt {
                         ((key[off++] & 0xff) << 16) |
                         ((key[off++] & 0xff) << 24);
             }
+        }
+
+        public static void main(String[] args) {
+                    /* Create a cipher using the first 16 bytes of the passphrase */
+            TEA tea = new TEA("And is there honey still for tea?".getBytes());
+
+            byte[] original = quote.getBytes();
+
+                    /* Run it through the cipher... and back */
+            byte[] crypt = tea.encrypt(original);
+            byte[] result = tea.decrypt(crypt);
+
+                    /* Ensure that all went well */
+            String test = new String(result);
+            if (!test.equals(quote))
+                throw new RuntimeException("Fail");
         }
 
         /**
@@ -168,25 +185,6 @@ public class TEAEncrypt implements Encrypt {
                 }
             }
             return dest;
-        }
-
-        /* Simple usage example */
-        public static String quote = "Now rise, and show your strength. Be eloquent, and deep, and tender; see, with a clear eye, into Nature, and into life:  spread your white wings of quivering thought, and soar, a god-like spirit, over the whirling world beneath you, up through long lanes of flaming stars to the gates of eternity!";
-
-        public static void main(String[] args) {
-                    /* Create a cipher using the first 16 bytes of the passphrase */
-            TEA tea = new TEA("And is there honey still for tea?".getBytes());
-
-            byte[] original = quote.getBytes();
-
-                    /* Run it through the cipher... and back */
-            byte[] crypt = tea.encrypt(original);
-            byte[] result = tea.decrypt(crypt);
-
-                    /* Ensure that all went well */
-            String test = new String(result);
-            if (!test.equals(quote))
-                throw new RuntimeException("Fail");
         }
     }
 }

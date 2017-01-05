@@ -4,13 +4,12 @@ import fatjar.Cache;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MapCache<K, V> implements Cache<K, V> {
 
-    private final String name;
     private static Map<String, Map> map = new ConcurrentHashMap<>();
+    private final String name;
 
     public MapCache(String name) {
         this.name = name;

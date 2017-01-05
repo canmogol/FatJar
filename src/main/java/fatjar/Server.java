@@ -10,16 +10,16 @@ import java.util.Map;
 
 public interface Server {
 
-    static Server create(Server.Type type, Map<ServerParams, String> params) {
-        return CurrentServer.create(type, params);
+    static Server create() {
+        return Server.create(Type.UndertowServer, new HashMap<>());
     }
 
     static Server create(Map<ServerParams, String> params) {
         return Server.create(Type.UndertowServer, params);
     }
 
-    static Server create() {
-        return Server.create(Type.UndertowServer, new HashMap<>());
+    static Server create(Server.Type type, Map<ServerParams, String> params) {
+        return CurrentServer.create(type, params);
     }
 
     Server listen(int port, String hostname);

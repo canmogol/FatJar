@@ -1,22 +1,23 @@
 package fatjar.implementations.json;
 
-import com.owlike.genson.Genson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fatjar.JSON;
 import fatjar.Log;
 
+import java.io.StringWriter;
 import java.util.Optional;
 
-public class GensonJSON implements JSON {
+public class JacksonJSON implements JSON {
 
-    private final Genson genson;
+    private final ObjectMapper mapper;
 
-    public GensonJSON() {
-	genson = new Genson();
+    public JacksonJSON() {
+	mapper = new ObjectMapper();
     }
 
     public <T> Optional<T> fromJson(String json, Class<T> tClass) {
 	try {
-	    T t = genson.deserialize(json, tClass);
+	    T t = mapper.readValue(json, tClass);
 	    return Optional.ofNullable(t);
 	} catch (Exception e) {
 	    Log.error("got exception while creating object from json, exception: " + e, e);
@@ -26,8 +27,9 @@ public class GensonJSON implements JSON {
 
     public Optional<String> toJson(Object object) {
 	try {
-	    String content = genson.serialize(object);
-	    return Optional.ofNullable(content);
+	    StringWriter stringWriter = new StringWriter();
+	    mapper.writeValue(stringWriter, object);
+	    return Optional.ofNullable(stringWriter.toString());
 	} catch (Exception e) {
 	    Log.error("got exception while creating json string from object, exception: " + e, e);
 	    return Optional.empty();

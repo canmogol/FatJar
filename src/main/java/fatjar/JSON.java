@@ -2,6 +2,8 @@ package fatjar;
 
 import fatjar.implementations.json.CurrentJSON;
 
+import java.util.Optional;
+
 public interface JSON {
 
     static JSON create() {
@@ -12,9 +14,9 @@ public interface JSON {
         return CurrentJSON.create(type);
     }
 
-    <T> T fromJson(String json, Class<T> tClass);
+    <T> Optional<T> fromJson(String json, Class<T> tClass);
 
-    String toJson(Object object);
+    Optional<String> toJson(Object object);
 
     enum Type {
         GensonJSON, JacksonJSON, GsonJSON

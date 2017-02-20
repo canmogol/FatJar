@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args) {
-        Main tester = new Main();
+        Main main = new Main();
         if (args.length == 1) {
-            tester.scriptServer(args[0]);
+            main.scriptServer(args[0]);
         } else {
-            tester.exampleServer();
+            main.exampleServer();
         }
     }
 

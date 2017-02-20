@@ -67,6 +67,7 @@
         <exclude.script.javascript>**/JavaScript.java</exclude.script.javascript>
         <exclude.script.python>**/PythonScript.java</exclude.script.python>
         <exclude.script.ruby>**/RubyScript.java</exclude.script.ruby>
+        <exclude.script.groovy>**/GroovyScript.java</exclude.script.groovy>
         <exclude.server.undertow>**/Undertow.java</exclude.server.undertow>
         <exclude.template.freemarker>**/FreemarkerTemplate.java</exclude.template.freemarker>
         <exclude.template.mustache>**/MustacheTemplate.java</exclude.template.mustache>
@@ -110,6 +111,7 @@
                         <exclude>${exclude.script.javascript}</exclude>
                         <exclude>${exclude.script.python}</exclude>
                         <exclude>${exclude.script.ruby}</exclude>
+                        <exclude>${exclude.script.groovy}</exclude>
                         <exclude>${exclude.server.undertow}</exclude>
                         <exclude>${exclude.template.freemarker}</exclude>
                         <exclude>${exclude.template.mustache}</exclude>
@@ -627,6 +629,24 @@
                             <artifactId>jnr-constants</artifactId>
                         </exclusion>
                     </exclusions>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>groovy</id>
+            <activation>
+                <property>
+                    <name>!none</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.script.groovy>none</exclude.script.groovy>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy-all</artifactId>
+                    <version>2.4.8</version>
                 </dependency>
             </dependencies>
         </profile>

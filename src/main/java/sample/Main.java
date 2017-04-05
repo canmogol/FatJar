@@ -1,6 +1,7 @@
 package sample;
 
 import fatjar.*;
+import fatjar.Cond;
 import fatjar.dto.HttpMethod;
 import fatjar.dto.Param;
 import fatjar.dto.RequestKeys;
@@ -180,7 +181,10 @@ public class Main {
                     res.write();
                 })
                 .get("/metrics", (req, res) -> {
-                    JSON.create().toJson(Metrics.create().getMetrics()).ifPresent(res::setContent);
+                    Cond.optional(JSON.create().toJson(Metrics.create().getMetrics()))
+                            .ifPresent(res::setContent)
+                            .orElse(() -> Log.error("could not get the metrics"))
+                            .eval();
                     res.write();
                 })
                 .get("/cache", (req, res) -> {

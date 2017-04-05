@@ -40,8 +40,7 @@ Server.create(map)
     .get("/Hi", function (req, res) {
         if (req.getQueryParams().containsKey("name")) {
             res.setContent("Hello " + req.getQueryParams().getValue("name"));
-        }
-        else {
+        } else {
             res.setContent("type \"http://localhost:80/Hi?name=john\" in your browser");
         }
         res.write();
@@ -84,8 +83,7 @@ Server.create(map)
                             "error", "username and/or password wrong"
                         )
                     );
-                })
-            ;
+                });
         } else {
             req.getSession().put("lastLogin", new Date().toString());
             req.getSession().putEncrypt("username", req.getPostParam("username"));

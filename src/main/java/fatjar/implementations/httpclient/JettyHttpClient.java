@@ -17,9 +17,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class JettyHttpClient implements HttpClient {
 
@@ -54,7 +52,7 @@ public class JettyHttpClient implements HttpClient {
     public HttpClient send() throws HttpClientException {
         try {
             contentResponse = request.send();
-        } catch (InterruptedException | TimeoutException | ExecutionException e) {
+        } catch (Exception e) {
             throw new HttpClientException(e);
         }
         return this;

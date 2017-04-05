@@ -183,7 +183,8 @@ public class Main {
                 .get("/metrics", (req, res) -> {
                     Cond.optional(JSON.create().toJson(Metrics.create().getMetrics()))
                             .ifPresent(res::setContent)
-                            .orElse(() -> Log.error("could not get the metrics"))
+                            .orElse(() -> res.setContent("could not get the metrics"))
+                            .error((e) -> Log.error("could not get the metrics, got exception: " + e))
                             .eval();
                     res.write();
                 })

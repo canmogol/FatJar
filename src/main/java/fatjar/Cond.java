@@ -17,15 +17,13 @@ public interface Cond {
     }
 
     static <T> OptionalConsumer<T> optional(Optional<T> optional) {
-        return new OptionalConsumer<T>(optional);
+        return new OptionalConsumer<>(optional);
     }
 
     class Hash {
 
         private static Logger logger = Logger.getLogger(Hash.class.getName());
-        private CondException condException = (e) -> {
-            logger.log(Level.SEVERE, "got exception while hash cond, error: " + e, e);
-        };
+        private CondException condException = (e) -> logger.log(Level.SEVERE, "got exception while hash cond, error: " + e, e);
         private Map<Object, Unit> hash = new HashMap<>();
         private Unit defaultUnit = Unit.empty();
 
@@ -138,7 +136,7 @@ public interface Cond {
         }
     }
 
-    static class OptionalConsumer<T> {
+    class OptionalConsumer<T> {
         private final Optional<T> optional;
         private CondException condException = (e) -> Log.error("got exception while optinal cond, error: " + e);
         private Consumer<T> ifPresent;
